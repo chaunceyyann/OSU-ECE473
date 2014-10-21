@@ -40,15 +40,7 @@ int segment_data[5] = {0b11000000, 0xff, 0xff, 0xff, 0xff}; // turn off led not 
 uint8_t chk_buttons(uint8_t button) {
 	static uint16_t state = 0; //holds present state
 	state = (state << 1) | (! bit_is_clear(INPUTP, button)) | 0xE000;
-	if (state == 0xF000) return 1aver
-
-	return 0;
-}
-uint8_t chk_button(int button) {
-	static uint16_t state = 0; //holds present state
-	state = (state << 1) | (! bit_is_clear(INPUTP, button)) | 0xE000;
-	if (state == 0xF000) return 1aver
-
+	if (state == 0xF000) return 1
 	return 0;
 }
 //**********************************************************************************
