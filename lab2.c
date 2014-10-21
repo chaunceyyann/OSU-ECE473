@@ -36,8 +36,8 @@ int dec_to_7seg[12] = {0b11000000, 0b11111001, 0b10100100, 0b10110000, // 0 1 2 
 //
 uint8_t chk_buttons(uint8_t button) {
 	static uint16_t state = 0; //holds present state
-	state = (state << 1) | (! bit_is_clear(PIND,0));
-	if ( state == 0x8000 ) return 1;
+	state = (state << 1) | (! bit_is_clear(PINA, button)) | 0xE000;
+	if (state == 0xF000) return 1;
 	return 0;
 }
 //******************************************************************************
@@ -65,7 +65,7 @@ void ledDigit (int n, int pos){
 		PORTB = pos << 4; // selet the digit
 		PORTA = dec_to_7seg[n];
 	}
-	_delay_ms(20);
+	_delay_ms(2);
 }
 
 void ledNumber (int n, int f){ // f = format
@@ -87,16 +87,24 @@ int main(){
 	DDRA = 0x00; // input
 	DDRC = 0xff; // output
 	PORTC = 0x00;
-	int bit = 0;
+	int counter = 0;
 while(1){
 	DDRA = 0x00; // input
+	PINA = 0xff;
 	PORTB = 0b01110000;
-	_delay_ms(10);
-	//DDRA = 0xff;
+	_delay_ms(2);
+
+	// output led
 	DDRA = 0xff;
-	PORTB = 0b00010000;
-	PORTA = bit_is_clear(PINA,1);
-	_delay_ms(200);
+	if (chk_buttons(0)) {
+		counter++;
+		counter = counter % 1023;
+	}
+	//PORTB = 0x00;
+	//PORTA = dec_to_7seg[counter];
+	
+	ledNumber(counter,8);
+	_delay_ms(2);
 	//ledDigit()
 	//ledDigit(bit_is_clear(PIND,0),0);
 	//ledDigit(bit_is_clear(PIND,1),1);
