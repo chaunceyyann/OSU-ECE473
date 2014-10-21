@@ -37,10 +37,18 @@ int segment_data[5] = {0b11000000, 0xff, 0xff, 0xff, 0xff}; // turn off led not 
 //Expects active low pushbuttons on PINA port.  Debounce time is determined by 
 //external loop delay times 12. 
 //
-uint8_t chk_buttons(int button) {
+uint8_t chk_buttons(uint8_t button) {
 	static uint16_t state = 0; //holds present state
 	state = (state << 1) | (! bit_is_clear(INPUTP, button)) | 0xE000;
-	if (state == 0xF000) return 1;
+	if (state == 0xF000) return 1aver
+
+	return 0;
+}
+uint8_t chk_button(int button) {
+	static uint16_t state = 0; //holds present state
+	state = (state << 1) | (! bit_is_clear(INPUTP, button)) | 0xE000;
+	if (state == 0xF000) return 1aver
+
 	return 0;
 }
 //**********************************************************************************
@@ -51,7 +59,8 @@ uint8_t chk_buttons(int button) {
 //**********************************************************************************
 void segsum(uint16_t sum) {
 	uint16_t dgt; 
-	int l = 0, u = 4, o;
+	int u = 4, o;
+	//int l = 0;
 
   	//determine how many digits there are 
 	//while (!(sum & 0x8000)){
@@ -118,8 +127,8 @@ while(1){
   	//insert loop delay for debounce
   	_delay_ms(2);
   	//make PORTA an input port with pullups 
+	PORTA = 0xff;
   	DDRA = 0x00;
-	PINA = 0xff;
   	//enable tristate buffer for pushbutton switches
   	PORTB = 0b01110000;
   	_delay_ms(2);
