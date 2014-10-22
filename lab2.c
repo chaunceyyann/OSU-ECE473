@@ -14,6 +14,22 @@
 #define FALSE 0
 #define INPUTP PINA
 //#define F_CPU 16000000 // cpu speed in hertz 
+#define MAX_CHECKS 12 // # checks before a switch is debounced
+uint8_t debounced_state = 0; // Debounced state of the switches
+uint8_t state[MAX_CHECKS]; // Array that maintains bounce status
+uint8_t index = 0; // Pointer into State
+// Service routine called by a timer interrupt
+
+void DebounceSwitch(){
+	uint8_t i,j;
+	state[index++]=0xff - PINA;
+    j=0xff;
+    for(i=0; i<MAX_CHECKS-1;i++)j=j & state[i];
+	//		if(j > 0) PORTF = 0xff;
+	//		else PORTF = 0x00;
+	debounced_state= j;
+    if(index >= MAX_CHECKS)index=0;
+}
 
 
 //decimal to 7-segment LED display encodings, logic "0" turns on segment
@@ -38,6 +54,12 @@ int segment_data[5] = {0b11000000, 0xff, 0xff, 0xff, 0xff}; // turn off led not 
 //external loop delay times 12. 
 //
 uint8_t chk_buttons(uint8_t button) {
+	static uint16_t state = 0; //holds present state
+	state = (state << 1) | (! bit_is_clear(INPUTP, button)) | 0xE000;
+	if (state == 0xF000) return 1;
+	return 0;
+}
+uint8_t chk_button(uint8_t button) {
 	static uint16_t state = 0; //holds present state
 	state = (state << 1) | (! bit_is_clear(INPUTP, button)) | 0xE000;
 	if (state == 0xF000) return 1;
@@ -109,12 +131,13 @@ void ledNumber (int n, int f){ // f = format
 
 //***********************************************************************************
 int main(){
-	int counter = 0,count = 0, j, i;
+	int counter = 0,count = 0, j, i, release = 0;
 	//set port bits 4-7 B as outputs
 	DDRB = 0xf0; // output
 	DDRC = 0xff; // output
 	PORTC = 0x00;
 
+	DDRF = 0xff;
 while(1){
   	//insert loop delay for debounce
   	_delay_ms(2);
@@ -128,20 +151,25 @@ while(1){
 
   	//now check each button and increment the count as needed
 	//j = counter%8;
-	for (j = 0; j < 8; j++){
-		for (i = 0; i < 12;i++){
-			if (chk_buttons(j)){
-				count += pow(2,j); 
+	//for (j = 0; j < 8; j++){
+		//for (i = 0; i < 12;i++){
+			DebounceSwitch();
+			if (debounced_state){
+				if(release == 0){
+				release = 1;
+				count += debounced_state; 
   				//bound the count to 0 - 1023
 				count = count%65536;
   				//break up the disp_value to 4, BCD digits in the array: call (segsum)
 				segsum(count);
+				debounced_state = 0;	
 			}
+}
+			else release = 0;
 			//_delay_ms(1);
-		}
-	}
-
-  	//make PORTA an output
+	//}
+	
+	//make PORTA an output
 	DDRA = 0xff;
 	//bound a counter (0-4) to keep track of digit to display 
 	for (counter = 0; counter < 5; counter++){	 
