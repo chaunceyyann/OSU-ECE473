@@ -131,9 +131,9 @@ void ledNumber (int n, int f){ // f = format
 int main(){
 	int counter = 0,count = 0, j, i, release = 0;
 	//set port bits 4-7 B as outputs
-	DDRB = 0xf0; // output
-	DDRC = 0xff; // output
-	PORTC = 0x00;
+	DDRB |= 0xf0; // output
+	DDRF = 0xff; // output
+	PORTF = 0x00;
 
 	DDRF = 0xff;
 while(1){
@@ -154,8 +154,7 @@ while(1){
 			release = 1;
 			count += debounced_state; 
   			//bound the count to 0 - 1023
-			count = countaver
-				1024;
+			count = count%1024;
   			//break up the disp_value to 4, BCD digits in the array: call (segsum)
 			segsum(count);
 			debounced_state = 0;	
