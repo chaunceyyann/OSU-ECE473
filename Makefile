@@ -34,6 +34,7 @@ clean:
 	-rm -rf $(PRG).o $(PRG).elf $(PRG).lst $(PRG).map $(PRG).srec $(PRG)*.bin
 	-rm -rf $(PRG)_eeprom.srec $(PRG)_eeprom*.bin $(PRG)_eeprom.hex $(PRG).hex 
 	-rm -rf $(PRG).d
+	-rm -rf LCDDriver.o LCDDriver.h
 
 #clean entire directory
 all_clean:
