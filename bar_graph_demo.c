@@ -18,7 +18,7 @@
 //     reglck            PORTB bit 0 (ss_n)                      
 //     srclk             PORTB bit 1 (sclk)
 //     sdin              PORTB bit 2 (mosi)
-//     oe_n                   ground
+//     oe_n              PORTB bit 7
 //     gnd2                   ground
 //     vdd2                     vcc
 //     sd_out               no connect

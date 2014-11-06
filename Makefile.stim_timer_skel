@@ -1,7 +1,7 @@
 SHELL               = /bin/bash
-PRG                 = lab3
-OBJS                = $(PRG).o LCDDriver.o 
-SRCS                = $(PRG).c LCDDriver.c 
+PRG                 = stim_timer_skel
+OBJS                = stim_timer_skel.o LCDDriver.o 
+SRCS                = stim_timer_skel.c LCDDriver.c 
 MCU_TARGET          = atmega128
 F_CPU               = 16000000UL
 PROGRAMMER_TARGET   = m128
@@ -56,7 +56,8 @@ program: $(PRG).hex
 #	avrdude -p $(PROGRAMMER_TARGET) -c usbasp -e -U flash:w:$(PRG).hex \
                                                      -U eeprom:w:$(PRG)_eeprom.hex
 	avrdude -p $(PROGRAMMER_TARGET) -c osuisp2 -e -U flash:w:$(PRG).hex 
-	make clean 
+	make clean -f Makefile.$(PRG)
+
 lst:  $(PRG).lst
 
 %.lst: %.elf

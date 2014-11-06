@@ -1,5 +1,5 @@
 SHELL               = /bin/bash
-PRG                 = lab3
+PRG                 = bar_graph_demo
 OBJS                = $(PRG).o LCDDriver.o 
 SRCS                = $(PRG).c LCDDriver.c 
 MCU_TARGET          = atmega128
@@ -56,7 +56,7 @@ program: $(PRG).hex
 #	avrdude -p $(PROGRAMMER_TARGET) -c usbasp -e -U flash:w:$(PRG).hex \
                                                      -U eeprom:w:$(PRG)_eeprom.hex
 	avrdude -p $(PROGRAMMER_TARGET) -c osuisp2 -e -U flash:w:$(PRG).hex 
-	make clean 
+	make clean -f Makefile.$(PRG)
 lst:  $(PRG).lst
 
 %.lst: %.elf
