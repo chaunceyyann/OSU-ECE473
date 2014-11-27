@@ -1,10 +1,8 @@
 // lab3.c 
 // Chauncey Yan
 // 11.02.14
-// Lab3:
-// Try another way to use push buttons as a user interface.
-// Using interrupts with counter/timer 0
-// Learn how to use SPI I/O.
+// Lab4:
+// timer, pwm, oscillator
 
 // Wire layout
 // 	    7Seg			    Mega128 Board
@@ -45,26 +43,26 @@
 #include <stdlib.h>
 #include "LCDDriver.h"
 
-#define MAX_CHECKS 12 // # checks before a switch is debounced
-#define BASE 10  // the base of the clock should be working
+#define MAX_CHECKS 12 				// # checks before a switch is debounced
+#define BASE 10  					// the base of the clock should be working
 
-static uint16_t gc = 0;
-uint8_t mode_step = 1;
-uint8_t debounced_state = 0; // Debounced state of the switches
-uint8_t state[MAX_CHECKS]; // Array that maintains bounce status
-uint8_t id = 0; // Pointer into State
-enum states {INIT};
-char * str;
-int encoder_data[4] = {0x00, 0x01, 0x03, 0x02};
+static uint32_t gc = 0; 			// global counter timer
+static uint16_t hours; 				// Hours
+static uint8_t mins;				// mins
+uint8_t mode_step = 1;				// pushbutton mode select
+uint8_t debounced_state = 0; 		// Debounced state of the switches
+uint8_t state[MAX_CHECKS]; 			// Array that maintains bounce status
+uint8_t id = 0; 					// Pointer into State
+int encoder_data[4] = {0x00, 0x01, 0x03, 0x02};		// encoder data decoder
 //decimal to 7-segment LED display encodings, logic "0" turns on segment
-int dec_to_7seg[18] = {0b11000000, 0b11111001, 0b10100100, 0b10110000, // 0 1 2 3
-					   0b10011001, 0b10010010, 0b10000010, 0b11111000, // 4 5 6 7
-					   0b10000000, 0b10011000, 0b10001000, 0b10000011, // 8 9 A B
-					   0b11000110, 0b10100001, 0b10000110, 0b10001110, // C D E F
-					   0b10000011, 0b1000100}; // ^ :
+int d7seg[18] = {0b11000000, 0b11111001, 0b10100100, 0b10110000, // 0 1 2 3
+				 0b10011001, 0b10010010, 0b10000010, 0b11111000, // 4 5 6 7
+				 0b10000000, 0b10011000, 0b10001000, 0b10000011, // 8 9 A B
+				 0b11000110, 0b10100001, 0b10000110, 0b10001110, // C D E F
+				 0b10000011, 0b1000100}; 	      			     // ^ :
 
 //holds data to be sent to the segments. logic zero turns segment on
-int segment_data[5] = {0b11000000, 0xff, 0xff, 0xff, 0xff}; // turn off led not needed.
+int segment_data[5] = {0b11000000, 0xff, 0xff, 0xff, 0xff}; 	// turn off led not needed.
 
 
 //*********************************************************************************
@@ -94,7 +92,7 @@ void breakDgt(uint16_t sum, int base_count, uint16_t check_bit) {
 	int o;
 	for (o = 0; o < 4; o++){
 		dgt = (sum >> (o * base_count)) & check_bit;
-		segment_data[o] = dec_to_7seg[dgt];
+		segment_data[o] = d7seg[dgt];
 	}
 }
 
@@ -105,10 +103,10 @@ void segsum(uint16_t sum) {
 	switch (BASE) {
 	case 10:
 		//breakDgt(sum,10);
-		segment_data[0] = dec_to_7seg[sum%10];
-		segment_data[1] = dec_to_7seg[sum/10%10];
-		segment_data[2] = dec_to_7seg[sum/100%10];
-		segment_data[3] = dec_to_7seg[sum/1000%10];
+		segment_data[0] = d7seg[sum%10];
+		segment_data[1] = d7seg[sum/10%10];
+		segment_data[2] = d7seg[sum/100%10];
+		segment_data[3] = d7seg[sum/1000%10];
 		break;
 	case 16:
 		breakDgt(sum,4,0x000f);
@@ -121,19 +119,41 @@ void segsum(uint16_t sum) {
 		break;
 	}
   	//blank out leading zero digits
-	while (segment_data[u] == dec_to_7seg[0] || segment_data[u] == 0xff) {
+	while (segment_data[u] == d7seg[0] || segment_data[u] == 0xff) {
 		segment_data[u--] = 0xff;
 		if ( u == -1) {
-			segment_data[0] = dec_to_7seg[0];
+			segment_data[0] = d7seg[0];
 			break;
 		}
 	}
   	//now move data to right place for misplaced colon position
 	segment_data[4] = segment_data[3];
 	segment_data[3] = segment_data[2];
-	segment_data[2] = 0xff; //dec_to_7seg[17];
+	segment_data[2] = 0xff; 			//d7seg[17];
 }
 
+
+//***********************************************************************************
+// 									alarm clock
+//
+//***********************************************************************************
+void rclock(void){
+
+	mins = gc % 60;
+
+	hours = gc / 60 % 24;
+
+	segment_data[0] = d7seg[mins%10];
+	segment_data[1] = d7seg[mins/10];
+	segment_data[3] = d7seg[hours%10];
+	segment_data[4] = d7seg[hours/10];
+
+	if ((gc % 2) == 0){ 
+		segment_data[2] = d7seg[17];
+	} else { 
+		segment_data[2] = 0xff;
+	}
+}
 
 /***********************************************************************/
 //                            spi input and output
@@ -161,7 +181,7 @@ void bar_print(uint8_t led_num){
 void tcnt0_init(void){
 	//timer counter 0 setup, running off i/o clock
 	TIMSK |= ( 1<<TOIE0 );             			//enable interrupts
-	TCCR0 |= ( 1<<CS00 ) | (1<<CS02);  			//normal mode, prescale by 128
+	TCCR0 |= ( 1<<CS00 );  			//normal mode, prescale by 128
 }
 
 void read_encoder(uint8_t miso){
@@ -189,20 +209,22 @@ void read_encoder(uint8_t miso){
 }
 
 ISR(TIMER0_OVF_vect){
-	// 16m/128 = 125khz
-	// 1/125k * 256 = 2.048ms
-	// 1/125k * 256 * 244 = 500ms
+	// 16m  
+	// 1/16m * 256 = 16uS
+	// 1/16m * 256 * 62500 = 1s
 	
-	static uint8_t count_2ms = 0;
-	count_2ms++; 								// increment count every 2.048ms
+	static uint16_t count_16us = 0;
+	count_16us++; 								// increment count every 2.048ms
 
-	if (( count_2ms % 1 ) == 0 ){				// prescale the count again by mod 
+	if (( count_16us % 62500 ) == 0 ){			// prescale the count again by mod 
 
   		bar_print(mode_step);					// SPI MOSI to bar graph display 
 	
-		read_encoder(SPDR);						// SPI MISO from Encoder 
-	}
-	if ( count_2ms == 0xff ) count_2ms = 0x00;  // count_2ms to 1st positon
+		//read_encoder(SPDR);						// SPI MISO from Encoder 
+		gc++;
+		rclock();
+
+		count_16us = 0x00;  					// count_2ms to 1st positon
 }
 
 //***********************************************************************************
@@ -222,7 +244,7 @@ void ledDigit (int n, int pos){
 	if ( pos != -1 ){
 		DDRA = 0xff; // output
 		PORTB = pos << 4; // selet the digit
-		PORTA = dec_to_7seg[n];
+		PORTA = d7seg[n];
 	}
 	_delay_ms(1);
 }
@@ -239,13 +261,14 @@ void ledNumber (int n, int f){ // f = format
 		ledDigit(digit[i%4],k);
 	}
 }
+
 //***********************************************************************************
 //									Main
 // 
 //***********************************************************************************
 int main(){
 	// run time initial 
-	int counter = 0,count = 0, i;
+	uint8_t counter = 0, i;
 
 	//set port bits 4-7 B as outputs
 	DDRB = 0xf0; // output
@@ -284,9 +307,9 @@ int main(){
 	}
 
 	// display the global counter
-	gc=gc%1024;									// roll over 
-	segsum(gc);									// display on 7 seg
-
+	//gc=gc%1024;									// roll over 
+	gc = 120;
+	//segsum(gc);									// display on 7 seg
 
 	// select the digit to display and select the input from decoder
 	DDRA = 0xff;								//make PORTA an output

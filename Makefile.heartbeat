@@ -1,5 +1,5 @@
 SHELL               = /bin/bash
-PRG                 = lab4
+PRG                 = heartbeat
 OBJS                = $(PRG).o 
 SRCS                = $(PRG).c 
 MCU_TARGET          = atmega128
@@ -22,7 +22,7 @@ override LDFLAGS       = -Wl,-Map,$(PRG).map
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
-all: $(PRG).elf lst text eeprom
+all: $(PRG).elf lst text eeprom  
 
 $(PRG).elf: $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
@@ -34,7 +34,6 @@ clean:
 	-rm -rf $(PRG).o $(PRG).elf $(PRG).lst $(PRG).map $(PRG).srec $(PRG)*.bin
 	-rm -rf $(PRG)_eeprom.srec $(PRG)_eeprom*.bin $(PRG)_eeprom.hex $(PRG).hex 
 	-rm -rf $(PRG).d
-	-rm -rf LCDDriver.o
 
 #clean entire directory
 all_clean:
@@ -52,12 +51,12 @@ all_clean:
 #include $(SRCS:.c=.d)
 
 #setup for usb programmer
-program: $(PRG).hex
+program: $(PRG).hex 
 #	avrdude -p $(PROGRAMMER_TARGET) -c usbasp -e -U flash:w:$(PRG).hex 
 #	avrdude -p $(PROGRAMMER_TARGET) -c usbasp -e -U flash:w:$(PRG).hex \
                                                      -U eeprom:w:$(PRG)_eeprom.hex
 	avrdude -p $(PROGRAMMER_TARGET) -c osuisp2 -e -U flash:w:$(PRG).hex 
-	make clean 
+	make clean
 lst:  $(PRG).lst
 
 %.lst: %.elf

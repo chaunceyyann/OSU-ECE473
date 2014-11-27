@@ -1,7 +1,7 @@
 SHELL               = /bin/bash
-PRG                 = lab4
-OBJS                = $(PRG).o 
-SRCS                = $(PRG).c 
+PRG                 = test
+OBJS                = $(PRG).o LCDDriver.o 
+SRCS                = $(PRG).c LCDDriver.c 
 MCU_TARGET          = atmega128
 F_CPU               = 16000000UL
 PROGRAMMER_TARGET   = m128
