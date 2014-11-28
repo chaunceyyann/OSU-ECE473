@@ -1,7 +1,8 @@
 SHELL               = /bin/bash
 PRG                 = lab4
-OBJS                = $(PRG).o LCDDriver.o 
-SRCS                = $(PRG).c LCDDriver.c
+PRG2                = lcd_functions
+OBJS                = $(PRG).o $(PRG2).o 
+SRCS                = $(PRG).c $(PRG2).c
 MCU_TARGET          = atmega128
 F_CPU               = 16000000UL
 PROGRAMMER_TARGET   = m128
@@ -34,7 +35,7 @@ clean:
 	-rm -rf $(PRG).o $(PRG).elf $(PRG).lst $(PRG).map $(PRG).srec $(PRG)*.bin
 	-rm -rf $(PRG)_eeprom.srec $(PRG)_eeprom*.bin $(PRG)_eeprom.hex $(PRG).hex 
 	-rm -rf $(PRG).d
-	-rm -rf LCDDriver.o
+	-rm -rf $(PRG2).o
 
 #clean entire directory
 all_clean:

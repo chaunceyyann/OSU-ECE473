@@ -44,7 +44,9 @@
 #include <util/delay.h>
 #include <stdlib.h>
 #include <time.h>
+//#include "LCDDriver.h"
 //#include "hd44780.h"
+#include "lcd_functions.h"
 #include "kellen_music.c"
 
 #define MAX_CHECKS 12 				// # checks before a switch is debounced
@@ -233,7 +235,7 @@ void read_encoder(uint8_t miso){
 
 void ADC_init (void){
 	PORTF = 0x00;
-	DDRF  = 0x00;
+	DDRF  &= ~(1<<0);
 	ADCSR |= (1 << ADFR);  		// Set ADC to Free-Running Mode
 	ADCSR |= (1 << ADPS2); 		// Set ADC prescaler to 16 - 500KHz
 	//ADCSR |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0); // Set ADC prescaler to 128 - 125KHz sample rate @ 16MHz
@@ -257,6 +259,7 @@ ISR(ADC_vect) {					// auto dimming mode
 	else if (adcd > 200)
 		adcd = 170;
 	OCR2 = adcd;
+	
 }
 
 //***********************************************************************************
@@ -313,22 +316,16 @@ ISR(TIMER0_OVF_vect){
 		vc = 100;
 
 	// Volume
-	OCR3A = 0x0064 - vc;
+	//OCR3A = 0x0064 - vc;
 
-	//segsum(vc);
-	if (( count_2ms % 488 ) == 0 ){				// prescale the count again by mod 
-		aclock_dis(rtc++);
-	}
+	segsum(vc);
+	//if (( count_2ms % 488 ) == 0 ){				// prescale the count again by mod 
+	//	aclock_dis(rtc++);
+	//}
 	if ( count_2ms == 0xffff ) count_2ms = 0;  	// count_2ms to 1st positon
 }
 
 //ISR timer 1 is in kellen_music.c
-
-//ISR(TIMER2_COMP_vect){
-	// change duty cycle according to ADCH input
-//	OCR2 = 2;
-//}
-
 
 
 //***********************************************************************************
@@ -345,12 +342,21 @@ int main(){
 	
 	// current time init
 	//time_init();
+	
+	// SPI interupt initial
+	spi_init();
+
+	lcd_init();	
+	clear_display();
+	cursor_off();
+
+	string2lcd("555");
+	clear_display();
+	string2lcd("111");
+	//clear_display();
 
 	// ADC init
 	ADC_init();
-
-	// SPI interupt initial
-	spi_init();
 
 	// time counter init
 	tcnt0_init();
@@ -359,10 +365,10 @@ int main(){
 	//tcnt3_init();
 
 	// Volume
-	OCR3A = 0x0005; 	// minimum
+	//OCR3A = 0x0005; 	// minimum
 
 	sei();
-	
+
 	// main while loop
 	while(1){
   	_delay_ms(2);								// insert loop delay for debounce
@@ -390,7 +396,7 @@ int main(){
 	}
 	if (gc == 0){
 		gc = 1;
-		music_on();
+		//music_on();
 	}
 //	switch (mode_step){
 //		case 1:
