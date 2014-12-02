@@ -1,6 +1,7 @@
 SHELL               = /bin/bash
 PRG                 = lab4
-PRG2                = lcd_functions
+#PRG2                = lcd_functions
+PRG2                = LCDDriver
 OBJS                = $(PRG).o $(PRG2).o 
 SRCS                = $(PRG).c $(PRG2).c
 MCU_TARGET          = atmega128

@@ -67,9 +67,9 @@
 #include <util/delay.h>
 #include <stdlib.h>
 #include <time.h>
-//#include "LCDDriver.h"
+#include "LCDDriver.h"
 //#include "hd44780.h"
-#include "lcd_functions.h"
+//#include "lcd_functions.h"
 #include "kellen_music.c"
 
 #define MAX_CHECKS 12 				// # checks before a switch is debounced
@@ -81,7 +81,7 @@ signed int gc = 0;					// globle counter
 signed int lec = 0;					// left encoder counter
 signed int old_lec = 0;				// old left encoder counter
 signed int rec = 0;					// right encoder counter
-signed int vc = 1;					// volume counter
+signed int vc = 20;					// volume counter
 signed int old_vc = 1;				// volume counter old value
 unsigned int rts = 0; 				// global time counter seconds
 unsigned int rtc = 1440; 			// global time counter mins 
@@ -105,6 +105,7 @@ uint8_t debounced_state = 0; 		// Debounced state of the switches
 uint8_t state[MAX_CHECKS]; 			// Array that maintains bounce status
 uint8_t id = 0; 					// Pointer into State
 signed int adcd = 0;				// ADC data
+uint16_t temp = 32;					// temporature value
 int encoder_data[4] = {0x00, 0x01, 0x03, 0x02};	// reorder encoder data
 char alarm_buf[32] = "Go Beavs! OSU Fight Fight Fight!";
 char buf[16];						// genaral purpose buffer
@@ -191,21 +192,6 @@ void segsum(uint16_t sum) {
 // 									clock
 //
 //***********************************************************************************
-void time_init(void){
-  time_t timer;
-  struct tm y2k;
-  int seconds;
-
-  y2k.tm_hour = 0;   y2k.tm_min = 0; y2k.tm_sec = 0;
-  y2k.tm_year = 114; y2k.tm_mon = 12; y2k.tm_mday = 1;
-
-  time(&timer);  /* get current time; same as: timer = time(NULL)  */
-
-  seconds = difftime(timer,mktime(&y2k));			// get the different second from 2014/12/1 to now
-  clear_display();
-  string2lcd(itoa(seconds,buf,10));
-}
-
 void hmclock(unsigned int tc){
   mins = tc % 60;
   hours_24 = tc / 60 % 24;							// 24 hours
@@ -225,36 +211,36 @@ void clock_dis(){
 }
 
 
-void alarm_check(){	// run once pre second
+void alarm_check(){									// run once pre second
   uint8_t i;
   if ((alarm_start == 60) && (mode & (1<<4))){		// initial value, use this to exe music once
 	hmclock(rtc);									// update real time clock value hours and mins
 	if ((ahours == hours_24) && (amins == mins)){	// use hours_24 for am pm
 	  music_on();									// alarm tone on
-	  clear_display();
+	  LCD_Clr();
 	  if ( song == 0)
-		string2lcd(alarm_buf);						// print Fight song
+		LCD_PutStr(alarm_buf);						// print Fight sone
 	  else if (song == 1)
-		string2lcd("Tetris Theme");						// print Fight song
+		LCD_PutStr("Tetris Theme");					// print Tetris
 	  else if (song == 2)
-		string2lcd("Mario Theme");						// print Fight song
+		LCD_PutStr("Mario Theme");					// print Mario
 	  else if (song == 3)
-		string2lcd("Unknow");						// print Fight song
+		LCD_PutStr("Unknow");						// print Unknow
 	  alarm_start = rts;							// set start second for alarm tone
 	}
   }
   if ((rts - alarm_start) == ALARM_LEN) { 			// 1-58s for the alarm tone
 	music_off();									// alarm tone off
-	clear_display();
-	string2lcd("Alarm off!");
+	LCD_Clr();
+	LCD_PutStr("Alarm off!");
 	alarm_start = 61;								// avoiding rerun this music_off and music_on
   } 
   if (((rts-alarm_start)<ALARM_LEN)&&(song==0)) {	// roll over buffer chars
-	clear_display();
+	LCD_Clr();
 	for (i=0;i<16;i++){								// give 16 chars to buf
 	  buf[i] = alarm_buf[i+(rts-alarm_start)];
 	}
-	string2lcd(buf);
+	LCD_PutStr(buf);
   }
   if (rts == 59){									// last second in this min
 	alarm_start = 60;								// reset alarm
@@ -265,8 +251,8 @@ void snooze_func(){
   if ((alarm_start != 61) && (alarm_start !=60)) {	// alarm is on
 	if ((mode & (1<<6)) && (snooze_start == 0)) {	// first time snooze is trigered
 	  music_off();									// turn off the music
-	  clear_display();
-	  string2lcd("Snooze mode 10s");				// print snooze
+	  LCD_Clr();
+	  LCD_PutStr("Snooze mode 10s");				// print snooze
 	  snooze_start = rts;							// start count 10 second
 	  alarm_start = 61;								// stop alarm tone end check
 	}
@@ -285,16 +271,16 @@ void snooze_func(){
 // Alarm print out                           
 /***********************************************************************/
 void lcd_alarm(){
-  clear_display();
+  LCD_Clr();
   if (mode & (1<<4)){							// check if alarm is set
-	string2lcd("Alarm set ");
+	LCD_PutStr("Alarm set ");
 	itoa(ahours,buf,10);
-	string2lcd(buf);
-	string2lcd(":");
+	LCD_PutStr(buf);
+	LCD_PutStr(":");
 	itoa(amins,buf,10);
-	string2lcd(buf);
+	LCD_PutStr(buf);
   } else										// not set
-	string2lcd("Alarm: Not set");
+	LCD_PutStr("Alarm: Not set");
 }
 
 /***********************************************************************/
@@ -418,6 +404,7 @@ ISR(TIMER0_OVF_vect){
   static uint16_t count_2ms = 0;
   count_2ms++; 								// increment count every 2.048ms
 
+  //bar_print(0);								// reduce the bar graph brightness
   // Encoder and bar graph
   if (count_2ms % 2 == 0){
 	//SPI MOSI to bar graph display
@@ -518,17 +505,17 @@ ISR(TIMER0_OVF_vect){
 	  OCR3A = 100 - vc;							// create PWM with TCNT3
 	  if (count_2ms % 488 == 0){				// strobe lcd in half a second
 		if (old_lec != lec){
-		  clear_display();
-		  string2lcd("Volume: ");
-		  string2lcd(itoa(vc,buf,10));			// lcd display volume
+		  LCD_Clr();
+		  LCD_PutStr("Volume: ");
+		  LCD_PutStr(itoa(vc,buf,10));			// lcd display volume
 		}
 		old_lec = lec;
 	  }
 	  if (mode_t & 0xFC){						// hit any button beside 0 1
 		mode &= ~0x02;							// exit volume control mode
-		clear_display();
-		string2lcd("Volume: ");
-		string2lcd(itoa(vc,buf,10));			// lcd display volume
+		LCD_Clr();
+		LCD_PutStr("Volume: ");
+		LCD_PutStr(itoa(vc,buf,10));			// lcd display volume
 	  }
 	}
   }
@@ -599,11 +586,13 @@ int main(){
   // SPI interupt initial
   spi_init();
 
-  lcd_init();	
-  clear_display();
-  cursor_off();
-
-  string2lcd("Welcome!");
+  LCD_Init();
+  LCD_Clr();
+  LCD_CursorBlinkOff();
+  LCD_PutStr("Welcome to Alarm!!!");
+  LCD_MovCursorLn2();
+  LCD_PutStr("Temperature: ");
+  LCD_PutDec16(temp);
 
   // current time init
   //time_init();
