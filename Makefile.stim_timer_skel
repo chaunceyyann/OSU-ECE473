@@ -1,7 +1,7 @@
 SHELL               = /bin/bash
-PRG                 = lab2
-OBJS                = lab2.o 
-SRCS                = lab2.c 
+PRG                 = stim_timer_skel
+OBJS                = stim_timer_skel.o LCDDriver.o 
+SRCS                = stim_timer_skel.c LCDDriver.c 
 MCU_TARGET          = atmega128
 F_CPU               = 16000000UL
 PROGRAMMER_TARGET   = m128
@@ -22,7 +22,7 @@ override LDFLAGS       = -Wl,-Map,$(PRG).map
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
 
-all: $(PRG).elf lst text eeprom  
+all: $(PRG).elf lst text eeprom
 
 $(PRG).elf: $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
@@ -51,12 +51,13 @@ all_clean:
 #include $(SRCS:.c=.d)
 
 #setup for usb programmer
-program: $(PRG).hex 
+program: $(PRG).hex
 #	avrdude -p $(PROGRAMMER_TARGET) -c usbasp -e -U flash:w:$(PRG).hex 
 #	avrdude -p $(PROGRAMMER_TARGET) -c usbasp -e -U flash:w:$(PRG).hex \
                                                      -U eeprom:w:$(PRG)_eeprom.hex
 	avrdude -p $(PROGRAMMER_TARGET) -c osuisp2 -e -U flash:w:$(PRG).hex 
-	make clean
+	make clean -f Makefile.stim_timer_skel 
+
 lst:  $(PRG).lst
 
 %.lst: %.elf

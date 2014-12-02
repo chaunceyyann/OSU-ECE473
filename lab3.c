@@ -37,7 +37,7 @@
 //     SCK               PORTB bit 1 
 //     CKINH             PORTE bit 6 
 //     SOUT/SER_OUT      PORTB bit 3
-//     SIN/SER_IN      	 PORTB bit 2
+//     SIN/SER_IN      	 Not connected
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
