@@ -60,7 +60,7 @@ void play_rest(uint8_t duration);
 void play_note(char note, uint8_t flat, uint8_t octave, uint8_t duration);
 void music_off(void);
 void music_on(void);      
-void music_init(void);
+void music_init(uint8_t);
 
 #define C0 0x1DDC
 #define Db0 0x1C30
@@ -1086,7 +1086,7 @@ void music_on(void) {
   play_song(song, notes);
 }
 
-void music_init(void) {
+void music_init(uint8_t sn) {
   //initially turned off (use music_on() to turn on)
   TIMSK |= (1<<OCIE1A);  //enable timer interrupt 1 on compare
   TCCR1A = 0x00;         //TCNT1, normal port operation
@@ -1097,7 +1097,7 @@ void music_init(void) {
   beat = 0;
   max_beat = 0;
   notes = 0;
-  song = 0;              //beaver fight song
+  song = sn;              //beaver fight song
 } 
 
 /*********************************************************************/

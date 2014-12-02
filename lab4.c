@@ -95,6 +95,8 @@ unsigned int mins = 0;				// display mins
 unsigned int amins = 60;			// alarm mins
 uint8_t alarm_start = 60;			// alarm start time
 uint8_t snooze_start = 0;			// alarm snooze start time
+uint8_t sn = 0;						// 0 - Beavs fight sone 1 - Tetris 
+									// 2 - Mario 3 - Unknown
 uint8_t mode_t = 0;					// toggle mode switch
 uint8_t mode = 1;					// mode flags
 uint8_t inc = 1;					// increament to seperate min and hour 
@@ -230,7 +232,14 @@ void alarm_check(){	// run once pre second
 	if ((ahours == hours_24) && (amins == mins)){	// use hours_24 for am pm
 	  music_on();									// alarm tone on
 	  clear_display();
-	  string2lcd(alarm_buf);						// print Fight song
+	  if ( song == 0)
+		string2lcd(alarm_buf);						// print Fight song
+	  else if (song == 1)
+		string2lcd("Tetris Theme");						// print Fight song
+	  else if (song == 2)
+		string2lcd("Mario Theme");						// print Fight song
+	  else if (song == 3)
+		string2lcd("Unknow");						// print Fight song
 	  alarm_start = rts;							// set start second for alarm tone
 	}
   }
@@ -240,7 +249,7 @@ void alarm_check(){	// run once pre second
 	string2lcd("Alarm off!");
 	alarm_start = 61;								// avoiding rerun this music_off and music_on
   } 
-  if ((rts - alarm_start) < ALARM_LEN) {			// roll over buffer chars
+  if (((rts-alarm_start)<ALARM_LEN)&&(song==0)) {	// roll over buffer chars
 	clear_display();
 	for (i=0;i<16;i++){								// give 16 chars to buf
 	  buf[i] = alarm_buf[i+(rts-alarm_start)];
@@ -263,8 +272,10 @@ void snooze_func(){
 	}
   }
   if ((rts - snooze_start) == SNOOZE_LEN) {			// out of snooze mode
-	alarm_start = 60;								// music on again. 
+	alarm_start = 60;								// resume music. 
 													// Not working for long snoozing 
+	song++;
+	if (song == 4) song = 0;						// roll back for the fisrt song
 	snooze_start = 0;								// reset snooze function
   }
 }
@@ -494,14 +505,14 @@ ISR(TIMER0_OVF_vect){
   }
 
   // ararm tone speed for note duration(64th notes)
-  if (count_2ms % 256 == 0){
+  if (count_2ms % 32 == 0){
 	beat++;
   }
 
   if (count_2ms % 2 == 0){						// volume control
 	if (((mode & (1<<0)) && (mode & (1<<1)))){	// mode 0 & 1
 	  if ((old_vc + lec) < 0) lec = 0-old_vc;	// set range 0 - 100
-	  else if ((old_vc + lec) > 100) lec = 100-old_vc; 
+	  else if ((old_vc + lec) > 50) lec = 50-old_vc; 
 	  vc = old_vc + lec;						// update volume counter
 	  segsum(vc);								// display vc
 	  OCR3A = 100 - vc;							// create PWM with TCNT3
@@ -602,7 +613,7 @@ int main(){
 
   // time counter init
   tcnt0_init();
-  music_init();
+  music_init(sn);
   tcnt2_init();
   tcnt3_init();
 
