@@ -1,7 +1,6 @@
 //LCD function header file
 //for mega128 board
 //R. Traylor 10.7.09
-
 void cursor_home(void);
 void home_line2(void);      
 void fill_spaces(void);

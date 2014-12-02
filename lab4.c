@@ -48,6 +48,7 @@
 //#include "hd44780.h"
 #include "lcd_functions.h"
 #include "kellen_music.c"
+#define SPI_MODE 1
 
 #define MAX_CHECKS 12 				// # checks before a switch is debounced
 #define BASE 10  					// the base of the clock should be working
@@ -56,10 +57,20 @@ signed int gc = 0;					// globle counter
 signed int lec = 0;					// left encoder counter
 signed int rec = 0;					// right encoder counter
 signed int vc = 1;					// volume counter
-unsigned int rtc = 0; 			// global time counter 
+unsigned int rts = 0; 				// global time counter seconds
+unsigned int rtc = 0; 				// global time counter mins 
+unsigned int rtc_t = 0;				// temporary rtc for set time mins
+unsigned int atc = 50;	 			// alarm mins 
+unsigned int atc_t = 0;				// temporary atc for set alarm mins
 unsigned int hours = 0; 			// Hours
+unsigned int hours_24 = 0; 			// 24 Hours
+unsigned int ahours = 0; 			// alarm Hours
 unsigned int mins = 0;				// mins
-uint8_t mode_step = 1;				// mode adder 
+unsigned int amins = 0;				// alarm mins
+uint8_t mode_t = 0;					// toggle mode
+uint8_t mode = 1;					// mode 
+uint8_t inc = 1;					// increament 
+uint8_t barcode = 0;				// data print on the bar 
 uint8_t debounced_state = 0; 		// Debounced state of the switches
 uint8_t state[MAX_CHECKS]; 			// Array that maintains bounce status
 uint8_t id = 0; 					// Pointer into State
@@ -67,7 +78,7 @@ signed int adcd = 0;					// ADC data
 int encoder_data[4] = {0x00, 0x01, 0x03, 0x02};
 uint16_t britness_s = 0x0100;
 uint16_t britness_e = 0xBE00;
-
+char * buf[16];
 //decimal to 7-segment LED display encodings, logic "0" turns on segment
 int dec_to_7seg[18] = {0b11000000, 0b11111001, 0b10100100, 0b10110000, // 0 1 2 3
 					   0b10011001, 0b10010010, 0b10000010, 0b11111000, // 4 5 6 7
@@ -163,24 +174,27 @@ void time_init(void){
   	seconds = difftime(timer,mktime(&y2k));
 	segsum(seconds);
 }
-void aclock_dis(unsigned int tc){
 
-	mins = (tc / 60) % 60;
-
-	hours = tc / 3600 % 24;
+void hmclock(unsigned int tc){
+	mins = tc % 60;
+	hours_24 = tc / 60 % 24;
+	hours = tc / 60 % 12;
+}
+void clock_dis(){
 
 	segment_data[0] = dec_to_7seg[mins%BASE];
 	segment_data[1] = dec_to_7seg[mins/BASE];
 	segment_data[3] = dec_to_7seg[hours%BASE];
 	segment_data[4] = dec_to_7seg[hours/BASE];
 
-	if ((tc % 2) == 0){
-		segment_data[2] = dec_to_7seg[17];
-	} else {
-		segment_data[2] = 0xff;
-	}
 }
 
+void set_time(){
+	rtc_t = rtc + rec;
+}
+void tloopback(){
+	
+}
 
 /***********************************************************************/
 //                            spi input and output
@@ -215,13 +229,13 @@ void read_encoder(uint8_t miso){
 
 	switch (s) {
 		case 0:
-			if ( encoder_data[(miso & 0x03)] - encoder_data[(old_miso & 0x03)] == -1) lec-=mode_step; 	
-			if ( encoder_data[(miso & 0x03)] - encoder_data[(old_miso & 0x03)] == 1) lec+=mode_step; 	
+			if ( encoder_data[(miso & 0x03)] - encoder_data[(old_miso & 0x03)] == -1) lec-=inc; 	
+			if ( encoder_data[(miso & 0x03)] - encoder_data[(old_miso & 0x03)] == 1) lec+=inc; 	
 			s = 1;
 			break;
 		case 1:
-			if ( encoder_data[((miso & 0x0C) >> 2)] - encoder_data[((old_miso & 0x0C) >> 2)] == -1) vc-=mode_step; 	
-			if ( encoder_data[((miso & 0x0C) >> 2)] - encoder_data[((old_miso & 0x0C) >> 2)] == 1) vc+=mode_step; 	
+			if ( encoder_data[((miso & 0x0C) >> 2)] - encoder_data[((old_miso & 0x0C) >> 2)] == -1) rec-=inc; 	
+			if ( encoder_data[((miso & 0x0C) >> 2)] - encoder_data[((old_miso & 0x0C) >> 2)] == 1) rec+=inc; 	
 			s = 0;
 			break;
 	}
@@ -301,33 +315,128 @@ ISR(TIMER0_OVF_vect){
 	
 	static uint16_t count_2ms = 0;
 	count_2ms++; 								// increment count every 2.048ms
+	
+	// Encoder and bar graph
+	if (count_2ms % 10 == 0){
+		//SPI MOSI to bar graph display
+  		bar_print(mode);
 
-	if ( count_2ms % 256 == 0 ){
-		// for note duration(64th notes)
+		// SPI MISO from Encoder 
+		read_encoder(SPDR);			// set time mode
+		// semicolum alwas light up
+		if (mode & (1<<3)){						
+			set_time();
+			hmclock(rtc_t);
+			clock_dis();
+			segment_data[2] = dec_to_7seg[17];
+
+			// check comfirmation
+			if (mode & (1<<6)){	
+				mode &= 0b00000011;
+				rtc = rtc_t;
+			}
+		}
+		// set alarm time
+		// checking comfirmation at the last
+ 		else if (mode & (1<<5)){
+			set_time();
+			hmclock(atc_t);
+			atc_t = atc + rec;
+			clock_dis();
+			segment_data[2] = dec_to_7seg[17];
+
+			// check comfirmation
+			if (mode & (1<<6)){					
+				mode &= 0b00000011;
+				atc = atc_t;
+			}
+		}
+
+		if (mode & (1<<6))				// clear confirm
+			mode &= 0b00000011;
+		if (mode & (1<<7))				// clear cancel
+			mode &= 0b00000011;
+	}
+
+	// real time clock
+	if ((count_2ms % 488 == 0) ){		// 1s
+		rts++;
+		if (rts == 60){
+			rtc++;
+			//alarm_check();
+			rts = 0;
+		}
+		if (!((mode & (1<<3)) || (mode & (1<<5)))){
+			hmclock(rtc);
+			clock_dis();
+
+			// seconds dots
+			if ((rts % 2) == 0){
+				segment_data[2] = dec_to_7seg[17];
+			} else {
+				segment_data[2] = 0xff;
+			}
+		}
+	}
+	// adding pm dot indicator
+	if (hours_24 >= 12)
+		segment_data[2] &= dec_to_7seg[16];
+
+	// ararm tone speed for note duration(64th notes)
+	if (count_2ms % 256 == 0){
 		beat++;
 	}
 
-  	bar_print(mode_step);					// SPI MOSI to bar graph display 
+	if (count_2ms % 256 == 0){}
+	if (count_2ms % 256 == 0){}
 	
-	read_encoder(SPDR);						// SPI MISO from Encoder 
-	if (vc < 0)
-		vc = 0;
-	if (vc > 100)
-		vc = 100;
-
-	// Volume
-	//OCR3A = 0x0064 - vc;
-
-	segsum(vc);
-	//if (( count_2ms % 488 ) == 0 ){				// prescale the count again by mod 
-	//	aclock_dis(rtc++);
-	//}
-	if ( count_2ms == 0xffff ) count_2ms = 0;  	// count_2ms to 1st positon
 }
 
 //ISR timer 1 is in kellen_music.c
 
-
+//***********************************************************************************
+//									Menu
+// 
+//***********************************************************************************
+void set_mode(){
+	switch (mode_t){
+		case 1:		// increament 1 
+			inc = 1;
+			mode &= 0b11111100;
+			mode |= (1<<0);
+			break;
+		case 2:		// increament 60 for mins
+			inc = 60;
+			mode &= 0b11111100;
+			mode |= (1<<1);
+			break;
+		case 4:		// set dim
+			//mode &= 0b00000111;
+			mode ^= (1<<2);
+			break;
+		case 8:		// set time
+			mode &= 0b00011111;
+			mode |= (1<<3);
+			rec = 0;
+			break;
+		case 16:	// set 
+			mode |= (1<<4);
+			break;
+		case 32:	// set alarm 
+			mode &= 0b00110111;
+			mode |= (1<<5);
+			rec = 0;
+			break;
+		case 64:	// confirm
+			mode |= (1<<6);
+			break;
+		case 128:	// cancel
+			mode |= (1<<7);
+			break;
+		default:
+			break;
+	}
+}
 //***********************************************************************************
 //									Main
 // 
@@ -350,9 +459,7 @@ int main(){
 	clear_display();
 	cursor_off();
 
-	string2lcd("555");
-	clear_display();
-	string2lcd("111");
+	string2lcd("Welcome!");
 	//clear_display();
 
 	// ADC init
@@ -382,42 +489,34 @@ int main(){
 	
 	// Debounceing buttons
 	DebounceSwitch();							// now check each button and increment the count as needed
+	//segsum(debounced_state);					// display on 7 seg
 	if (debounced_state){ 						// change the mode according to the button pushed
-		mode_step = debounced_state; 			// store the mode step 
-		for (i = 0; i<8; i++){ 					// checking the additional input
-			if ( debounced_state & (1 << i) ){ 	// detect where is one of the buttons
-				debounced_state ^= (1 << i);	// invert that buttons input 
-				break;
-			}
+		if (mode_t != debounced_state){
+			mode_t = debounced_state;
+			set_mode();
+			clear_display();
+			string2lcd("Alarm: ");
+			//if (atc)
+			//string2lcd(buf);
+			string2lcd(" AutoDim: ");
+			//string2lcd(buf);
+			string2lcd(" Volume: ");
+			//string2lcd(buf);
+			debounced_state = 0;					// reset debouced_state
 		}
-		if (debounced_state) 					// check if it still has buttons pressed
-			mode_step = 0;						// set mode step as 0 if two or more buttons
-		debounced_state = 0;					// reset debouced_state
-	}
-	if (gc == 0){
+
+	} else mode_t = 0;
+	
+
+
+
+	if (gc == 0){	// first time
 		gc = 1;
 		//music_on();
 	}
-//	switch (mode_step){
-//		case 1:
-//			break;
-//		case 2:
-//			break;
-//		case 4:
-//			break;
-//		case 8:
-//			break;
-//		case 32:
-//			break;
-//		case 64:
-//			break;
-//		case 128:
-//			break;
-//		default:
-//			break;
-//	}
+
 	// display the global counter
-	//segsum(adcd);									// display on 7 seg
+	//segsum(mode);									// display on 7 seg
 
 	// select the digit to display and select the input from decoder
 	DDRA = 0xff;								//make PORTA an output

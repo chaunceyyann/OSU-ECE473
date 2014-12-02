@@ -140,4 +140,3 @@ void lcd_init(void){
 	strobe_lcd();
 	_delay_ms(5);
 } 
-
