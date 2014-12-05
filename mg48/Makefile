@@ -1,5 +1,5 @@
 SHELL               = /bin/bash
-PRG                 = mg48
+PRG                 = m48
 PRG2                = lm73_functions
 PRG3                = twi_master
 OBJS                = $(PRG).o $(PRG2).o $(PRG3).o

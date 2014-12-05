@@ -674,9 +674,6 @@ int main(){
   // uart transmition 
   uart_init();
 
-  // current time init
-  //time_init();
-
   // enable global interrupt
   sei();
 
@@ -704,7 +701,7 @@ int main(){
 
     locTemp();
 
-	for ( counter = 0; counter < 4; counter++){
+	for ( counter = 0; counter < 8; counter++){
 	  remote_temp_buf[counter] = uart_getc();
 	}
     // testing 
@@ -720,7 +717,7 @@ int main(){
 
       //fix for the last digit over bright issue
       if (counter != 4)
-        _delay_ms(1);
+        _delay_ms(2);
 
     }
   }//while
