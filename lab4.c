@@ -65,10 +65,14 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include "LCDDriver.h"
 #include "kellen_music.c"
+#include "lm73_functions.h"
+#include "twi_master.h"
+#include "uart_functions.c"
 
 #define MAX_CHECKS 12           // # checks before a switch is debounced
 #define BASE 10                 // the base of the clock should be working
@@ -104,9 +108,16 @@ uint8_t state[MAX_CHECKS];      // Array that maintains bounce status
 uint8_t id = 0;                 // Pointer into State
 signed int adcd = 0;            // ADC data
 uint16_t temp = 32;             // temporature value
+uint16_t lm73_int;              // temporature value int
+uint8_t lm73_dec;               // temporature value float
+uint16_t nega_temp = 0;         // if negative temporature
+uint8_t lm73_wr_buf[2];         // lm73 writing buffer
+uint8_t lm73_rd_buf[2];         // lm73 reading buffer
 int encoder_data[4] = {0x00, 0x01, 0x03, 0x02}; // reorder encoder data
 char alarm_buf[32] = "Go Beavs! OSU Fight Fight Fight!";
 char buf[16];                   // genaral purpose buffer
+char loc_temp_buf[16];          // local temporature buffer
+char remote_temp_buf[16];          // local temporature buffer
 
 //decimal to 7-segment LED display encodings, logic "0" turns on segment
 int dec_to_7seg[18] = {0b11000000, 0b11111001, 0b10100100, 0b10110000, // 0 1 2 3
@@ -362,6 +373,44 @@ ISR(ADC_vect) {                  // auto dimming mode
 
 }
 
+
+//***********************************************************************************
+//                             TWI tempurature
+//
+//***********************************************************************************
+void locTemp(){;
+  uint16_t lm73_temp;
+  int i;
+  twi_start_rd(LM73_ADDRESS,lm73_rd_buf,2); //read temperature data from LM73 (2 bytes)  (twi_mas    ter.h)
+  _delay_ms(2);    //wait for it to finish
+  lm73_temp = lm73_rd_buf[0];       //save high temperature byte into lm73_temp
+  lm73_temp = lm73_temp << 8;       //shift it into upper byte
+  lm73_temp |= lm73_rd_buf[1];      //"OR" in the low temp byte to lm73_temp
+
+  // check negative temp
+  if (lm73_temp & (1<<15)){
+    lm73_temp &= ~(1<<15);
+    nega_temp = 1;
+  } else nega_temp = 0;
+  
+  //lm73_temp_convert(lm73_temp,0x01);          // f_not_c
+
+  lm73_temp = (lm73_temp >> 5);     // remove the last unused 5 bits, accuracy at 0.25 C.
+  lm73_int = (lm73_temp >> 2);      // remove the last 2 bits, accuracy at 1 C.
+  lm73_dec = (lm73_temp & 0x03) * 25;    // get 2 decimal float number
+
+  snprintf(loc_temp_buf,16,"%d.%d C",lm73_int,lm73_dec);
+
+  // negative number handler
+  if (nega_temp == 1){
+	for (i = 15; i >= 0; i--){
+	  loc_temp_buf[i] = loc_temp_buf[(i-1)];
+	}
+	loc_temp_buf[0] = '-';
+  }
+}
+
+
 //***********************************************************************************
 //                             TCNT initial    
 //
@@ -517,6 +566,17 @@ ISR(TIMER0_OVF_vect){
       }
     }
   }
+
+  // ararm tone speed for note duration(64th notes)
+  if (count_2ms % 122 == 0){
+	LCD_Clr();
+	LCD_PutStr("LocTem:");
+	LCD_PutStr(loc_temp_buf);
+    LCD_MovCursorLn2();
+	//LCD_PutStr("Temp: ");
+	LCD_PutStr(remote_temp_buf);
+  }
+
 }
 
 //ISR timer 1 is in kellen_music.c
@@ -581,20 +641,6 @@ int main(){
   DDRB = 0xf0; // output
   DDRD = 0xff; // output
 
-  // SPI interupt initial
-  spi_init();
-
-  LCD_Init();
-  LCD_Clr();
-  LCD_CursorBlinkOff();
-  LCD_PutStr("Welcome to Alarm!!!");
-  LCD_MovCursorLn2();
-  LCD_PutStr("Temperature: ");
-  LCD_PutDec16(temp);
-
-  // current time init
-  //time_init();
-
   // ADC init
   ADC_init();
 
@@ -606,6 +652,30 @@ int main(){
 
   // initial Volume mute
   OCR3A = 0x0064;
+
+  // SPI interupt initial
+  spi_init();
+
+  // initialize TWI
+  init_twi();
+  lm73_wr_buf[0] = LM73_PTR_TEMP;      //load lm73_wr_buf[0] with temperature pointer address
+  twi_start_wr(LM73_ADDRESS,lm73_wr_buf,2);   //start the TWI write process (twi_master.h)
+  _delay_ms(2);
+
+  // initialize LCD
+  LCD_Init();
+  LCD_Clr();
+  LCD_CursorBlinkOff();
+  LCD_PutStr("Welcome to Alarm!!!");
+  LCD_MovCursorLn2();
+  LCD_PutStr("Temp: ");
+  LCD_PutDec16(temp);
+
+  // uart transmition 
+  uart_init();
+
+  // current time init
+  //time_init();
 
   // enable global interrupt
   sei();
@@ -632,7 +702,11 @@ int main(){
 
     } else mode_t = 0;                  // no toggle input
 
+    locTemp();
 
+	for ( counter = 0; counter < 4; counter++){
+	  remote_temp_buf[counter] = uart_getc();
+	}
     // testing 
     //segsum(mode);                     // display on 7 seg
 
@@ -646,7 +720,7 @@ int main(){
 
       //fix for the last digit over bright issue
       if (counter != 4)
-        _delay_ms(2);
+        _delay_ms(1);
 
     }
   }//while

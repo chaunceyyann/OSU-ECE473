@@ -19,5 +19,5 @@
 #define LM73_CONFIG_VALUE1     0xE0          //no timeout, max resolution: for ctl/status reg
 
 //special functions for lm73 temperature sensor
-void  lm73_temp_convert(char temp_digits[], uint16_t lm73_temp, uint8_t f_not_c);
+void  lm73_temp_convert(uint16_t lm73_temp, uint8_t f_not_c);
   

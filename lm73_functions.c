@@ -2,7 +2,7 @@
 // Roger Traylor 11.28.10
 
 #include <util/twi.h>
-#include "lm73_functions_skel.h"
+#include "lm73_functions.h"
 #include <util/delay.h>
 
 //TODO: remove volatile type modifier?  I think so.
@@ -15,13 +15,12 @@ volatile uint8_t lm73_rd_buf[2];
 //********************************************************************************
 
 //******************************************************************************
-void lm73_temp_convert(char temp_digits[], uint16_t lm73_temp, uint8_t f_not_c){
+void lm73_temp_convert(uint16_t lm73_temp, uint8_t f_not_c){
 	//given a temperature reading from an LM73, the address of a buffer
 	//array, and a format (deg F or C) it formats the temperature into ascii in 
 	if (f_not_c == 0x01 ){
-		lm73_temp = lm73_temp * 9 / 5 + 32;
+		lm73_temp = lm73_temp / 5 * 9 + 32;
 	}
-	itoa((int)lm73_temp,temp_digits,2);
 
 	//the buffer pointed to by the arguement.
 	//TODO:Returns what???(uint8_t)??? Probably a BUG?
