@@ -7,14 +7,14 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "twi_master.h"
-#include "uart_functions.c"
 #include "lm73_functions.h"
+#include "uart_functions.c"
 
 #define F_CPU 8000000UL
 
 uint8_t lm73_wr_buf[2];
 uint8_t lm73_rd_buf[2];
-char remote_temp_buf[16];
+char remote_temp_buf[2];
 
 void remoteTemp () {
   uint16_t lm73_temp;
@@ -24,7 +24,7 @@ void remoteTemp () {
   lm73_temp = lm73_temp << 8;               //shift it into upper byte
   lm73_temp |= lm73_rd_buf[1];              //"OR" in the low temp byte to lm73_temp
   lm73_temp = (lm73_temp >> 7);				// move it to whole digits
-  itoa((int)lm73_temp,remote_temp_buf,2);   //convert to string in array with itoa() from avr-libc
+  itoa((int)lm73_temp,remote_temp_buf,10);   //convert to string in array with itoa() from avr-libc
 }
 
 
@@ -39,10 +39,14 @@ int main(){
   uart_init();
 
   sei();
+
   while (1){
     remoteTemp();
-	for (i = 0; i<16; i++){
-	  uart_putc(remote_temp_buf[i]);
+	if (uart_getc() == 's'){
+	  for (i = 0; i<2; i++){
+	    uart_putc(remote_temp_buf[i]);
+	    while (uart_getc() != 'Y'){}
+	  }
 	}
   }
 }

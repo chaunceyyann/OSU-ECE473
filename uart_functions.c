@@ -83,7 +83,7 @@ char uart_getc(void) {
 
   while (!(UCSR0A & (1<<RXC0))) {
   timer++;
-  if(timer >= 16000){ return(0);}
+  if(timer >= 16000){ return('0');}
   //what should we return if nothing comes in?
   //return the data into a global variable
   //give uart_getc the address of the variable
