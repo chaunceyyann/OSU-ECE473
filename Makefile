@@ -1,5 +1,5 @@
 SHELL               = /bin/bash
-PRG                 = lab4
+PRG                 = lab5
 PRG2                = LCDDriver
 PRG3                = lm73_functions
 PRG4                = twi_master
@@ -38,6 +38,8 @@ clean:
 	-rm -rf $(PRG)_eeprom.srec $(PRG)_eeprom*.bin $(PRG)_eeprom.hex $(PRG).hex 
 	-rm -rf $(PRG).d
 	-rm -rf $(PRG2).o
+	-rm -rf $(PRG3).o
+	-rm -rf $(PRG4).o
 
 #clean entire directory
 all_clean:
