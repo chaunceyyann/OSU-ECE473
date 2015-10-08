@@ -1,10 +1,7 @@
 SHELL               = /bin/bash
-PRG                 = lab5
-PRG2                = LCDDriver
-PRG3                = lm73_functions
-PRG4                = twi_master
-OBJS                = $(PRG).o $(PRG2).o $(PRG3).o $(PRG4).o 
-SRCS                = $(PRG).c $(PRG2).c $(PRG3).c $(PRG4).c 
+PRG                 = lab1_code
+OBJS                = $(PRG).o 
+SRCS                = $(PRG).c 
 MCU_TARGET          = atmega128
 F_CPU               = 16000000UL
 PROGRAMMER_TARGET   = m128
