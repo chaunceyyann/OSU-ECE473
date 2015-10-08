@@ -18,7 +18,7 @@
 //*******************************************************************************
 int8_t debounce_switch() {
   static uint16_t state = 0; //holds present state
-  state = (state << 1) | (! bit_is_clear(PINA, 0)) | 0xE000;
+  state = (state << 1) | (! bit_is_clear(PIND, 0)) | 0xE000;
   if (state == 0xF000) return 1;
   return 0;
 }
