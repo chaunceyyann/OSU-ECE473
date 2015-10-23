@@ -37,8 +37,8 @@ int segment_data[5] = {0b11000000, 0xff, 0xff, 0xff, 0xff}; // turn off led not 
 //Expects active low pushbuttons on PINA port.  Debounce time is determined by 
 //external loop delay times 12. 
 void DebounceSwitch(){
-	uint8_t i,j;
-	state[id++]=0xff - PINA;
+    static uint8_t i,j;
+    state[id++]=0xff - PINA;
     j=0xff;
     for(i=0; i<MAX_CHECKS-1;i++)j=j & state[i];
 	debounced_state = j;
@@ -131,6 +131,8 @@ void ledNumber (int n, int f){ // f = format
 int main(){
 	int counter = 0,count = 0, j, i, release = 0;
 	//set port bits 4-7 B as outputs
+	DDRE = 0x10;
+	PORTE = 0x00;
 	DDRB |= 0xf0; // output
 	DDRF = 0xff; // output
 	PORTF = 0x00;
@@ -154,7 +156,8 @@ while(1){
 			release = 1;
 			count += debounced_state; 
   			//bound the count to 0 - 1023
-			count = count%1024;
+			if (count >1023)
+			        count = 1;
   			//break up the disp_value to 4, BCD digits in the array: call (segsum)
 			segsum(count);
 			debounced_state = 0;	
