@@ -312,6 +312,7 @@ int main(){
 	}
 
 	// display the global counter
+	if (gc==1024)gc++;
 	gc=gc%1024;					// roll over 
 	segsum(gc);					// display on 7 seg
 
