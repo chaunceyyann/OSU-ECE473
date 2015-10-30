@@ -1,6 +1,6 @@
 // lab3.c 
 // Chauncey Yan
-// 10.30.15
+// 11.02.14
 // Lab3:
 // Try another way to use push buttons as a user interface.
 // Using interrupts with counter/timer 0
@@ -58,13 +58,13 @@ uint8_t state[MAX_CHECKS]; // Array that maintains bounce status
 uint8_t id = 0; // Pointer into State
 enum states {INIT};
 char * str;
-//int encoder_data[4] = {0x00, 0x01, 0x03, 0x02};
+int encoder_data[4] = {0x00, 0x01, 0x03, 0x02};
 //decimal to 7-segment LED display encodings, logic "0" turns on segment
 int dec_to_7seg[18] = {0b11000000, 0b11111001, 0b10100100, 0b10110000, // 0 1 2 3
-		       0b10011001, 0b10010010, 0b10000010, 0b11111000, // 4 5 6 7
-		       0b10000000, 0b10011000, 0b10001000, 0b10000011, // 8 9 A B
-		       0b11000110, 0b10100001, 0b10000110, 0b10001110, // C D E F
-		       0b10000011, 0b1000100}; // ^ :
+					   0b10011001, 0b10010010, 0b10000010, 0b11111000, // 4 5 6 7
+					   0b10000000, 0b10011000, 0b10001000, 0b10000011, // 8 9 A B
+					   0b11000110, 0b10100001, 0b10000110, 0b10001110, // C D E F
+					   0b10000011, 0b1000100}; // ^ :
 
 //holds data to be sent to the segments. logic zero turns segment on
 int segment_data[5] = {0b11000000, 0xff, 0xff, 0xff, 0xff}; // turn off led not needed.
@@ -78,10 +78,10 @@ int segment_data[5] = {0b11000000, 0xff, 0xff, 0xff, 0xff}; // turn off led not 
 void DebounceSwitch(){
 	uint8_t i,j;
 	state[id++]=0xff - PINA;
-	j=0xff;
-	for(i=0; i<MAX_CHECKS-1;i++)j=j & state[i];
+    j=0xff;
+    for(i=0; i<MAX_CHECKS-1;i++)j=j & state[i];
 	debounced_state = j;
-	if(id >= MAX_CHECKS)id=0;
+    if(id >= MAX_CHECKS)id=0;
 }
 
 
@@ -110,9 +110,8 @@ void segsum(uint16_t sum) {
 		//breakDgt(sum,10);
 		segment_data[0] = dec_to_7seg[sum%10];
 		segment_data[1] = dec_to_7seg[sum/10%10];
-		segment_data[2] = 0xff; //dec_to_7seg[17];
-		segment_data[3] = dec_to_7seg[sum/100%10];
-		segment_data[4] = dec_to_7seg[sum/1000%10];
+		segment_data[2] = dec_to_7seg[sum/100%10];
+		segment_data[3] = dec_to_7seg[sum/1000%10];
 		break;
 	case 16:
 		breakDgt(sum,4,0x000f);
@@ -132,6 +131,10 @@ void segsum(uint16_t sum) {
 			break;
 		}
 	}
+  	//now move data to right place for misplaced colon position
+	segment_data[4] = segment_data[3];
+	segment_data[3] = segment_data[2];
+	segment_data[2] = 0xff; //dec_to_7seg[17];
 }
 
 
@@ -143,55 +146,46 @@ void segsum(uint16_t sum) {
 //interrupts disabled, poll SPIF bit in SPSR to check xmit completion
 /***********************************************************************/
 void spi_init(void){
-  	DDRB  |= 0x07;         			      	// Turn on SS, MOSI, SCLK for output
-						      	// Turn on bit 3 SER_out for input
-  	DDRE  |= 0xD0;        			      	// Turn on CLK_INH, SH/LD for output
+  	DDRB  |= 0x07;         					  	// Turn on SS, MOSI, SCLK for output
+												// Turn on bit 3 SER_out for input
+  	DDRE  |= 0xD0;        					  	// Turn on CLK_INH, SH/LD for output
 
 	SPCR  |= ( 1 << SPE ) | ( 1 << MSTR );		// Set up SPI mode
   	SPSR  |= ( 1 << SPI2X );              		// Double speed operation
  }
 
 void bar_print(uint8_t led_num){
-	SPDR = led_num;				      	// print to bar graph
-	while (bit_is_clear(SPSR,SPIF));	     	// wait for the data to be sent out
-	PORTB |= 0x01;				       	// strobe output data reg in HC595 - rising edge
-	PORTB &= 0xFE;				       	// Falling edge
+	SPDR = led_num;								// print to bar graph
+	while (bit_is_clear(SPSR,SPIF));			// wait for the data to be sent out
+	PORTB |= 0x01;								// strobe output data reg in HC595 - rising edge
+	PORTB &= 0xFE;								// Falling edge
 }
 
 void tcnt0_init(void){
 	//timer counter 0 setup, running off i/o clock
-	TIMSK |= ( 1<<TOIE0 );             	   	//enable interrupts
-	TCCR0 |= ( 1<<CS00 ) | (1<<CS02);  	     	//normal mode, prescale by 128
+	TIMSK |= ( 1<<TOIE0 );             			//enable interrupts
+	TCCR0 |= ( 1<<CS00 ) | (1<<CS02);  			//normal mode, prescale by 128
 }
 
 void read_encoder(uint8_t miso){
 	static uint8_t old_miso;
+	static int s = 0;
 
 	// Pulse the HC165 with SH/LD 0 for load the data from knod then keep it high for serial sent back
-	PORTE ^= (1<<7); 			      	// SH/LD = 0 CLK_INH = 0 
-  	PORTE |= 0b10000000; 			     	// SH/LD = 1 CLK_INH = 0
+	PORTE ^= (1<<7); 						// SH/LD = 0 CLK_INH = 0 
+  	PORTE |= 0b10000000; 					// SH/LD = 1 CLK_INH = 0
 
-	if (old_miso != miso){
-		if ((old_miso & 0x03) == 0x03){
-			switch(miso&0x03){
-				case 0x02:
-					gc+=mode_step;
-					break;
-				case 0x01:
-					gc-=mode_step;
-					break;
-			}
-		}
-		if ((old_miso & 0x0C) == 0x0C){
-			switch((miso&0x0C)>>2){
-				case 0x02:
-					gc+=mode_step;
-					break;
-				case 0x01:
-					gc-=mode_step;
-					break;
-			}
-		}
+	switch (s) {
+		case 0:
+			if ( encoder_data[(miso & 0x03)] - encoder_data[(old_miso & 0x03)] == -1) gc-=mode_step; 	
+			if ( encoder_data[(miso & 0x03)] - encoder_data[(old_miso & 0x03)] == 1) gc+=mode_step; 	
+			s = 1;
+			break;
+		case 1:
+			if ( encoder_data[((miso & 0x0C) >> 2)] - encoder_data[((old_miso & 0x0C) >> 2)] == -1) gc-=mode_step; 	
+			if ( encoder_data[((miso & 0x0C) >> 2)] - encoder_data[((old_miso & 0x0C) >> 2)] == 1) gc+=mode_step; 	
+			s = 0;
+			break;
 	}
 	old_miso = miso;
 
@@ -203,19 +197,19 @@ ISR(TIMER0_OVF_vect){
 	// 1/125k * 256 * 244 = 500ms
 	
 	static uint8_t count_2ms = 0;
-	count_2ms++; 					// increment count every 2.048ms
+	count_2ms++; 								// increment count every 2.048ms
 
-	if (( count_2ms % 1 ) == 0 ){			// prescale the count again by mod 
+	if (( count_2ms % 1 ) == 0 ){				// prescale the count again by mod 
 
-  		bar_print(mode);			// SPI MOSI to bar graph display 
+  		bar_print(mode);					// SPI MOSI to bar graph display 
 	
-		read_encoder(SPDR);			// SPI MISO from Encoder 
+		read_encoder(SPDR);						// SPI MISO from Encoder 
 	}
-	if ( count_2ms == 0xff ) count_2ms = 0x00;      // count_2ms to 1st positon
+	if ( count_2ms == 0xff ) count_2ms = 0x00;  // count_2ms to 1st positon
 }
 
 //***********************************************************************************
-// 		Demostration and debugging functions
+// 							Demostration and debugging functions
 //
 //***********************************************************************************
 
@@ -229,14 +223,14 @@ void LCDprint (char *char1, char *char2){
 void ledDigit (int n, int pos){
 	//pos 0 1 3 4
 	if ( pos != -1 ){
-		DDRA = 0xff; 				// output
-		PORTB = pos << 4; 			// selet the digit
+		DDRA = 0xff; // output
+		PORTB = pos << 4; // selet the digit
 		PORTA = dec_to_7seg[n];
 	}
 	_delay_ms(1);
 }
 
-void ledNumber (int n, int f){ 				// f = format
+void ledNumber (int n, int f){ // f = format
 	int digit[4],i,k;
 	digit[0] = n%f;
 	digit[1] = n/f%f;
@@ -254,7 +248,7 @@ void ledNumber (int n, int f){ 				// f = format
 //***********************************************************************************
 int main(){
 	// run time initial 
-	int counter = 0;
+	int counter = 0,count = 0, i;
 
 	//set port bits 4-7 B as outputs
 	DDRB = 0xf0; // output
@@ -263,38 +257,39 @@ int main(){
 	
 	// SPI interupt initial
 	spi_init();
-
-	LCD_Init();
-	LCD_Clr();
-	LCD_CursorBlinkOff();
-	LCD_PutStr("Welcome to Alarm!!!");
-	LCD_MovCursorLn2();
-	//LCD_PutDec16(temp);
+	
+  LCD_Init();
+  LCD_Clr();
+  LCD_CursorBlinkOff();
+  LCD_PutStr("Welcome to Alarm!!!");
+  LCD_MovCursorLn2();
+  LCD_PutStr("Temperature: ");
+  //LCD_PutDec16(temp);
 
 	tcnt0_init();
 	sei();
 	// main while loop
 	while(1){
-  	_delay_ms(2);				        // insert loop delay for debounce
+  	_delay_ms(2);								// insert loop delay for debounce
 
 	PORTA = 0xff;
-  	DDRA = 0x00;				        // make PORTA an input with pullups
+  	DDRA = 0x00;								// make PORTA an input with pullups
 
-  	PORTB |= 0b01110000;			        // enable tristate buffer for pushbutton switches
+  	PORTB |= 0b01110000;						// enable tristate buffer for pushbutton switches
 
-  	_delay_ms(1);				       	// make sure button get the time to react
+  	_delay_ms(1);								// make sure button get the time to react
 
 	// Debounceing buttons
-	DebounceSwitch();				// now check each button and increment the count as needed
+	DebounceSwitch();							// now check each button and increment the count as needed
 	if (old_deState & debounced_state)
 		release = 0;
 	else 
 		release = 1;
 	old_deState = debounced_state;
-	if (debounced_state && (release == 1)){ 	// change the mode according to the button pushed
+	if (debounced_state && (release == 1)){ 						// change the mode according to the button pushed
 		release = 0;
-		mode = debounced_state ^ mode; 		// store the mode  
-		debounced_state = 0;			// reset debouced_state
+		mode = debounced_state ^ mode; 			// store the mode  
+		debounced_state = 0;					// reset debouced_state
 	}
 
 	switch (mode){
@@ -312,16 +307,16 @@ int main(){
 	}
 
 	// display the global counter
-	gc=gc%1024;					// roll over 
-	segsum(gc);					// display on 7 seg
+	gc=gc%1024;									// roll over 
+	segsum(gc);									// display on 7 seg
 
 	// select the digit to display and select the input from decoder
-	DDRA = 0xff;					//make PORTA an output
+	DDRA = 0xff;								//make PORTA an output
 
 	//bound a counter (0-4) to keep track of digit to display
 	for (counter = 0; counter < 5; counter++){
-		PORTB = counter << 4;			//send PORTB the digit to display
-		PORTA = segment_data[counter];		//send 7 segment code to LED segments
+		PORTB = counter << 4;					//send PORTB the digit to display
+		PORTA = segment_data[counter];			//send 7 segment code to LED segments
 
   		//fix for the last digit over bright issue
 		if (counter != 4)
