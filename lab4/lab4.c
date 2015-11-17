@@ -89,13 +89,13 @@ unsigned int hours = 0; 			// display Hours
 unsigned int hours_24 = 0; 			// display 24 Hours
 unsigned int ahours = 0; 			// alarm Hours 24 hours
 unsigned int mins = 0;				// display mins
-unsigned int amins = 60;			// alarm mins
+unsigned int amins = 1;				// alarm mins
 uint8_t alarm_start = 60;			// alarm start time
 uint8_t snooze_start = 0;			// alarm snooze start time
 uint8_t sn = 0;						// 0 - Beavs fight sone 1 - Tetris 
 // 2 - Mario 3 - Unknown
 uint8_t mode_t = 0;					// toggle mode switch
-uint8_t mode = 1;					// mode flags
+uint8_t mode = 0;					// mode flags
 uint8_t inc = 1;					// increament to seperate min and hour 
 uint8_t barcode = 0;				// data print on the bar 
 uint8_t debounced_state = 0; 		// Debounced state of the switches
@@ -195,7 +195,7 @@ void hmclock(unsigned int tc){							// hour and mins from mins count
 void clock_dis(){
 	segment_data[0] = dec_to_7seg[mins%BASE];			// 1st digit
 	segment_data[1] = dec_to_7seg[mins/BASE];			// 2ed digit
-	if (mode & (1<<4)){	 		   						// 24 hours mode
+	if (mode & (1<<5)){	 		   						// 24 hours mode
 		segment_data[3] = dec_to_7seg[hours_24%BASE];	
 		segment_data[4] = dec_to_7seg[hours_24/BASE];
 	} else {											// 12 hours mode
@@ -207,7 +207,7 @@ void clock_dis(){
 
 void alarm_check(){										// run once pre second
 	uint8_t i;
-	if ((alarm_start == 60) && (mode & (1<<3))){		// initial value, use this to exe music once
+	if ((alarm_start == 60) && (mode & (1<<4))){		// initial value, use this to exe music once
 		hmclock(rtc);									// update real time clock value hours and mins
 		if ((ahours == hours_24) && (amins == mins)){	// use hours_24 for am pm
 			music_on();									// alarm tone on
@@ -223,7 +223,7 @@ void alarm_check(){										// run once pre second
 			alarm_start = rts;							// set start second for alarm tone
 		}
 	}
-	if ((rts - alarm_start) >= ALARM_LEN) { 			// 1-58s for the alarm tone
+	if ((rts - alarm_start) == ALARM_LEN) { 			// 1-58s for the alarm tone
 		music_off();									// alarm tone off
 		LCD_Clr();
 		LCD_PutStr("Alarm off!");
@@ -266,7 +266,7 @@ void snooze_func(){
 /***********************************************************************/
 void lcd_alarm(){
 	LCD_Clr();
-	if (mode & (1<<3)){							// check if alarm is set
+	if (mode & (1<<4)){							// check if alarm is set
 		LCD_PutStr("Alarm set ");
 		itoa(ahours,buf,10);
 		LCD_PutStr(buf);
@@ -406,7 +406,7 @@ ISR(TIMER0_OVF_vect){
 	static uint16_t count_2ms = 0;
 	count_2ms++; 								// increment count every 2.048ms
 
-	bar_print(0);								// reduce the bar graph brightness
+	//bar_print(0);								// reduce the bar graph brightness
 
 	// Encoder and bar graph
 	if (count_2ms % 2 == 0){
@@ -433,18 +433,18 @@ ISR(TIMER0_OVF_vect){
 		// set alarm time
 		// checking comfirmation at the last
 		else if (mode & (1<<3)){
-			atc_t = atc + rec;					// adding right encoder value to temo alarm time 
+			atc_t = atc + rec;					// adding right encoder value to temp alarm time 
 			hmclock(atc_t);						// update hours and mins
-			clock_dis();							// display the clock
+			clock_dis();						// display the clock
 			segment_data[2] = dec_to_7seg[17];	// presist the semicolumn
 
 			// check comfirmation
 			if (mode & (1<<7)){					
 				atc = atc_t;
-				ahours = atc / 60 % 24;				// update alarm hour 24 
-				amins = atc % 60;					// update alarm min 
-				mode |= (1<<4);						// set alarm mode flag
-				lcd_alarm();						// display alarm on lcd
+				ahours = atc / 60 % 24;			// update alarm hour 24 
+				amins = atc % 60;				// update alarm min 
+				mode |= (1<<4);					// set alarm mode flag
+				lcd_alarm();					// display alarm on lcd
 			}
 		}
 
@@ -452,43 +452,41 @@ ISR(TIMER0_OVF_vect){
 		// snooze function
 		snooze_func();
 
-		// manualy clear snooze and confirm if necessary
+		// manualy clear snooze and clear confirm bargraph
 		if ((mode & (1<<6)) && (snooze_start == 0))			// clear snooze if alarm is off
-			mode &= 0b00110011;								// clear set time set alarm as well
+			mode &= 0b00110010;								// clear set time set alarm as well
 		if (mode & (1<<7))									// clear confirm
-			mode &= 0b00110011;								// clear set time set alarm as well
+			mode &= 0b00110010;								// clear set time set alarm as well
 	}
 
 
 	// real time clock
-	if ((count_2ms % 488 == 0) ){					// 1s
-		rts++;										// seconds ++
+	if ((count_2ms % 488 == 0) ){				// 1s
+		rts++;									// seconds ++
 		if (rts == 60){
-			rtc++;									// mins ++
-			rts = 0;									// reset second
+			rtc++;								// mins ++
+			rts = 0;							// reset second
 		}
 		// check if the real time match with alarm time
 		alarm_check();
 
 		// make sure it is not in set time or set alarm mode
-		if (!((mode & (1<<0)) && (mode & (1<<1)))){
-			if (!((mode & (1<<3)) || (mode & (1<<2)))){
-				hmclock(rtc);							// update real time clock
-				clock_dis();							// display the clock
+		if (!((mode & (1<<3)) || (mode & (1<<2)))){
+			hmclock(rtc);					// update real time clock
+			clock_dis();					// display the clock
 
-				// seconds semicolumn
-				if ((rts % 2) == 0){					// flash every second
-					segment_data[2] = dec_to_7seg[17];
-				} else {
-					segment_data[2] = 0xff;
-				}
+			// seconds semicolumn
+			if ((rts % 2) == 0){			// flash every 2 second
+				segment_data[2] = dec_to_7seg[17];
+			} else {
+				segment_data[2] = 0xff;
 			}
 		}
 	}
 
 	// adding pm dot indicator 
 	// (out of real time since it should show up on all settings)
-	if ((hours_24 >= 12) && !(mode & (1<<5))){	// pm and not 24 hour mode
+	if ((hours_24 >= 12) && !(mode & (1<<5))){		// pm and not 24 hour mode
 		segment_data[2] &= dec_to_7seg[16];
 	} else {										// explicitly turn off indicator 
 		segment_data[2] &= ~(1<<1) | ~(1<<0);
@@ -500,25 +498,21 @@ ISR(TIMER0_OVF_vect){
 	}
 
 	if (count_2ms % 2 == 0){						// volume control
-		if (((mode & (1<<0)) && (mode & (1<<1)))){	// mode 0 & 1
-			if ((old_vc + lec) < 0) lec = 0-old_vc;	// set range 0 - 100
-			else if ((old_vc + lec) > 50) lec = 50-old_vc; 
+		if (mode & (1<<0)) { 						// mode 0
+			if ((old_vc + lec) < 0) 
+				lec = 0-old_vc;	// set range 0 - 50
+			else if ((old_vc + lec) > 50) 
+				lec = 50-old_vc; 
 			vc = old_vc + lec;						// update volume counter
 			segsum(vc);								// display vc
-			OCR3A = 100 - vc;							// create PWM with TCNT3
-			if (count_2ms % 488 == 0){				// strobe lcd in half a second
+			OCR3A = 100 - vc;						// create PWM with TCNT3
+			if (count_2ms % 488 == 0){				// strobe lcd every second
 				if (old_lec != lec){
 					LCD_Clr();
 					LCD_PutStr("Volume: ");
-					LCD_PutStr(itoa(vc,buf,10));			// lcd display volume
+					LCD_PutStr(itoa(vc,buf,10));	// lcd display volume
 				}
 				old_lec = lec;
-			}
-			if (mode_t & 0xFC){						// hit any button beside 0 1
-				mode &= ~0x02;							// exit volume control mode
-				LCD_Clr();
-				LCD_PutStr("Volume: ");
-				LCD_PutStr(itoa(vc,buf,10));			// lcd display volume
 			}
 		}
 	}
@@ -532,30 +526,34 @@ ISR(TIMER0_OVF_vect){
 //***********************************************************************************
 void set_mode(){
 	switch (mode_t){
-		case 1:							// increament 1 min 
-			inc = 1;
-			mode &= 0b11111100;			// clear the other inc
-			mode |= (1<<0);
+		case 1:							// toggle volume change mode 
+			mode ^= (1<<0);
+			old_vc = vc;   				// save old vc value for next adding
+			lec = 0;   					// reset light encoder reading
 			break;
-		case 2:							// 60 mins -> 1 hour
-			inc = 60;
-			mode &= 0b11111100;			// clear the other inc
-			mode |= (1<<1);
+		case 2:							// 1 min or 60 mins ?
+			mode ^= (1<<1);				// toggle inc between 1 and 60 mins
+			if (mode & (1<<1))
+				inc = 60;
+			else
+				inc = 1;
 			break;
 		case 4:							// set time
 			mode &= 0b00110111;			// clear set alarm
 			mode ^= (1<<2);				// toggle, for cancelling
-			rec = 0;						// reset right encoder reading
+			rec = 0;					// reset right encoder reading
 			break;
 		case 8:							// set alarm
 			mode &= 0b00111011;			// clear set time
 			mode ^= (1<<3);				// toggle, for cancelling
-			if (!(mode & (1<<3)))			// unset alarm if double cancel setting
-				mode &= ~(1<<4);			// unset alarm flag
-			lcd_alarm();					// update lcd 
-			rec = 0;						// reset right encoder reading
+			if (!(mode & (1<<3)))		// unset alarm if double cancel setting
+				mode &= ~(1<<4);		// unset alarm flag
+			lcd_alarm();				// update lcd 
+			rec = 0;					// reset right encoder reading
 			break;
-		case 16:						// alarm indicator, button broke
+		case 16:						// alarm indicator, toggle set or unset
+			mode ^= (1<<4);				// toggle
+			lcd_alarm();
 			break;						
 		case 32:						// 24 - 12 indicator
 			mode ^= (1<<5);				// toggle
@@ -567,10 +565,7 @@ void set_mode(){
 			mode |= (1<<7);				// clear manually in timer 0
 			break;
 		default:						// multiple button input detected
-			mode &= 0b00110011;			// clear set time set alarm
-			mode |= (1<<0) | (1<<1);		// entering volume control
-			lec = 0;						// reset light encoder reading
-			old_vc = vc;					// save old vc value for next adding
+			mode &= 0b00110010;			// clear all mode but alarm set, 12/24, 1/60
 			break;
 	}
 }
@@ -592,11 +587,11 @@ int main(){
 	LCD_Init();
 	LCD_Clr();
 	LCD_CursorBlinkOff();
-	LCD_PutStr("Teklarm2.0");
+	LCD_PutStr("Teklarm 2.0");
 	LCD_MovCursorLn2();
-	LCD_PutStr("Local: ");
-	LCD_PutDec16(temp);
-	LCD_PutDec16(adcd);
+	LCD_PutStr("LocalTemperature");
+	//LCD_PutDec16(temp);
+	//LCD_PutDec16(adcd);
 
 	// current time init
 	//time_init();
@@ -610,8 +605,8 @@ int main(){
 	tcnt2_init();
 	tcnt3_init();
 
-	// initial Volume mute
-	OCR3A = 0x0064;
+	// initial Volume 20
+	OCR3A = 100 - vc;
 
 	// enable global interrupt
 	sei();
