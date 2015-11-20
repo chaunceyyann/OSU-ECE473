@@ -13,7 +13,7 @@
 // |4| -> toggle alarm set/non-set
 // |5| -> toggle 12 / 24 hour mode
 // |6| -> snooze mode
-// |7| -> confirmation/cancel alarm 
+// |7| -> confirmation/dismiss alarm 
 
 // Encoder assignment
 //  _____    _____
@@ -557,9 +557,9 @@ ISR(TIMER0_OVF_vect){
     }
 
     if (count_2ms % 2 == 0){                        // volume control
-        if (mode & (1<<0)) { 						// mode 0
+        if (mode & (1<<0)) {                        // mode 0
             if ((old_vc + lec) < 0) 
-                lec = 0-old_vc;    // set range 0 - 100
+                lec = 0-old_vc;                     // set range 0 - 100
             else if ((old_vc + lec) > 50) 
                 lec = 50-old_vc; 
             vc = old_vc + lec;                      // update volume counter
@@ -597,46 +597,46 @@ ISR(TIMER0_OVF_vect){
 //***********************************************************************************
 void set_mode(){
     switch (mode_t){
-        case 1:							// toggle volume change mode 
+        case 1:                         // toggle volume change mode 
             mode ^= (1<<0);
-            old_vc = vc;   				// save old vc value for next adding
-            lec = 0;   					// reset light encoder reading
+            old_vc = vc;                // save old vc value for next adding
+            lec = 0;                    // reset light encoder reading
             break;
-        case 2:							// 1 min or 60 mins ?
-            mode ^= (1<<1);				// toggle inc between 1 and 60 mins
+        case 2:                         // 1 min or 60 mins ?
+            mode ^= (1<<1);             // toggle inc between 1 and 60 mins
             if (mode & (1<<1))
                 inc = 60;
             else
                 inc = 1;
             break;
-        case 4:							// set time
-            mode &= 0b00110111;			// clear set alarm
-            mode ^= (1<<2);				// toggle, for cancelling
-            rec = 0;					// reset right encoder reading
+        case 4:                         // set time
+            mode &= 0b00110111;         // clear set alarm
+            mode ^= (1<<2);             // toggle, for cancelling
+            rec = 0;                    // reset right encoder reading
             break;
-        case 8:							// set alarm
-            mode &= 0b00111011;			// clear set time
-            mode ^= (1<<3);				// toggle, for cancelling
-            if (!(mode & (1<<3)))		// unset alarm if double cancel setting
-                mode &= ~(1<<4);		// unset alarm flag
-            lcd_alarm();				// update lcd 
-            rec = 0;					// reset right encoder reading
+        case 8:                         // set alarm
+            mode &= 0b00111011;         // clear set time
+            mode ^= (1<<3);             // toggle, for cancelling
+            if (!(mode & (1<<3)))       // unset alarm if double cancel setting
+                mode &= ~(1<<4);        // unset alarm flag
+            lcd_alarm();                // update lcd 
+            rec = 0;                    // reset right encoder reading
             break;
-        case 16:						// alarm indicator, toggle set or unset
-            mode ^= (1<<4);				// toggle
+        case 16:                        // alarm indicator, toggle set or unset
+            mode ^= (1<<4);             // toggle
             lcd_alarm();
             break;						
-        case 32:						// 24 - 12 indicator
-            mode ^= (1<<5);				// toggle
+        case 32:                        // 24 - 12 indicator
+            mode ^= (1<<5);             // toggle
             break;
-        case 64:						// snooze function indicator
-            mode |= (1<<6);				// clear manually in timer 0
+        case 64:                        // snooze function indicator
+            mode |= (1<<6);             // clear manually in timer 0
             break;
-        case 128:						// confirm
-            mode |= (1<<7);				// clear manually in timer 0
+        case 128:                       // confirm & dismiss alarm
+            mode |= (1<<7);             // clear manually in timer 0
             break;
-        default:						// multiple button input detected
-            mode &= 0b00110010;			// clear all mode but alarm set, 12/24, 1/60
+        default:                        // multiple buttons input detected
+            mode &= 0b00110010;         // clear all mode but alarm set, 12/24, 1/60
             break;
     }
 }
