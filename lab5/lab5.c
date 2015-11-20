@@ -79,7 +79,7 @@
 
 #define MAX_CHECKS 12           // # checks before a switch is debounced
 #define BASE 10                 // the base of the clock should be working
-#define ALARM_LEN 16            // seconds of alarm going to be play
+#define ALARM_LEN 32            // seconds of alarm going to be play
 #define SNOOZE_LEN 10           // seconds of snooze going to be wait
 
 signed int gc = 0;              // globle counter
@@ -103,7 +103,7 @@ uint8_t snooze_start = 0;       // alarm snooze start time
 uint8_t sn = 0;                 // 0 - Beavs fight sone 1 - Tetris 
                                 // 2 - Mario 3 - Unknown
 uint8_t mode_t = 0;             // toggle mode switch
-uint8_t mode = 0;               // mode flags
+uint8_t mode = 1;               // mode flags
 uint8_t inc = 1;                // increament to seperate min and hour 
 uint8_t barcode = 0;            // data print on the bar 
 uint8_t debounced_state = 0;    // Debounced state of the switches
@@ -122,7 +122,6 @@ char loc_temp_buf[16];          // local temporature buffer
 char remote_temp_buf[2];        // remote temporature buffer
 
 //decimal to 7-segment LED display encodings, logic "0" turns on segment
-#include <time.h>
 int dec_to_7seg[18] = {0b11000000, 0b11111001, 0b10100100, 0b10110000, // 0 1 2 3
     0b10011001, 0b10010010, 0b10000010, 0b11111000, // 4 5 6 7
     0b10000000, 0b10011000, 0b10001000, 0b10000011, // 8 9 A B
@@ -245,7 +244,6 @@ void alarm_check(){                                     // run once pre second
         LCD_Clr();
         LCD_PutStr("Alarm off!");
         alarm_start = 61;                               // avoiding rerun this music_off and music_on
-        mode &= ~(1<<4);
     } 
     if (((rts-alarm_start)<ALARM_LEN)&&(song==0)) {     // roll over buffer chars
         LCD_MovCursorLn1();
@@ -256,7 +254,6 @@ void alarm_check(){                                     // run once pre second
     }
     if (rts == 59){                                     // last second in this min
         alarm_start = 60;                               // reset alarm
-        mode &= ~(1<<4);
     }
 }
 
@@ -274,7 +271,7 @@ void snooze_func(){
         alarm_start = 60;                               // resume music. 
         // Not working for long snoozing 
         song++;
-        if (song == 3) song = 0;                        // roll back for the fisrt song
+        if (song == 4) song = 0;                        // roll back for the fisrt song
         snooze_start = 0;                               // reset snooze function
     }
 }
