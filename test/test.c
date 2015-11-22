@@ -21,6 +21,7 @@
 static uint16_t gc = 0;
 uint8_t mode_step = 1;
 uint8_t mode = 1;
+uint8_t lec = 0;
 uint8_t debounced_state = 0; // Debounced state of the switches
 uint8_t old_deState = 0;     // old Debounced state of the switches
 uint8_t release = 1;
@@ -71,15 +72,6 @@ void segsum(uint16_t sum) {
 		segment_data[2] = 0xff; //dec_to_7seg[17];
 		segment_data[3] = dec_to_7seg[sum/100%10];
 		segment_data[4] = dec_to_7seg[sum/1000%10];
-		break;
-	case 16:
-		breakDgt(sum,4,0x000f);
-		break;
-	case 8:
-		breakDgt(sum,3,0x0007);
-		break;
-	case 2:
-		breakDgt(sum,1,0x0001);
 		break;
 	}
   	//blank out leading zero digits
