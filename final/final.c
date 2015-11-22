@@ -2,6 +2,13 @@
 // Chauncey Yan
 // Fall2015
 
+//16x2 LCD display 
+//-----------------------------------------------------------------
+//| 8 | 8 | . | 7 |   |   | * | * | * | * | * | * | * | * |   |   |
+//|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+//| A | L | A | R | M |   | M | U | S | I | C |   |   |   |   |   |
+//-----------------------------------------------------------------
+
 // Push button assignment
 // --- --- --- --- --- --- --- ---
 // |7| |6| |5| |4| |3| |2| |1| |0|
@@ -21,7 +28,7 @@
 // | (L) |  | (R) |
 // \_____/  \_____/
 //
-// L:Volume R:Time/Alarm
+// L:Volume R:Time/Alarm/Fhz
 
 // Wire layout
 //      7Seg                Mega128 Board
@@ -64,6 +71,13 @@
 //       ADC               Mega128 board
 // --------------        ------------------
 // analog data in        PORTF bit 0
+//
+//   FM radio              Mega128 board
+// --------------        ------------------
+//     RST_N             PORTB bit 0 (ss_n)
+//     SCLK              PORTB bit 1 (sclk)
+//     SDIO              PORTB bit 2 (mosi)
+//     ENBL              PORTD bit 2 
 
 
 #include <avr/io.h>
@@ -77,9 +91,9 @@
 #include "twi_master.h"
 #include "uart_functions.c"
 
-#define MAX_CHECKS 12           // # checks before a switch is debounced
+#define MAX_CHECKS 12           // # of checks before a switch is debounced
 #define BASE 10                 // the base of the clock should be working
-#define ALARM_LEN 16            // seconds of alarm going to be play
+#define ALARM_LEN 32            // seconds of alarm going to be play
 #define SNOOZE_LEN 10           // seconds of snooze going to be wait
 
 signed int gc = 0;              // globle counter
@@ -101,7 +115,7 @@ unsigned int amins = 59;        // alarm mins
 uint8_t alarm_start = 60;       // alarm start time
 uint8_t snooze_start = 0;       // alarm snooze start time
 uint8_t sn = 0;                 // 0 - Beavs fight sone 1 - Tetris 
-                                // 2 - Mario 3 - Unknown
+// 2 - Mario 3 - Unknown
 uint8_t mode_t = 0;             // toggle mode switch
 uint8_t mode = 0;               // mode flags
 uint8_t inc = 1;                // increament to seperate min and hour 
@@ -244,7 +258,6 @@ void alarm_check(){                                     // run once pre second
         LCD_Clr();
         LCD_PutStr("Alarm off!");
         alarm_start = 61;                               // avoiding rerun this music_off and music_on
-        mode &= ~(1<<4);
     } 
     if (((rts-alarm_start)<ALARM_LEN)&&(song==0)) {     // roll over buffer chars
         LCD_MovCursorLn1();
@@ -255,7 +268,6 @@ void alarm_check(){                                     // run once pre second
     }
     if (rts == 59){                                     // last second in this min
         alarm_start = 60;                               // reset alarm
-        mode &= ~(1<<4);
     }
 }
 
@@ -326,7 +338,7 @@ void read_encoder(uint8_t miso){
     PORTE ^= (1<<7);                          // SH/LD = 0 CLK_INH = 0 
     PORTE = 0b10000000;                       // SH/LD = 1 CLK_INH = 0
 
-if (old_miso != miso){
+    if (old_miso != miso){
         if ((old_miso & 0x03) == 0x03){
             switch(miso&0x03){
                 case 0x02:
@@ -568,7 +580,7 @@ ISR(TIMER0_OVF_vect){
             OCR3A = 100 - vc;                       // create PWM with TCNT3
             if (count_2ms % 488 == 0){              // strobe lcd each second
                 if (old_lec != lec){
-                    LCD_Clr();
+                    LCD_MovCursorLn1();
                     LCD_PutStr("Volume: ");
                     LCD_PutStr(itoa(vc,buf,10));    // lcd display volume
                 }
@@ -664,7 +676,7 @@ int main(){
 
     // initial Volume 20
     OCR3A = 100 - vc;
-    
+
     // SPI interupt initial
     spi_init();
 

@@ -1,5 +1,5 @@
 SHELL               = /bin/bash
-PRG                 = lab5
+PRG                 = final
 PRG2                = LCDDriver
 PRG3                = lm73_functions
 PRG4                = twi_master

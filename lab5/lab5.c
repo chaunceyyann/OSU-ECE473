@@ -79,7 +79,7 @@
 
 #define MAX_CHECKS 12           // # checks before a switch is debounced
 #define BASE 10                 // the base of the clock should be working
-#define ALARM_LEN 32            // seconds of alarm going to be play
+#define ALARM_LEN 16            // seconds of alarm going to be play
 #define SNOOZE_LEN 10           // seconds of snooze going to be wait
 
 signed int gc = 0;              // globle counter
@@ -103,7 +103,7 @@ uint8_t snooze_start = 0;       // alarm snooze start time
 uint8_t sn = 0;                 // 0 - Beavs fight sone 1 - Tetris 
                                 // 2 - Mario 3 - Unknown
 uint8_t mode_t = 0;             // toggle mode switch
-uint8_t mode = 1;               // mode flags
+uint8_t mode = 0;               // mode flags
 uint8_t inc = 1;                // increament to seperate min and hour 
 uint8_t barcode = 0;            // data print on the bar 
 uint8_t debounced_state = 0;    // Debounced state of the switches
@@ -566,7 +566,7 @@ ISR(TIMER0_OVF_vect){
             OCR3A = 100 - vc;                       // create PWM with TCNT3
             if (count_2ms % 488 == 0){              // strobe lcd each second
                 if (old_lec != lec){
-                    LCD_MovCursorLn1();
+                    LCD_Clr();
                     LCD_PutStr("Volume: ");
                     LCD_PutStr(itoa(vc,buf,10));    // lcd display volume
                 }
