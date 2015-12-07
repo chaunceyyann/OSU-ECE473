@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="CommandLine" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="cmd_line_debug\CommandLine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\cmd_line_debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="libhid" />
+					<Add library="libhidparse" />
+					<Add library="libsetupapi" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="cmd_line_release\CommandLine" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\cmd_line_release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="Tiny26Interface.cpp" />
+		<Unit filename="Tiny26Interface.h" />
+		<Unit filename="cmd_line_main.cpp" />
+		<Unit filename="usb.c">
+			<Option compilerVar="CPP" />
+		</Unit>
+		<Unit filename="usb.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

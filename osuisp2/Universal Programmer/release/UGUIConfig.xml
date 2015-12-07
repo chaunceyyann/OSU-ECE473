@@ -1,0 +1,409 @@
+<Universal-GUI-Config>
+	<avr-options>
+		<program-flash enabled="true"/>
+		<program-eeprom enabled="false"/>
+		<program-fuse-bits enabled="false"/>
+		<program-lock-bits enabled="false"/>
+	</avr-options>
+	<supported-programmers>
+		
+		<supported-programmer name="osuisp2" isCommon="yes">
+			<param name="Port" flag = "-P" values="usb" edit="false"/>
+			<param name="Clock Period (us)" flag = "-B" values="1,2,4,6,8,10,12,14,16,20,32,64,128,256,512" canEdit="true" defaultIndex = "5"/>
+		</supported-programmer>
+		
+		<supported-programmer name="usbasp" isCommon="yes">
+			<param name="Port" flag = "-P" values="usb" canEdit="false"/>
+			<param name="Clock Period (us)" flag = "-B" values="1,2,4,8,16,32,64,128,256,512" canEdit="true" defaultIndex = "4"/>
+		</supported-programmer>
+		
+		<supported-programmer name="osuisp" isCommon="yes">
+			<param name="Port" flag = "-P" values="usb" canEdit="false"/>
+		</supported-programmer>
+		
+		<supported-programmer name="stk200" isCommon="no">
+			<param name="Port" flag = "-P" values="lpt1, lpt2, lpt3" canEdit="false"/>
+		</supported-programmer>
+			
+		<supported-programmer name="avrisp" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="dapa" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="futurlec" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="abcmini" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="picoweb" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="sp12" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="alf" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="dasa3" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="bascom" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="dt006" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="pony-stk200" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="dasa" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="bsd" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="pavr" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="jtag2" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="jtag2fast" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="jtag2slow" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="jtagmkII" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="jtag1slow" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="jtag1" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="jtagmkI" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="avr911" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="avr109" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="butterfly" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="avr910" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="stk500v2" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="stk500" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="avrisp2" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="avrispmkII" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="avrispv2" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="ponyser" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+		<supported-programmer name="xil" isCommon="no">
+			<param name="Port" flag = "-P" values="" canEdit="true"/>
+		</supported-programmer>
+		
+	</supported-programmers>
+	<supported-parts>
+		<supported-part name="ATMEGA128" id="1E9702" abbreviation="m128">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, BODEN, BODLEVEL"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, CKOPT, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="WDTON, M103C"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+
+		<supported-part name="ATTINY261" id="1e910c" abbreviation="t261">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="SELFPRGEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+
+		<supported-part name="ATTINY26" id="1E9109" abbreviation="t26">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOPT, PLLCK"/>
+			<hfuse names="BODEN, BODLEVEL, EESAVE, SPIEN, RSTDISBL"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATtiny24" id="1E910B" abbreviation="t24">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="SELFPRGEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATMEGA1281" id="1E9704" abbreviation="m1281">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA1280" id="1E9703" abbreviation="m1280">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA640" id="1E9608" abbreviation="m640">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATtiny85" id="1E930B" abbreviation="t85">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="SELFPRGEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATtiny45" id="1E9206" abbreviation="t45">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="SELFPRGEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATtiny25" id="1E9108" abbreviation="t25">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="SELFPRGEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="AT90PWM3" id="1E9381" abbreviation="pwm3">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="BOOTRST, BOOTSZ0, BOOTSZ1, RESERVED, PSCRV, PSC0RB, PSC1RB, PSC2RB"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="AT90PWM2" id="1E9381" abbreviation="pwm2">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="BOOTRST, BOOTSZ0, BOOTSZ1, RESERVED, PSCRV, PSC0RB, PSC1RB, PSC2RB"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATtiny2313" id="1E910A" abbreviation="t2313">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="RSTDISBL, BODLEVEL0, BODLEVEL1, BODLEVEL2, WDTON, SPIEN, EESAVE, DWEN"/>
+			<efuse names="SELFPRGEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATMEGA168" id="1E9406" abbreviation="m168">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="BOOTRST, BOOTSZ0, BOOTSZ1"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA88" id="1E930A" abbreviation="m88">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="BOOTRST, BOOTSZ0, BOOTSZ1"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA48" id="1E9205" abbreviation="m48">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="SELFPRGEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATtiny44" id="1E9207" abbreviation="t44">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="SELFPRGEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATMEGA8535" id="1E9308" abbreviation="m8535">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, BODEN, BODLEVEL"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, CKOPT, SPIEN, WDTON, S8535C"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA8515" id="1E9306" abbreviation="m8515">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, BODEN, BODLEVEL"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, CKOPT, SPIEN, WDTON, S8515C"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA8" id="1E9307" abbreviation="m8">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, BODEN, BODLEVEL"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, CKOPT, SPIEN, WDTON, RSTDISBL"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA161" id="1E9401" abbreviation="m161">
+			<fuse names="CKSEL0, CKSEL1, CKSEL2, SUT, SPIEN, BOOTRST"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA32" id="1E6502" abbreviation="m32">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, BODEN, BODLEVEL"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, CKOPT, SPIEN, JTAGEN, OCDEN"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA6490" id="1E9604" abbreviation="m6490">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="RSTDISBL, BODLEVEL0, BODLEVEL1"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA649" id="1E9603" abbreviation="m649">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="RSTDISBL, BODLEVEL0, BODLEVEL1"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA3290" id="1E9504" abbreviation="m3290">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="RSTDISBL, BODLEVEL0, BODLEVEL1"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA329" id="1E9503" abbreviation="m329">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="RSTDISBL, BODLEVEL0, BODLEVEL1"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA169" id="1E9405" abbreviation="m169">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="RESERVED, BODLEVEL0, BODLEVEL1, BODLEVEL2"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA163" id="1E9402" abbreviation="m163"/>
+		<supported-part name="ATMEGA162" id="1E9404" abbreviation="m162">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="RESERVED, BODLEVEL0, BODLEVEL1, BODLEVEL2, M161C"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA644" id="1E9609" abbreviation="m644">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA324" id="1E9508" abbreviation="m324">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA164" id="1E940A" abbreviation="m164">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA16" id="1E9403" abbreviation="m16">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, BODEN, BODLEVEL"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, CKOPT, SPIEN, JTAGEN, OCDEN"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="AT90CAN128" id="1E9781" abbreviation="c128">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, WDTON, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="TA0SEL, BODLEVEL0, BODLEVEL1, BODLEVEL2"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATtiny84" id="1E930C" abbreviation="t84">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, CKOUT, CKDIV8"/>
+			<hfuse names="BODLEVEL0, BODLEVEL1, BODLEVEL2, EESAVE, WDTON, SPIEN, DWEN, RSTDISBL"/>
+			<efuse names="SELFPRGEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATMEGA64" id="1E9602" abbreviation="m64">
+			<lfuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, SUT0, SUT1, BODEN, BODLEVEL"/>
+			<hfuse names="BOOTRST, BOOTSZ0, BOOTSZ1, EESAVE, CKOPT, SPIEN, JTAGEN, OCDEN"/>
+			<efuse names="WDTON, M103C"/>
+			<lock names="LB1, LB2, BLB01, BLB02, BLB11, BLB12"/>
+		</supported-part>
+		<supported-part name="ATMEGA103" id="1E9701" abbreviation="m103">
+			<fuse names="EESAVE, SUT1, SUT0, SPIEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="AT90S8535" id="1E9303" abbreviation="8535">
+			<fuse names="FSTRT, SPIEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="AT90S8515" id="1E9301" abbreviation="8515">
+			<fuse names="FSTRT, SPIEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="AT90S4434" id="FFFFFF" abbreviation="4434"/>
+		<supported-part name="AT90S4433" id="1E9203" abbreviation="4433">
+			<fuse names="CKSEL0, CKSEL1, CKSEL2, BODEN, BODLEVEL, SPIEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="AT90S2343" id="1E9103" abbreviation="2343">
+			<fuse names="FSTRT, SPIEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="AT90S2333" id="FFFFFE" abbreviation="2333"/>
+		<supported-part name="AT90S2313" id="1E9101" abbreviation="2313">
+			<fuse names="FSTRT, SPIEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="AT90S4414" id="FFFFFD" abbreviation="4414"/>
+		<supported-part name="AT90S1200" id="1E9001" abbreviation="1200">
+			<fuse names="FSTRT, SPIEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATtiny15" id="1E9006" abbreviation="t15">
+			<fuse names="CKSEL0, CKSEL1, RSTDSBL, SPIEN, BODEN, BODLEVEL"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATtiny13" id="1E9007" abbreviation="t13">
+			<lfuse names="CKSEL0, CKSEL1, SUT0, SUT1, CKDIV8, WDTON, EESAVE, SPIEN"/>
+			<hfuse names="RSTDISBL, BODLEVEL0, BODLEVEL1, DWEN, SELFPRGEN"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+		<supported-part name="ATtiny12" id="1E9005" abbreviation="t12">
+			<fuse names="CKSEL0, CKSEL1, CKSEL2, CKSEL3, RSTDSBL, SPIEN, BODEN, BODLEVEL"/>
+			<lock names="LB1, LB2"/>
+		</supported-part>
+	</supported-parts>
+</Universal-GUI-Config>
+

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="avrdude" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="avrdude\avrdude" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="avrdude\avrdude" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-DWIN32NATIVE" />
+			<Add option="-DCONFIG_DIR C:\" />
+		</Compiler>
+		<Linker>
+			<Add library="libusb" />
+			<Add library="libhid" />
+			<Add library="libhidparse" />
+			<Add library="libsetupapi" />
+		</Linker>
+		<Unit filename="ac_cfg.h" />
+		<Unit filename="arduino.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="arduino.h" />
+		<Unit filename="avr.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="avr.h" />
+		<Unit filename="avr910.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="avr910.h" />
+		<Unit filename="avrdude.h" />
+		<Unit filename="avrpart.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="avrpart.h" />
+		<Unit filename="bitbang.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="bitbang.h" />
+		<Unit filename="buspirate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="buspirate.h" />
+		<Unit filename="butterfly.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="butterfly.h" />
+		<Unit filename="config.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="config.h" />
+		<Unit filename="config_gram.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="config_gram.h" />
+		<Unit filename="confwin.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="confwin.h" />
+		<Unit filename="crc16.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="crc16.h" />
+		<Unit filename="fileio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="fileio.h" />
+		<Unit filename="freebsd_ppi.h" />
+		<Unit filename="jtagmkI.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="jtagmkI.h" />
+		<Unit filename="jtagmkII.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="jtagmkII.h" />
+		<Unit filename="jtagmkII_private.h" />
+		<Unit filename="jtagmkI_private.h" />
+		<Unit filename="lexer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="linux_ppdev.h" />
+		<Unit filename="lists.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lists.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="my_ddk_hidsdi.h" />
+		<Unit filename="osuisp2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="osuisp2.h" />
+		<Unit filename="par.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="par.h" />
+		<Unit filename="pgm.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pgm.h" />
+		<Unit filename="pindefs.h" />
+		<Unit filename="ppi.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ppi.h" />
+		<Unit filename="ppiwin.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="safemode.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="safemode.h" />
+		<Unit filename="ser_avrdoper.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ser_posix.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ser_win32.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="serbb.h" />
+		<Unit filename="serbb_posix.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="serbb_win32.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="serial.h" />
+		<Unit filename="solaris_ecpp.h" />
+		<Unit filename="stk500.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="stk500.h" />
+		<Unit filename="stk500_private.h" />
+		<Unit filename="stk500generic.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="stk500generic.h" />
+		<Unit filename="stk500v2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="stk500v2.h" />
+		<Unit filename="stk500v2_private.h" />
+		<Unit filename="term.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="term.h" />
+		<Unit filename="update.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="update.h" />
+		<Unit filename="usb_libusb.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="usbasp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="usbasp.h" />
+		<Unit filename="usbdevs.h" />
+		<Unit filename="usbtiny.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="usbtiny.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

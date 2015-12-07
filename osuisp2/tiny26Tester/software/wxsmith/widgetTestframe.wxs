@@ -1,0 +1,881 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxFrame" name="widgetTestFrame">
+		<size>592,446</size>
+		<fg>#FFFFFF</fg>
+		<bg>#FFFFFF</bg>
+		<minsize>600,480</minsize>
+		<maxsize>600,480</maxsize>
+		<id_arg>0</id_arg>
+		<handler function="OnClose" entry="EVT_CLOSE" />
+		<object class="wxPanel" name="ID_PANEL13" variable="Panel12" member="yes">
+			<pos>8,120</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP11" variable="StaticBitmap11" member="yes">
+				<bitmap>images\buffer.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX47" variable="PORTB2" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX48" variable="PINB2" member="yes">
+				<pos>0,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX49" variable="DDRB2" member="yes">
+				<pos>31,0</pos>
+				<enabled>0</enabled>
+				<handler function="OnDDRA2Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL2" variable="Panel1" member="yes">
+			<pos>472,120</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP2" variable="StaticBitmap2" member="yes">
+				<bitmap>images\buffer2.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX25" variable="PORTA2" member="yes">
+				<pos>0,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX26" variable="PINA2" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX27" variable="DDRA2" member="yes">
+				<pos>25,0</pos>
+				<handler function="OnDDRA2Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL12" variable="Panel11" member="yes">
+			<pos>8,72</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP10" variable="StaticBitmap10" member="yes">
+				<bitmap>images\buffer.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX44" variable="PORTB1" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX45" variable="PINB1" member="yes">
+				<pos>0,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX46" variable="DDRB1" member="yes">
+				<pos>31,0</pos>
+				<enabled>0</enabled>
+				<handler function="OnDDRA1Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL3" variable="Panel2" member="yes">
+			<pos>472,72</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP3" variable="StaticBitmap3" member="yes">
+				<bitmap>images\buffer2.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX28" variable="PORTA1" member="yes">
+				<pos>0,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX29" variable="PINA1" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX30" variable="DDRA1" member="yes">
+				<pos>25,0</pos>
+				<handler function="OnDDRA1Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL14" variable="Panel13" member="yes">
+			<pos>8,168</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP12" variable="StaticBitmap12" member="yes">
+				<bitmap>images\buffer.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX50" variable="PORTB3" member="yes">
+				<pos>56,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX51" variable="PINB3" member="yes">
+				<pos>0,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX52" variable="DDRB3" member="yes">
+				<pos>31,0</pos>
+				<handler function="OnDDRA3Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL4" variable="Panel3" member="yes">
+			<pos>472,168</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP4" variable="StaticBitmap4" member="yes">
+				<bitmap>images\buffer2.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX2" variable="PORTA3" member="yes">
+				<pos>0,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX4" variable="PINA3" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX6" variable="DDRA3" member="yes">
+				<pos>25,0</pos>
+				<handler function="OnDDRA3Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL9" variable="Panel10" member="yes">
+			<pos>8,24</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP9" variable="StaticBitmap9" member="yes">
+				<bitmap>images\buffer.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX41" variable="PORTB0" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX42" variable="PINB0" member="yes">
+				<pos>0,24</pos>
+				<enabled>0</enabled>
+				<handler function="OnPINA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX43" variable="DDRB0" member="yes">
+				<pos>31,0</pos>
+				<enabled>0</enabled>
+				<handler function="OnDDRA0Click1" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL8" variable="Panel7" member="yes">
+			<pos>472,24</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP8" variable="StaticBitmap8" member="yes">
+				<bitmap>images\buffer2.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX16" variable="PORTA0" member="yes">
+				<pos>0,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX17" variable="PINA0" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+				<handler function="OnPINA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX18" variable="DDRA0" member="yes">
+				<pos>25,0</pos>
+				<handler function="OnDDRA0Click1" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL18" variable="Panel17" member="yes">
+			<pos>8,360</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP16" variable="StaticBitmap16" member="yes">
+				<bitmap>images\buffer.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX62" variable="PORTB7" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX63" variable="PINB7" member="yes">
+				<pos>0,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX64" variable="DDRB7" member="yes">
+				<pos>31,0</pos>
+				<enabled>0</enabled>
+				<handler function="OnDDRA7Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL7" variable="Panel6" member="yes">
+			<pos>472,360</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP7" variable="StaticBitmap7" member="yes">
+				<bitmap>images\buffer2.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX13" variable="PORTA7" member="yes">
+				<pos>0,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX14" variable="PINA7" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX15" variable="DDRA7" member="yes">
+				<pos>25,0</pos>
+				<handler function="OnDDRA7Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL17" variable="Panel16" member="yes">
+			<pos>8,312</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP15" variable="StaticBitmap15" member="yes">
+				<bitmap>images\buffer.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX59" variable="PORTB6" member="yes">
+				<pos>56,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX60" variable="PINB6" member="yes">
+				<pos>0,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX61" variable="DDRB6" member="yes">
+				<pos>31,0</pos>
+				<handler function="OnDDRA6Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL6" variable="Panel5" member="yes">
+			<pos>472,312</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP6" variable="StaticBitmap6" member="yes">
+				<bitmap>images\buffer2.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX10" variable="PORTA6" member="yes">
+				<pos>0,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX11" variable="PINA6" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+				<handler function="OnPINA6Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX12" variable="DDRA6" member="yes">
+				<pos>25,0</pos>
+				<handler function="OnDDRA6Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL16" variable="Panel15" member="yes">
+			<pos>8,264</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP14" variable="StaticBitmap14" member="yes">
+				<bitmap>images\buffer.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX56" variable="PORTB5" member="yes">
+				<pos>56,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX57" variable="PINB5" member="yes">
+				<pos>0,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX58" variable="DDRB5" member="yes">
+				<pos>31,0</pos>
+				<handler function="OnDDRA5Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL5" variable="Panel4" member="yes">
+			<pos>472,264</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP5" variable="StaticBitmap5" member="yes">
+				<bitmap>images\buffer2.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX7" variable="PORTA5" member="yes">
+				<pos>0,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX8" variable="PINA5" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX9" variable="DDRA5" member="yes">
+				<pos>25,0</pos>
+				<handler function="OnDDRA5Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL15" variable="Panel14" member="yes">
+			<pos>8,216</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP13" variable="StaticBitmap13" member="yes">
+				<bitmap>images\buffer.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX53" variable="PORTB4" member="yes">
+				<pos>56,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX54" variable="PINB4" member="yes">
+				<pos>0,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX55" variable="DDRB4" member="yes">
+				<pos>31,0</pos>
+				<handler function="OnDDRA4Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxPanel" name="ID_PANEL1" variable="PA0_PANEL" member="yes">
+			<pos>472,216</pos>
+			<size>72,40</size>
+			<bg>#FFFFFF</bg>
+			<object class="wxStaticBitmap" name="ID_STATICBITMAP1" variable="StaticBitmap1" member="yes">
+				<bitmap>images\buffer2.bmp</bitmap>
+				<pos>13,13</pos>
+				<size>43,26</size>
+				<minsize>43,26</minsize>
+				<maxsize>43,26</maxsize>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX1" variable="PORTA4" member="yes">
+				<pos>0,24</pos>
+				<minsize>20,20</minsize>
+				<maxsize>20,20</maxsize>
+				<handler function="OnDDRA0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX3" variable="PINA4" member="yes">
+				<pos>56,24</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX5" variable="DDRA4" member="yes">
+				<pos>25,0</pos>
+				<handler function="OnDDRA4Click" entry="EVT_CHECKBOX" />
+			</object>
+		</object>
+		<object class="wxButton" name="ID_BUTTON2" variable="Button_Connect" member="yes">
+			<label>Connect</label>
+			<pos>256,16</pos>
+			<handler function="OnButton_ConnectClick" entry="EVT_BUTTON" />
+		</object>
+		<object class="wxPanel" name="ID_PANEL19" variable="Panel18" member="yes">
+			<pos>144,152</pos>
+			<size>264,240</size>
+			<style>wxDOUBLE_BORDER|wxTAB_TRAVERSAL</style>
+			<object class="wxStaticText" name="ID_STATICTEXT6" variable="OCR1C_Text" member="yes">
+				<label>OCR1C = 0</label>
+				<pos>8,16</pos>
+				<fg>#800040</fg>
+			</object>
+			<object class="wxStaticText" name="ID_STATICTEXT5" variable="TCCR1B_Text" member="yes">
+				<label>TCCR1B=0x00</label>
+				<pos>144,88</pos>
+				<fg>#804000</fg>
+				<font>
+					<size>10</size>
+					<style>normal</style>
+					<weight>bold</weight>
+					<underlined>0</underlined>
+					<family>swiss</family>
+					<face>Courier New</face>
+				</font>
+			</object>
+			<object class="wxSlider" name="ID_SLIDER3" variable="OCR1C_Slider" member="yes">
+				<max>255</max>
+				<pos>80,10</pos>
+				<size>166,24</size>
+			</object>
+			<object class="wxSlider" name="ID_SLIDER2" variable="OCR1B_Slider" member="yes">
+				<max>255</max>
+				<pos>80,34</pos>
+				<size>166,24</size>
+				<handler function="OnOCR1B_SliderCmdScroll" entry="EVT_COMMAND_SCROLL" />
+			</object>
+			<object class="wxSlider" name="ID_SLIDER1" variable="TCNT1_Slider" member="yes">
+				<max>255</max>
+				<pos>80,60</pos>
+				<size>166,24</size>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxStaticText" name="ID_STATICTEXT7" variable="OCR1B_Text" member="yes">
+				<label>OCR1B = 0</label>
+				<pos>8,40</pos>
+				<fg>#800040</fg>
+			</object>
+			<object class="wxStaticText" name="ID_STATICTEXT4" variable="TCCR1A_Text" member="yes">
+				<label>TCCR1A=0x00</label>
+				<pos>24,88</pos>
+				<size>162,16</size>
+				<fg>#804000</fg>
+				<font>
+					<size>10</size>
+					<style>normal</style>
+					<weight>bold</weight>
+					<underlined>0</underlined>
+					<family>swiss</family>
+					<face>Courier New</face>
+				</font>
+			</object>
+			<object class="wxStaticText" name="ID_STATICTEXT8" variable="TCNT1_Text" member="yes">
+				<label>TCNT1 = 0</label>
+				<pos>8,64</pos>
+				<fg>#800040</fg>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX33" variable="TCCR1A7" member="yes">
+				<label>COM1A1</label>
+				<pos>32,104</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX34" variable="TCCR1A6" member="yes">
+				<label>COM1A0</label>
+				<pos>32,120</pos>
+				<enabled>0</enabled>
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX35" variable="TCCR1A5" member="yes">
+				<label>COM1B1</label>
+				<pos>32,136</pos>
+				<handler function="OnTCCR1A5Click1" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX36" variable="TCCR1A4" member="yes">
+				<label>COM1B0</label>
+				<pos>32,152</pos>
+				<handler function="OnTCCR1A4Click1" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX37" variable="TCCR1A3" member="yes">
+				<label>FOC1A</label>
+				<pos>32,168</pos>
+				<enabled>0</enabled>
+				<handler function="OnTCCR1A4Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX38" variable="TCCR1A2" member="yes">
+				<label>FOC1B</label>
+				<pos>32,184</pos>
+				<enabled>0</enabled>
+				<handler function="OnTCCR1A5Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX39" variable="TCCR1A1" member="yes">
+				<label>PWM1A</label>
+				<pos>32,200</pos>
+				<handler function="OnTCCR1A1Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX40" variable="TCCR1A0" member="yes">
+				<label>PWM1B</label>
+				<pos>32,216</pos>
+				<handler function="OnTCCR1A0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX19" variable="TCCR1B7" member="yes">
+				<label>CTC1</label>
+				<pos>152,104</pos>
+				<handler function="OnTCCR1B0Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX20" variable="TCCR1B6" member="yes">
+				<label>PSR1</label>
+				<pos>152,120</pos>
+				<handler function="OnTCCR1B1Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX23" variable="TCCR1B3" member="yes">
+				<label>CS13</label>
+				<pos>152,168</pos>
+				<handler function="OnTCCR1A4Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX24" variable="TCCR1B2" member="yes">
+				<label>CS12</label>
+				<pos>152,184</pos>
+				<handler function="OnTCCR1A5Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX31" variable="TCCR1B1" member="yes">
+				<label>CS11</label>
+				<pos>152,200</pos>
+				<handler function="OnTCCR1B1Click1" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX32" variable="TCCR1B0" member="yes">
+				<label>CS10</label>
+				<pos>152,216</pos>
+				<handler function="OnTCCR1B7Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX21" variable="TCCR1B5" member="yes">
+				<label>-</label>
+				<pos>152,136</pos>
+				<enabled>0</enabled>
+				<handler function="OnTCCR1B2Click" entry="EVT_CHECKBOX" />
+			</object>
+			<object class="wxCheckBox" name="ID_CHECKBOX22" variable="TCCR1B4" member="yes">
+				<label>-</label>
+				<pos>152,152</pos>
+				<enabled>0</enabled>
+			</object>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT17" variable="StaticText10" member="yes">
+			<label>PA0</label>
+			<pos>432,40</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+				<face>Arial</face>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT24" variable="StaticText17" member="yes">
+			<label>PB7</label>
+			<pos>88,376</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+				<face>Arial</face>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT23" variable="StaticText16" member="yes">
+			<label>PB6</label>
+			<pos>88,328</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+				<face>Arial</face>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT22" variable="StaticText15" member="yes">
+			<label>PB5</label>
+			<pos>88,280</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+				<face>Arial</face>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT21" variable="StaticText14" member="yes">
+			<label>PB4</label>
+			<pos>88,232</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+				<face>Arial</face>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT20" variable="StaticText13" member="yes">
+			<label>PB3</label>
+			<pos>88,184</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+				<face>Arial</face>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT19" variable="StaticText12" member="yes">
+			<label>PB2</label>
+			<pos>88,136</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+				<face>Arial</face>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT18" variable="StaticText11" member="yes">
+			<label>PB1</label>
+			<pos>88,88</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+				<face>Arial</face>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT10" variable="StaticText3" member="yes">
+			<label>PB0</label>
+			<pos>88,40</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+				<face>Arial</face>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT16" variable="StaticText9" member="yes">
+			<label>PA7</label>
+			<pos>432,376</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT15" variable="StaticText8" member="yes">
+			<label>PA6</label>
+			<pos>432,328</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT14" variable="StaticText7" member="yes">
+			<label>PA5</label>
+			<pos>432,280</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT13" variable="StaticText6" member="yes">
+			<label>PA4</label>
+			<pos>432,232</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT12" variable="StaticText5" member="yes">
+			<label>PA3</label>
+			<pos>432,184</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT11" variable="StaticText4" member="yes">
+			<label>PA2</label>
+			<pos>432,136</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+			</font>
+		</object>
+		<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText2" member="yes">
+			<label>PA1</label>
+			<pos>432,88</pos>
+			<fg>#008040</fg>
+			<font>
+				<size>12</size>
+				<style>normal</style>
+				<weight>bold</weight>
+				<underlined>0</underlined>
+				<family>swiss</family>
+			</font>
+		</object>
+		<object class="wxPanel" name="ID_PANEL10" variable="Panel8" member="yes">
+			<pos>144,48</pos>
+			<size>264,96</size>
+			<style>wxDOUBLE_BORDER|wxTAB_TRAVERSAL</style>
+			<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+				<label>ADC:</label>
+				<pos>32,8</pos>
+				<fg>wxSYS_COLOUR_MENUTEXT</fg>
+			</object>
+			<object class="wxStaticText" name="ID_STATICTEXT2" variable="ADC_Digital" member="yes">
+				<label>0</label>
+				<pos>8,24</pos>
+				<size>56,13</size>
+				<fg>#004080</fg>
+			</object>
+			<object class="wxStaticText" name="ID_STATICTEXT3" variable="ADC_Voltage" member="yes">
+				<label>0</label>
+				<pos>8,40</pos>
+				<size>56,13</size>
+				<fg>#008000</fg>
+			</object>
+			<object class="wxGauge" name="ID_GAUGE1" variable="ADCGauge" member="yes">
+				<range>256</range>
+				<pos>8,56</pos>
+				<size>86,30</size>
+			</object>
+			<object class="wxRadioButton" name="ID_RADIOBUTTON1" variable="RadioButton_ADC0" member="yes">
+				<label>ADC 0 (PA0)</label>
+				<selected>1</selected>
+				<pos>96,8</pos>
+			</object>
+			<object class="wxRadioButton" name="ID_RADIOBUTTON2" variable="RadioButton_ADC1" member="yes">
+				<label>ADC 1 (PA1)</label>
+				<pos>96,24</pos>
+			</object>
+			<object class="wxRadioButton" name="ID_RADIOBUTTON3" variable="RadioButton_ADC2" member="yes">
+				<label>ADC 2 (PA2)</label>
+				<pos>96,40</pos>
+			</object>
+			<object class="wxRadioButton" name="ID_RADIOBUTTON5" variable="RadioButton_ADC3" member="yes">
+				<label>ADC 3 (PA4)</label>
+				<pos>96,56</pos>
+			</object>
+			<object class="wxRadioButton" name="ID_RADIOBUTTON6" variable="RadioButton_ADC4" member="yes">
+				<label>ADC 4 (PA5)</label>
+				<pos>96,72</pos>
+			</object>
+			<object class="wxRadioButton" name="ID_RADIOBUTTON7" variable="RadioButton_ADC5" member="yes">
+				<label>ADC 5 (PA6)</label>
+				<pos>176,8</pos>
+			</object>
+			<object class="wxRadioButton" name="ID_RADIOBUTTON8" variable="RadioButton_ADC6" member="yes">
+				<label>ADC 6 (PA7)</label>
+				<pos>176,24</pos>
+			</object>
+		</object>
+		<object class="wxMenuBar" variable="MenuBar1" member="no">
+			<object class="wxMenu" variable="Menu1" member="no">
+				<label>&amp;File</label>
+				<object class="wxMenuItem" name="idMenuQuit" variable="MenuItem1" member="no">
+					<label>Quit</label>
+					<accel>Alt-F4</accel>
+					<help>Quit the application</help>
+					<handler function="OnQuit" entry="EVT_MENU" />
+				</object>
+			</object>
+			<object class="wxMenu" variable="Menu2" member="no">
+				<label>Help</label>
+				<object class="wxMenuItem" name="idMenuAbout" variable="MenuItem2" member="no">
+					<label>About</label>
+					<accel>F1</accel>
+					<help>Show info about this application</help>
+					<handler function="OnAbout" entry="EVT_MENU" />
+				</object>
+			</object>
+		</object>
+		<object class="wxStatusBar" name="ID_STATUSBAR1" variable="StatusBar1" member="yes">
+			<fields>1</fields>
+			<widths>-1</widths>
+			<styles>wxSB_NORMAL</styles>
+		</object>
+		<object class="wxTimer" name="ID_TIMER1" variable="Timer1" member="yes">
+			<interval>75</interval>
+			<handler function="OnTimer1Trigger" entry="EVT_TIMER" />
+		</object>
+		<object class="wxTimer" name="ID_TIMER2" variable="Timer2" member="yes">
+			<interval>30</interval>
+			<handler function="OnTimer2Trigger" entry="EVT_TIMER" />
+		</object>
+	</object>
+</wxsmith>

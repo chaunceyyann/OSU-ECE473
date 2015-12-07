@@ -1,0 +1,89 @@
+# JTAG declarations for XCF02S idcode XXXX0101000001000101000010010011
+# generated on 7/21/2009 1:31:20 PM by Z:\Windows.Documents\Desktop\script\bsdl2jtag.pl 0.1 from xcf02s.bsd
+signal OE_RESET
+signal CLK
+signal TDI
+signal TCK
+signal VCCINT
+signal CE
+signal CEO
+signal VCCJ
+signal D0
+signal CF
+signal GND
+signal DNC
+signal TDO
+signal VCCO
+signal TMS
+register ISC_DEFAULT 1
+register BYPASS 1
+register ISPENABLE 6
+register DATA3 3
+register BSR 25
+register ADDRESS 16
+register USERCODEV 32
+register DATA0 4096
+register ISC_INFO 8
+register DATA1 2097152
+register XSC_STATUS 8
+register DEVICE_ID 32
+instruction length 8
+instruction FDATA0 11101101 DATA0
+# instruction priv3 11100111 <unspecified>
+instruction IDCODE 11111110 DEVICE_ID
+instruction ISPENC 11101001 ISPENABLE
+instruction PRELOAD 00000001 BSR
+instruction FBLANK3 11100001 DATA3
+# instruction priv9 11110101 <unspecified>
+instruction ISCTESTSTATUS 11100011 XSC_STATUS
+instruction NORMRST 11110000 ISC_DEFAULT
+instruction ISCCLRSTATUS 11110100 XSC_STATUS
+# instruction priv6 11110111 <unspecified>
+instruction FVFY6 11100110 USERCODEV
+# instruction priv5 11100000 <unspecified>
+instruction FADDR 11101011 ADDRESS
+instruction FVFY3 11100010 DATA3
+instruction FVFY0 11101111 DATA0
+instruction ISPEN 11101000 ISPENABLE
+instruction SAMPLE/PRELOAD 00000001 BSR
+instruction CONFIG 11101110 BYPASS
+instruction SERASE 00001010 ADDRESS
+instruction HIGHZ 11111100 BYPASS
+instruction FPGM 11101010 ISC_DEFAULT
+instruction FDATA3 11110011 DATA3
+instruction BYPASS 11111111 BYPASS
+# instruction priv4 11110110 <unspecified>
+instruction USERCODE 11111101 DEVICE_ID
+# instruction priv7 11110010 <unspecified>
+instruction FVFY1 11111000 DATA1
+instruction ISC_READ_INFO 11110001 ISC_INFO
+instruction FBLANK0 11100101 DATA1
+instruction FBLANK6 11100100 USERCODEV
+instruction EXTEST 00000000 BSR
+instruction CLAMP 11111010 BYPASS
+instruction FERASE 11101100 ADDRESS
+bit  0 I ? CLK
+bit  1 X 0 *
+bit  2 X ? *
+bit  3 C 0 *
+bit  4 O ? D0 3 0 Z
+bit  5 X 0 *
+bit  6 X ? *
+bit  7 X 0 *
+bit  8 X ? *
+bit  9 X 0 *
+bit 10 X ? *
+bit 11 C 0 *
+bit 12 O ? CEO 11 0 Z
+bit 13 X 0 *
+bit 14 X ? *
+bit 15 I ? CE
+bit 16 X 0 *
+bit 17 X ? *
+bit 18 C 0 *
+bit 19 O ? OE_RESET 18 0 Z
+bit 20 I ? OE_RESET
+bit 21 C 0 *
+bit 22 O ? CF 21 0 Z
+bit 23 X 0 *
+bit 24 X ? *

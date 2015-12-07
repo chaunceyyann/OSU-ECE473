@@ -1,0 +1,1245 @@
+# depslib dependency file v1.0
+1263901150 source:c:\temp\work\avrdude-5.10\arduino.c
+	"ac_cfg.h"
+	<stdio.h>
+	<string.h>
+	<unistd.h>
+	"avrdude.h"
+	"pgm.h"
+	"stk500_private.h"
+	"stk500.h"
+	"serial.h"
+
+1279123490 c:\temp\work\avrdude-5.10\ac_cfg.h
+
+1263901150 c:\temp\work\avrdude-5.10\avrdude.h
+	"ac_cfg.h"
+	<windows.h>
+
+1263901150 c:\temp\work\avrdude-5.10\pgm.h
+	<limits.h>
+	"avrpart.h"
+	"lists.h"
+	"pindefs.h"
+	"serial.h"
+
+1263901150 c:\temp\work\avrdude-5.10\avrpart.h
+	<limits.h>
+	"lists.h"
+
+1263901150 c:\temp\work\avrdude-5.10\lists.h
+	<stdio.h>
+
+1263901150 c:\temp\work\avrdude-5.10\pindefs.h
+
+1263901150 c:\temp\work\avrdude-5.10\serial.h
+
+1263901150 c:\temp\work\avrdude-5.10\stk500_private.h
+
+1263901150 c:\temp\work\avrdude-5.10\stk500.h
+
+1263901150 source:c:\temp\work\avrdude-5.10\avr.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<string.h>
+	<sys/time.h>
+	<time.h>
+	"avrdude.h"
+	"avr.h"
+	"lists.h"
+	"pindefs.h"
+	"ppi.h"
+	"safemode.h"
+	"update.h"
+
+1263901150 c:\temp\work\avrdude-5.10\avr.h
+	<stdio.h>
+	"avrpart.h"
+	"pgm.h"
+
+1263901150 c:\temp\work\avrdude-5.10\ppi.h
+
+1263901150 c:\temp\work\avrdude-5.10\safemode.h
+
+1263901150 c:\temp\work\avrdude-5.10\update.h
+
+1263901150 source:c:\temp\work\avrdude-5.10\avr910.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<ctype.h>
+	<sys/time.h>
+	<unistd.h>
+	"avrdude.h"
+	"avr.h"
+	"config.h"
+	"pgm.h"
+	"avr910.h"
+	"serial.h"
+
+1263901150 c:\temp\work\avrdude-5.10\config.h
+	"lists.h"
+	"pindefs.h"
+	"avr.h"
+
+1263901150 c:\temp\work\avrdude-5.10\avr910.h
+	"avrpart.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\avrpart.c
+	<stdlib.h>
+	<string.h>
+	"avrdude.h"
+	"avrpart.h"
+	"pindefs.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\bitbang.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<fcntl.h>
+	<unistd.h>
+	<errno.h>
+	<signal.h>
+	<sys/time.h>
+	"avrdude.h"
+	"avr.h"
+	"pindefs.h"
+	"pgm.h"
+	"par.h"
+	"serbb.h"
+
+1263901150 c:\temp\work\avrdude-5.10\par.h
+
+1263901150 c:\temp\work\avrdude-5.10\serbb.h
+
+1263901150 source:c:\temp\work\avrdude-5.10\buspirate.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<malloc.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"serial.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\butterfly.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<ctype.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"butterfly.h"
+	"serial.h"
+
+1263901150 c:\temp\work\avrdude-5.10\butterfly.h
+
+1263901150 source:c:\temp\work\avrdude-5.10\config.c
+	"ac_cfg.h"
+	<errno.h>
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<string.h>
+	"avrdude.h"
+	"avr.h"
+	"config.h"
+	"config_gram.h"
+
+1279123922 c:\temp\work\avrdude-5.10\config_gram.h
+
+1279123923 source:c:\temp\work\avrdude-5.10\config_gram.c
+	"ac_cfg.h"
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	"avrdude.h"
+	"config.h"
+	"lists.h"
+	"par.h"
+	"serbb.h"
+	"pindefs.h"
+	"ppi.h"
+	"pgm.h"
+	"stk500.h"
+	"arduino.h"
+	"buspirate.h"
+	"stk500v2.h"
+	"stk500generic.h"
+	"avr910.h"
+	"butterfly.h"
+	"usbasp.h"
+	"osuisp2.h"
+	"usbtiny.h"
+	"avr.h"
+	"jtagmkI.h"
+	"jtagmkII.h"
+	<stddef.h>
+	<libintl.h>
+	<alloca.h>
+	<malloc.h>
+	<stdlib.h>
+	<stdlib.h>
+	<stdio.h>
+
+1263901150 c:\temp\work\avrdude-5.10\arduino.h
+
+1263901150 c:\temp\work\avrdude-5.10\buspirate.h
+
+1263901150 c:\temp\work\avrdude-5.10\stk500v2.h
+
+1263901150 c:\temp\work\avrdude-5.10\stk500generic.h
+
+1263901150 c:\temp\work\avrdude-5.10\usbasp.h
+	"avrpart.h"
+
+1279146380 c:\temp\work\avrdude-5.10\osuisp2.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<sys/time.h>
+	<unistd.h>
+	<malloc.h>
+	"avrpart.h"
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+
+1263901150 c:\temp\work\avrdude-5.10\usbtiny.h
+	"avrpart.h"
+
+1263901150 c:\temp\work\avrdude-5.10\jtagmki.h
+
+1263901150 c:\temp\work\avrdude-5.10\jtagmkii.h
+
+1263901150 source:c:\temp\work\avrdude-5.10\confwin.c
+	"avrdude.h"
+	<limits.h>
+	<windows.h>
+
+1263901150 source:c:\temp\work\avrdude-5.10\crc16.c
+	"crc16.h"
+
+1263901150 c:\temp\work\avrdude-5.10\crc16.h
+
+1263901150 source:c:\temp\work\avrdude-5.10\fileio.c
+	"ac_cfg.h"
+	<limits.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<ctype.h>
+	"avrdude.h"
+	"avr.h"
+	"fileio.h"
+
+1263901150 c:\temp\work\avrdude-5.10\fileio.h
+
+1263901150 source:c:\temp\work\avrdude-5.10\jtagmki.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<unistd.h>
+	<sys/time.h>
+	<time.h>
+	"avrdude.h"
+	"avr.h"
+	"crc16.h"
+	"pgm.h"
+	"jtagmkI_private.h"
+	"serial.h"
+
+1263901150 c:\temp\work\avrdude-5.10\jtagmki_private.h
+
+1263901150 source:c:\temp\work\avrdude-5.10\jtagmkii.c
+	"ac_cfg.h"
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<unistd.h>
+	<sys/time.h>
+	<time.h>
+	"avrdude.h"
+	"avr.h"
+	"crc16.h"
+	"pgm.h"
+	"jtagmkII.h"
+	"jtagmkII_private.h"
+	"serial.h"
+	"usbdevs.h"
+
+1263901150 c:\temp\work\avrdude-5.10\jtagmkii_private.h
+
+1263901150 c:\temp\work\avrdude-5.10\usbdevs.h
+
+1279123925 source:c:\temp\work\avrdude-5.10\lexer.c
+	<stdio.h>
+	<string.h>
+	<errno.h>
+	<stdlib.h>
+	<inttypes.h>
+	<math.h>
+	<string.h>
+	<errno.h>
+	<limits.h>
+	<sys/types.h>
+	<sys/stat.h>
+	"avrdude.h"
+	"config.h"
+	"config_gram.h"
+	"lists.h"
+	<unistd.h>
+
+1263901150 source:c:\temp\work\avrdude-5.10\lists.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	"lists.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\main.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<errno.h>
+	<fcntl.h>
+	<limits.h>
+	<string.h>
+	<time.h>
+	<unistd.h>
+	<ctype.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<sys/time.h>
+	"avr.h"
+	"config.h"
+	"confwin.h"
+	"fileio.h"
+	"lists.h"
+	"par.h"
+	"pindefs.h"
+	"term.h"
+	"safemode.h"
+	"update.h"
+
+1263901150 c:\temp\work\avrdude-5.10\confwin.h
+
+1263901150 c:\temp\work\avrdude-5.10\term.h
+	"avr.h"
+	"pgm.h"
+
+1279146291 source:c:\temp\work\avrdude-5.10\osuisp2.c
+	"ac_cfg.h"
+	"osuisp2.h"
+	<stdio.h>
+	<windows.h>
+	<setupapi.h>
+	<ddk\hidsdi.h>
+	<ddk\hidpi.h>
+	<string.h>
+	<usb.h>
+
+1263901150 source:c:\temp\work\avrdude-5.10\par.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<fcntl.h>
+	<unistd.h>
+	<errno.h>
+	"freebsd_ppi.h"
+	"linux_ppdev.h"
+	"solaris_ecpp.h"
+	"avrdude.h"
+	"avr.h"
+	"pindefs.h"
+	"pgm.h"
+	"ppi.h"
+	"bitbang.h"
+
+1263901150 c:\temp\work\avrdude-5.10\freebsd_ppi.h
+	<dev/ppbus/ppi.h>
+
+1263901150 c:\temp\work\avrdude-5.10\linux_ppdev.h
+	<sys/ioctl.h>
+	<linux/parport.h>
+	<linux/ppdev.h>
+	<stdlib.h>
+
+1263901150 c:\temp\work\avrdude-5.10\solaris_ecpp.h
+	<sys/ecppio.h>
+
+1263901150 c:\temp\work\avrdude-5.10\bitbang.h
+
+1263901150 source:c:\temp\work\avrdude-5.10\pgm.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"avrdude.h"
+	"pgm.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\ppi.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<fcntl.h>
+	<unistd.h>
+	<errno.h>
+	"freebsd_ppi.h"
+	"linux_ppdev.h"
+	"solaris_ecpp.h"
+	"avrdude.h"
+	"avr.h"
+	"pindefs.h"
+	"pgm.h"
+	"ppi.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\ppiwin.c
+	"ac_cfg.h"
+	"avrdude.h"
+	<errno.h>
+	<fcntl.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<windows.h>
+	<sys/time.h>
+	<windows.h>
+	"serial.h"
+	"ppi.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\safemode.c
+	<stdio.h>
+	"ac_cfg.h"
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"safemode.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\ser_avrdoper.c
+	"ac_cfg.h"
+	<stdio.h>
+	<string.h>
+	"avrdude.h"
+	"serial.h"
+	<windows.h>
+	<setupapi.h>
+	<ddk/hidsdi.h>
+	"my_ddk_hidsdi.h"
+	<ddk/hidpi.h>
+	<usb.h>
+
+1263901150 c:\temp\work\avrdude-5.10\my_ddk_hidsdi.h
+	<pshpack4.h>
+	<ddk/hidusage.h>
+	<ddk/hidpi.h>
+	<poppack.h>
+
+1263901150 source:c:\temp\work\avrdude-5.10\ser_posix.c
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<sys/ioctl.h>
+	<sys/types.h>
+	<sys/time.h>
+	<sys/socket.h>
+	<netdb.h>
+	<netinet/in.h>
+	<fcntl.h>
+	<termios.h>
+	<unistd.h>
+	"avrdude.h"
+	"serial.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\ser_win32.c
+	"avrdude.h"
+	<windows.h>
+	<stdio.h>
+	<ctype.h>
+	"serial.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\serbb_posix.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<fcntl.h>
+	<unistd.h>
+	<errno.h>
+	<sys/ioctl.h>
+	<termios.h>
+	"avrdude.h"
+	"avr.h"
+	"pindefs.h"
+	"pgm.h"
+	"bitbang.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\serbb_win32.c
+	"avrdude.h"
+	"ac_cfg.h"
+	<windows.h>
+	<stdio.h>
+	"avr.h"
+	"pindefs.h"
+	"pgm.h"
+	"bitbang.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\stk500.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<unistd.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"stk500_private.h"
+	"serial.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\stk500generic.c
+	"ac_cfg.h"
+	<stdio.h>
+	<string.h>
+	"avrdude.h"
+	"pgm.h"
+	"stk500.h"
+	"stk500v2.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\stk500v2.c
+	"ac_cfg.h"
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<limits.h>
+	<unistd.h>
+	<sys/time.h>
+	<time.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"stk500_private.h"
+	"stk500v2_private.h"
+	"serial.h"
+	"usbdevs.h"
+	"jtagmkII.h"
+	"jtagmkII_private.h"
+
+1263901150 c:\temp\work\avrdude-5.10\stk500v2_private.h
+
+1263901150 source:c:\temp\work\avrdude-5.10\term.c
+	"ac_cfg.h"
+	<ctype.h>
+	<string.h>
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	<readline/readline.h>
+	<readline/history.h>
+	"avrdude.h"
+	"avr.h"
+	"config.h"
+	"lists.h"
+	"pgm.h"
+	"pindefs.h"
+	"ppi.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\update.c
+	<stdio.h>
+	<stdlib.h>
+	<errno.h>
+	<string.h>
+	<time.h>
+	"avrdude.h"
+	"avr.h"
+	"config.h"
+	"confwin.h"
+	"fileio.h"
+	"update.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\usb_libusb.c
+	"ac_cfg.h"
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<sys/types.h>
+	<sys/time.h>
+	<usb.h>
+	"avrdude.h"
+	"serial.h"
+	"usbdevs.h"
+
+1263901150 source:c:\temp\work\avrdude-5.10\usbasp.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<sys/time.h>
+	<unistd.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"usbasp.h"
+	<usb.h>
+
+1263901150 source:c:\temp\work\avrdude-5.10\usbtiny.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<sys/time.h>
+	<unistd.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"usbtiny.h"
+	<usb.h>
+
+1263901150 source:c:\temp\work\repo\avrdude\arduino.c
+	"ac_cfg.h"
+	<stdio.h>
+	<string.h>
+	<unistd.h>
+	"avrdude.h"
+	"pgm.h"
+	"stk500_private.h"
+	"stk500.h"
+	"serial.h"
+
+1279123490 c:\temp\work\repo\avrdude\ac_cfg.h
+
+1263901150 c:\temp\work\repo\avrdude\avrdude.h
+	"ac_cfg.h"
+	<windows.h>
+
+1263901150 c:\temp\work\repo\avrdude\pgm.h
+	<limits.h>
+	"avrpart.h"
+	"lists.h"
+	"pindefs.h"
+	"serial.h"
+
+1263901150 c:\temp\work\repo\avrdude\avrpart.h
+	<limits.h>
+	"lists.h"
+
+1263901150 c:\temp\work\repo\avrdude\lists.h
+	<stdio.h>
+
+1263901150 c:\temp\work\repo\avrdude\pindefs.h
+
+1263901150 c:\temp\work\repo\avrdude\serial.h
+
+1263901150 c:\temp\work\repo\avrdude\stk500_private.h
+
+1263901150 c:\temp\work\repo\avrdude\stk500.h
+
+1263901150 source:c:\temp\work\repo\avrdude\avr.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<unistd.h>
+	<string.h>
+	<sys/time.h>
+	<time.h>
+	"avrdude.h"
+	"avr.h"
+	"lists.h"
+	"pindefs.h"
+	"ppi.h"
+	"safemode.h"
+	"update.h"
+
+1263901150 c:\temp\work\repo\avrdude\avr.h
+	<stdio.h>
+	"avrpart.h"
+	"pgm.h"
+
+1263901150 c:\temp\work\repo\avrdude\ppi.h
+
+1263901150 c:\temp\work\repo\avrdude\safemode.h
+
+1263901150 c:\temp\work\repo\avrdude\update.h
+
+1263901150 source:c:\temp\work\repo\avrdude\avr910.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<ctype.h>
+	<sys/time.h>
+	<unistd.h>
+	"avrdude.h"
+	"avr.h"
+	"config.h"
+	"pgm.h"
+	"avr910.h"
+	"serial.h"
+
+1263901150 c:\temp\work\repo\avrdude\config.h
+	"lists.h"
+	"pindefs.h"
+	"avr.h"
+
+1263901150 c:\temp\work\repo\avrdude\avr910.h
+	"avrpart.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\avrpart.c
+	<stdlib.h>
+	<string.h>
+	"avrdude.h"
+	"avrpart.h"
+	"pindefs.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\bitbang.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<fcntl.h>
+	<unistd.h>
+	<errno.h>
+	<signal.h>
+	<sys/time.h>
+	"avrdude.h"
+	"avr.h"
+	"pindefs.h"
+	"pgm.h"
+	"par.h"
+	"serbb.h"
+
+1263901150 c:\temp\work\repo\avrdude\par.h
+
+1263901150 c:\temp\work\repo\avrdude\serbb.h
+
+1263901150 source:c:\temp\work\repo\avrdude\buspirate.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<malloc.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"serial.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\butterfly.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<ctype.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"butterfly.h"
+	"serial.h"
+
+1263901150 c:\temp\work\repo\avrdude\butterfly.h
+
+1263901150 source:c:\temp\work\repo\avrdude\config.c
+	"ac_cfg.h"
+	<errno.h>
+	<stdio.h>
+	<stdlib.h>
+	<stdarg.h>
+	<string.h>
+	"avrdude.h"
+	"avr.h"
+	"config.h"
+	"config_gram.h"
+
+1279123922 c:\temp\work\repo\avrdude\config_gram.h
+
+1279123923 source:c:\temp\work\repo\avrdude\config_gram.c
+	"ac_cfg.h"
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	"avrdude.h"
+	"config.h"
+	"lists.h"
+	"par.h"
+	"serbb.h"
+	"pindefs.h"
+	"ppi.h"
+	"pgm.h"
+	"stk500.h"
+	"arduino.h"
+	"buspirate.h"
+	"stk500v2.h"
+	"stk500generic.h"
+	"avr910.h"
+	"butterfly.h"
+	"usbasp.h"
+	"osuisp2.h"
+	"usbtiny.h"
+	"avr.h"
+	"jtagmkI.h"
+	"jtagmkII.h"
+	<stddef.h>
+	<libintl.h>
+	<alloca.h>
+	<malloc.h>
+	<stdlib.h>
+	<stdlib.h>
+	<stdio.h>
+
+1263901150 c:\temp\work\repo\avrdude\arduino.h
+
+1263901150 c:\temp\work\repo\avrdude\buspirate.h
+
+1263901150 c:\temp\work\repo\avrdude\stk500v2.h
+
+1263901150 c:\temp\work\repo\avrdude\stk500generic.h
+
+1263901150 c:\temp\work\repo\avrdude\usbasp.h
+	"avrpart.h"
+
+1279146380 c:\temp\work\repo\avrdude\osuisp2.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<sys/time.h>
+	<unistd.h>
+	<malloc.h>
+	"avrpart.h"
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+
+1263901150 c:\temp\work\repo\avrdude\usbtiny.h
+	"avrpart.h"
+
+1263901150 c:\temp\work\repo\avrdude\jtagmki.h
+
+1263901150 c:\temp\work\repo\avrdude\jtagmkii.h
+
+1263901150 source:c:\temp\work\repo\avrdude\confwin.c
+	"avrdude.h"
+	<limits.h>
+	<windows.h>
+
+1263901150 source:c:\temp\work\repo\avrdude\crc16.c
+	"crc16.h"
+
+1263901150 c:\temp\work\repo\avrdude\crc16.h
+
+1263901150 source:c:\temp\work\repo\avrdude\fileio.c
+	"ac_cfg.h"
+	<limits.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<ctype.h>
+	"avrdude.h"
+	"avr.h"
+	"fileio.h"
+
+1263901150 c:\temp\work\repo\avrdude\fileio.h
+
+1263901150 source:c:\temp\work\repo\avrdude\jtagmki.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<unistd.h>
+	<sys/time.h>
+	<time.h>
+	"avrdude.h"
+	"avr.h"
+	"crc16.h"
+	"pgm.h"
+	"jtagmkI_private.h"
+	"serial.h"
+
+1263901150 c:\temp\work\repo\avrdude\jtagmki_private.h
+
+1263901150 source:c:\temp\work\repo\avrdude\jtagmkii.c
+	"ac_cfg.h"
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<unistd.h>
+	<sys/time.h>
+	<time.h>
+	"avrdude.h"
+	"avr.h"
+	"crc16.h"
+	"pgm.h"
+	"jtagmkII.h"
+	"jtagmkII_private.h"
+	"serial.h"
+	"usbdevs.h"
+
+1263901150 c:\temp\work\repo\avrdude\jtagmkii_private.h
+
+1263901150 c:\temp\work\repo\avrdude\usbdevs.h
+
+1279123925 source:c:\temp\work\repo\avrdude\lexer.c
+	<stdio.h>
+	<string.h>
+	<errno.h>
+	<stdlib.h>
+	<inttypes.h>
+	<math.h>
+	<string.h>
+	<errno.h>
+	<limits.h>
+	<sys/types.h>
+	<sys/stat.h>
+	"avrdude.h"
+	"config.h"
+	"config_gram.h"
+	"lists.h"
+	<unistd.h>
+
+1263901150 source:c:\temp\work\repo\avrdude\lists.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	"lists.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\main.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<errno.h>
+	<fcntl.h>
+	<limits.h>
+	<string.h>
+	<time.h>
+	<unistd.h>
+	<ctype.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<sys/time.h>
+	"avr.h"
+	"config.h"
+	"confwin.h"
+	"fileio.h"
+	"lists.h"
+	"par.h"
+	"pindefs.h"
+	"term.h"
+	"safemode.h"
+	"update.h"
+
+1263901150 c:\temp\work\repo\avrdude\confwin.h
+
+1263901150 c:\temp\work\repo\avrdude\term.h
+	"avr.h"
+	"pgm.h"
+
+1279146816 source:c:\temp\work\repo\avrdude\osuisp2.c
+	"ac_cfg.h"
+	"osuisp2.h"
+	<stdio.h>
+	<windows.h>
+	<setupapi.h>
+	<ddk\hidsdi.h>
+	<ddk\hidpi.h>
+	<string.h>
+	<usb.h>
+
+1263901150 source:c:\temp\work\repo\avrdude\par.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<fcntl.h>
+	<unistd.h>
+	<errno.h>
+	"freebsd_ppi.h"
+	"linux_ppdev.h"
+	"solaris_ecpp.h"
+	"avrdude.h"
+	"avr.h"
+	"pindefs.h"
+	"pgm.h"
+	"ppi.h"
+	"bitbang.h"
+
+1263901150 c:\temp\work\repo\avrdude\freebsd_ppi.h
+	<dev/ppbus/ppi.h>
+
+1263901150 c:\temp\work\repo\avrdude\linux_ppdev.h
+	<sys/ioctl.h>
+	<linux/parport.h>
+	<linux/ppdev.h>
+	<stdlib.h>
+
+1263901150 c:\temp\work\repo\avrdude\solaris_ecpp.h
+	<sys/ecppio.h>
+
+1263901150 c:\temp\work\repo\avrdude\bitbang.h
+
+1263901150 source:c:\temp\work\repo\avrdude\pgm.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"avrdude.h"
+	"pgm.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\ppi.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<fcntl.h>
+	<unistd.h>
+	<errno.h>
+	"freebsd_ppi.h"
+	"linux_ppdev.h"
+	"solaris_ecpp.h"
+	"avrdude.h"
+	"avr.h"
+	"pindefs.h"
+	"pgm.h"
+	"ppi.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\ppiwin.c
+	"ac_cfg.h"
+	"avrdude.h"
+	<errno.h>
+	<fcntl.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<unistd.h>
+	<windows.h>
+	<sys/time.h>
+	<windows.h>
+	"serial.h"
+	"ppi.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\safemode.c
+	<stdio.h>
+	"ac_cfg.h"
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"safemode.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\ser_avrdoper.c
+	"ac_cfg.h"
+	<stdio.h>
+	<string.h>
+	"avrdude.h"
+	"serial.h"
+	<windows.h>
+	<setupapi.h>
+	<ddk/hidsdi.h>
+	"my_ddk_hidsdi.h"
+	<ddk/hidpi.h>
+	<usb.h>
+
+1263901150 c:\temp\work\repo\avrdude\my_ddk_hidsdi.h
+	<pshpack4.h>
+	<ddk/hidusage.h>
+	<ddk/hidpi.h>
+	<poppack.h>
+
+1263901150 source:c:\temp\work\repo\avrdude\ser_posix.c
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<sys/ioctl.h>
+	<sys/types.h>
+	<sys/time.h>
+	<sys/socket.h>
+	<netdb.h>
+	<netinet/in.h>
+	<fcntl.h>
+	<termios.h>
+	<unistd.h>
+	"avrdude.h"
+	"serial.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\ser_win32.c
+	"avrdude.h"
+	<windows.h>
+	<stdio.h>
+	<ctype.h>
+	"serial.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\serbb_posix.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<fcntl.h>
+	<unistd.h>
+	<errno.h>
+	<sys/ioctl.h>
+	<termios.h>
+	"avrdude.h"
+	"avr.h"
+	"pindefs.h"
+	"pgm.h"
+	"bitbang.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\serbb_win32.c
+	"avrdude.h"
+	"ac_cfg.h"
+	<windows.h>
+	<stdio.h>
+	"avr.h"
+	"pindefs.h"
+	"pgm.h"
+	"bitbang.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\stk500.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<unistd.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"stk500_private.h"
+	"serial.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\stk500generic.c
+	"ac_cfg.h"
+	<stdio.h>
+	<string.h>
+	"avrdude.h"
+	"pgm.h"
+	"stk500.h"
+	"stk500v2.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\stk500v2.c
+	"ac_cfg.h"
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<limits.h>
+	<unistd.h>
+	<sys/time.h>
+	<time.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"stk500_private.h"
+	"stk500v2_private.h"
+	"serial.h"
+	"usbdevs.h"
+	"jtagmkII.h"
+	"jtagmkII_private.h"
+
+1263901150 c:\temp\work\repo\avrdude\stk500v2_private.h
+
+1263901150 source:c:\temp\work\repo\avrdude\term.c
+	"ac_cfg.h"
+	<ctype.h>
+	<string.h>
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	<readline/readline.h>
+	<readline/history.h>
+	"avrdude.h"
+	"avr.h"
+	"config.h"
+	"lists.h"
+	"pgm.h"
+	"pindefs.h"
+	"ppi.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\update.c
+	<stdio.h>
+	<stdlib.h>
+	<errno.h>
+	<string.h>
+	<time.h>
+	"avrdude.h"
+	"avr.h"
+	"config.h"
+	"confwin.h"
+	"fileio.h"
+	"update.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\usb_libusb.c
+	"ac_cfg.h"
+	<ctype.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<sys/types.h>
+	<sys/time.h>
+	<usb.h>
+	"avrdude.h"
+	"serial.h"
+	"usbdevs.h"
+
+1263901150 source:c:\temp\work\repo\avrdude\usbasp.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<sys/time.h>
+	<unistd.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"usbasp.h"
+	<usb.h>
+
+1263901150 source:c:\temp\work\repo\avrdude\usbtiny.c
+	"ac_cfg.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<errno.h>
+	<sys/time.h>
+	<unistd.h>
+	"avrdude.h"
+	"avr.h"
+	"pgm.h"
+	"usbtiny.h"
+	<usb.h>
+

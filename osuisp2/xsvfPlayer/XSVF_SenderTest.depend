@@ -1,0 +1,125 @@
+# depslib dependency file v1.0
+1277663305 source:d:\documents\c++\testapps\xsvf_sendertest\xsvfprog.c
+	"xsvfprog.h"
+	"firmware/defines.h"
+	<usb.h>
+
+1277573335 d:\documents\c++\testapps\xsvf_sendertest\xsvfprog.h
+
+1277573351 d:\documents\c++\testapps\xsvf_sendertest\firmware\defines.h
+
+1277684872 source:d:\documents\c++\testapps\xsvf_sendertest\xsvfplayer.c
+	<stdio.h>
+	<stdlib.h>
+	<Winsock2.h>
+	"firmware/xsvfexec/xsvf.h"
+	"firmware/defines.h"
+	"xsvfprog.h"
+
+1277573351 d:\documents\c++\testapps\xsvf_sendertest\firmware\xsvfexec\xsvf.h
+
+1277733941 source:d:\documents\c++\testapps\xsvf_sendertest\usbhid.c
+	<stdio.h>
+	<windows.h>
+	<setupapi.h>
+	<ddk\hidsdi.h>
+	<ddk\hidpi.h>
+
+1277772516 source:c:\temp\xsvfplayer\xsvf_sendertest\xsvfplayer.c
+	<stdio.h>
+	<stdlib.h>
+	<Winsock2.h>
+	"firmware/xsvfexec/xsvf.h"
+	"firmware/defines.h"
+	"xsvfprog.h"
+	"usbhid.h"
+
+1277573352 c:\temp\xsvfplayer\xsvf_sendertest\firmware\xsvfexec\xsvf.h
+
+1277573352 c:\temp\xsvfplayer\xsvf_sendertest\firmware\defines.h
+
+1277573336 c:\temp\xsvfplayer\xsvf_sendertest\xsvfprog.h
+
+1277663306 source:c:\temp\xsvfplayer\xsvf_sendertest\xsvfprog.c
+	"xsvfprog.h"
+	"firmware/defines.h"
+	<usb.h>
+
+1277744413 source:c:\temp\xsvfplayer\xsvf_sendertest\usbhid.c
+	"usbhid.h"
+
+1277740806 c:\temp\xsvfplayer\xsvf_sendertest\usbhid.h
+	<stdio.h>
+	<windows.h>
+	<setupapi.h>
+	<ddk\hidsdi.h>
+	<ddk\hidpi.h>
+
+1277663306 source:c:\temp\work\xsvfplayer\xsvf_sendertest\xsvfprog.c
+	"xsvfprog.h"
+	"firmware/defines.h"
+	<usb.h>
+
+1277573336 c:\temp\work\xsvfplayer\xsvf_sendertest\xsvfprog.h
+
+1277573352 c:\temp\work\xsvfplayer\xsvf_sendertest\firmware\defines.h
+
+1277744413 source:c:\temp\work\xsvfplayer\xsvf_sendertest\usbhid.c
+	"usbhid.h"
+
+1277858166 c:\temp\work\xsvfplayer\xsvf_sendertest\usbhid.h
+	<stdio.h>
+	<windows.h>
+	<setupapi.h>
+	<ddk\hidsdi.h>
+	<ddk\hidpi.h>
+
+1277857891 source:c:\temp\work\xsvfplayer\xsvf_sendertest\xsvfplayer.c
+	<stdio.h>
+	<stdlib.h>
+	<Winsock2.h>
+	"xsvf.h"
+	"usbhid.h"
+
+1277573352 c:\temp\work\xsvfplayer\xsvf_sendertest\firmware\xsvfexec\xsvf.h
+
+1277573352 c:\temp\work\xsvfplayer\xsvf_sendertest\xsvf.h
+
+1278451734 source:c:\temp\work\repo\xsvfplayer\xsvfplayer.c
+	<stdio.h>
+	<stdlib.h>
+	<Winsock2.h>
+	"xsvf.h"
+	"usbhid.h"
+
+1278451734 c:\temp\work\repo\xsvfplayer\xsvf.h
+
+1279147712 c:\temp\work\repo\xsvfplayer\usbhid.h
+	<stdio.h>
+	<windows.h>
+	<setupapi.h>
+	<ddk\hidsdi.h>
+	<ddk\hidpi.h>
+
+1278451734 source:c:\temp\work\repo\xsvfplayer\usbhid.c
+	"usbhid.h"
+
+1279949901 source:c:\repo\xsvfplayer\usbhid.c
+	"usbhid.h"
+
+1279225909 c:\repo\xsvfplayer\usbhid.h
+	<stdio.h>
+	<windows.h>
+	<setupapi.h>
+	<ddk\hidsdi.h>
+	<ddk\hidpi.h>
+
+1279951089 source:c:\repo\xsvfplayer\xsvfplayer.c
+	<stdio.h>
+	<stdlib.h>
+	<Winsock2.h>
+	"xsvf.h"
+	"usbhid.h"
+
+1279225909 c:\repo\xsvfplayer\xsvf.h
+

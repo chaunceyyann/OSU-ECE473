@@ -1,0 +1,34 @@
+Follow the steps below to generate an SVF file which can be used to program the PROM on the Tekbots FPGA board.
+
+Design your program in Xilinx as normal
+Under Configure Target Device in the Processes pane, click Manage Configuration Project (iMPCT)
+Select Prepare a PROM File
+Click Next
+Select Xilinx PROM
+Select MCS Format
+Choose a name for your file under PROM File Name
+Click Next
+Choose Serial Mode
+Click Next
+Choose xcf02s and click Add
+Click Next then Finish
+An Add Device Dialog will appear. Click OK
+When prompted, select the .bit file in your project directory
+You should be asked whether you want to add another device file to Data Stream: 0.  Click No then OK.
+In the panel on the right side of the screen, click Generate File.
+You should see a big blue message saying PROM File Generation Succeeded
+
+In the panel on the left side of the screen, click Boundary Scan
+Right click in the middle panel and click Add Xilinx Device
+Select the .mcs file you create earlier
+Select xcf02s as the Part Name
+
+Go to Output -> SVF FILE -> Create SVF File
+Enter a name for your svf file
+Right Click on the picture of the Xilinx chip and click program
+Select Load FPGA, leave other programming properties as default
+You should see another big blue box saying Programming Succeed
+Go to Output -> SVF FILE -> Stop Writing to SVF File
+
+Your SVF file will now be in your project directory.
+You can now use urjtag to program the PROM chip with this file.
