@@ -1,0 +1,22 @@
+[user]
+	email = chaunceyyann@gmail.com
+	name = cyanjin
+[alias]
+	lg = log -p
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	st = status
+	br = branch
+	co = checkout
+	ct = commit
+	ls = ls-files
+[color]         
+	ui = auto
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+[push]
+	default = simple
+[core]
+	editor = vim

@@ -11,9 +11,9 @@
 # Main		:
 # Issues	:
 ######################################################################################################
-git st
-git add .
-git commit -m "New Changes"
-git push -u origin
+#git st
+git add -A
+git commit 
+git push 
 
 

@@ -8,5 +8,6 @@ alias mkdir='mkdir -p'
 alias h='history'
 alias du='du -hk'
 alias df='df -hTk'
-
- 
+alias pi='seq -f '4/%g' 1 2 99999 | paste -sd-+ | bc -l'
+alias m99='for i in {1..9}; do for j in $(seq 1 $i); do echo -ne $i×$j=$((i*j))\\t;done; echo;done'
+alias wl='cowsay -f "$(ls /usr/share/cowsay/cows/ | sort -R | head -1)" "$(fortune -s)";figlet "Welcome back!"'
