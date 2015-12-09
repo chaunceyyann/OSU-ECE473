@@ -1,4 +1,4 @@
-// final.c 
+// lab5.c 
 // Chauncey Yan
 // Fall2015
 
@@ -57,9 +57,9 @@
 //
 // Encoder board           Mega128 board
 // --------------        ------------------
-//     SH/LD             PORTE bit 6 (high)
+//     SH/LD             PORTE bit 7 (high)
 //     SCK               PORTB bit 1 (sclk) 
-//     CKINH             PORTD bit 6 (gnd)
+//     CKINH             PORTE bit 6 (gnd)
 //     SOUT/SER_OUT      PORTB bit 3 (miso)
 //     SIN/SER_IN        Not connected
 //
@@ -74,10 +74,10 @@
 //
 //   FM radio              Mega128 board
 // --------------        ------------------
-//     RST_N             PORTE bit 2 
-//     SCLK              PORTD bit 0 
-//     SDIO              PORTD bit 1 
-//     GPO2/INT          PORTE bit 7 
+//     RST_N             PORTB bit 0 (ss_n)
+//     SCLK              PORTB bit 1 (sclk)
+//     SDIO              PORTB bit 2 (mosi)
+//     ENBL              PORTD bit 2 
 
 
 #include <avr/io.h>
@@ -135,14 +135,6 @@ char alarm_buf[32] = "Go Beavs! OSU Fight Fight Fight!";
 char buf[16];                   // genaral purpose buffer
 char loc_temp_buf[16];          // local temporature buffer
 char remote_temp_buf[2];        // remote temporature buffer
-
-enum radio_band{FM, AM, SW};
-volatile enum radio_band current_radio_band;
-volatile uint8_t STC_interrupt;  //flag bit to indicate tune or seek is done
-uint16_t eeprom_fm_freq;
-uint16_t eeprom_am_freq;
-uint16_t eeprom_sw_freq;
-uint8_t  eeprom_volume;
 
 //decimal to 7-segment LED display encodings, logic "0" turns on segment
 int dec_to_7seg[18] = {0b11000000, 0b11111001, 0b10100100, 0b10110000, // 0 1 2 3
@@ -445,42 +437,6 @@ void localTemp(){;
     }
 }
 
-void radio_init(){
-
-    //                           DDRE:  0 0 0 0 1 0 1 1
-    //   (^ edge int from radio) bit 7--| | | | | | | |--bit 0 USART0 RX
-    //(shift/load_n for 74HC165) bit 6----| | | | | |----bit 1 USART0 TX
-    //                           bit 5------| | | |------bit 2 (new radio reset, active high)
-    //                  (unused) bit 4--------| |--------bit 3 (TCNT3 PWM output for volume control)
-
-    DDRE  |= 0x04; //Port E bit 2 is active high reset for radio
-    DDRE  |= 0x40; //Port E bit 6 is shift/load_n for encoder 74HC165
-    DDRE  |= 0x08; //Port E bit 3 is TCNT3 PWM output for volume
-    PORTE |= 0x04; //radio reset is on at powerup (active high)
-    PORTE |= 0x40; //pulse low to load switch values, else its in shift mode
-
-
-    //hardware reset of Si4734
-    PORTE &= ~(1<<PE7); //int2 initially low to sense TWI mode
-    DDRE  |= 0x80;      //turn on Port E bit 7 to drive it low
-    PORTE |=  (1<<PE2); //hardware reset Si4734
-    _delay_us(200);     //hold for 200us, 100us by spec
-    PORTE &= ~(1<<PE2); //release reset
-    _delay_us(30);      //5us required because of my slow I2C translators I suspect
-    //Si code in "low" has 30us delay...no explaination in documentation
-    DDRE  &= ~(0x80);   //now Port E bit 7 becomes input from the radio interrupt
-
-
-
-    while(twi_busy()){} //spin while TWI is busy
-    fm_pwr_up();        //power up radio
-    while(twi_busy()){} //spin while TWI is busy
-    fm_tune_freq();     //tune to frequency
-
-    //retrive the receive strength and display on the bargraph display
-    while(twi_busy()){}                //spin while TWI is busy
-    fm_rsq_status();                   //get status of radio tuning operation
-}
 
 //***********************************************************************************
 //                             TCNT initial    
@@ -745,9 +701,6 @@ int main(){
     // enable global interrupt
     sei();
 
-    // turn on radio
-    //radio_init();
-    //music_on();
     // main while loop
     while(1){
 

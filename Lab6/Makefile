@@ -1,10 +1,9 @@
-SHELL           =/bin/bash
-PRG             =final
+PRG             =lab6
 
-OBJS            =final.o LCDDriver.o lm73_functions.o twi_master.o si4734.o 
+OBJS            =lab6.o LCDDriver.o lm73_functions_skel.o twi_master.o usart.o si4734.o 
 
 
-SRCS            =final.c LCDDriver.c lm73_functions.c twi_master.c si4734.c
+SRCS            =lab6.c LCDDriver.c lm73_functions_skel.c twi_master.c usart.c si4734.c
 
 MCU_TARGET     = atmega128
 PROGRAMMER_TARGET     = m128
@@ -45,7 +44,7 @@ clean:
 	-rm -rf $(PRG)_eeprom.srec $(PRG)_eeprom*.bin $(PRG)_eeprom.hex 
 
 all_clean:
-	rm -rf *.o *.elf *.lst *.map *.srec *.bin *.hex *.d
+	rm -rf *.o *.elf *.lst *.map *.srec *.bin *.hex
 
 #setup for usb programmer
 #hacked the permissions for stinkin' Redhat box
@@ -56,9 +55,9 @@ program: $(PRG).hex
 
 #avrdude -p $(PROGRAMMER_TARGET) -c usbasp -e -U flash:w:$(PRG).hex 
 	avrdude -p $(PROGRAMMER_TARGET) -c osuisp2 -e -U flash:w:$(PRG).hex 
-	make all_clean 
+
 lst:  $(PRG).lst
- 
+
 %.lst: %.elf
 	$(OBJDUMP) -h -S $< > $@
 

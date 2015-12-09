@@ -1,10 +1,11 @@
 SHELL               = /bin/bash
-PRG                 = lab5
+PRG                 = final
 PRG2                = LCDDriver
 PRG3                = lm73_functions
 PRG4                = twi_master
-OBJS                = $(PRG).o $(PRG2).o $(PRG3).o $(PRG4).o 
-SRCS                = $(PRG).c $(PRG2).c $(PRG3).c $(PRG4).c 
+PRG4                = si4734
+OBJS                = $(PRG).o $(PRG2).o $(PRG3).o $(PRG4).o $(PRG4).o
+SRCS                = $(PRG).c $(PRG2).c $(PRG3).c $(PRG4).c $(PRG4).c
 MCU_TARGET          = atmega128
 F_CPU               = 16000000UL
 PROGRAMMER_TARGET   = m128
@@ -61,7 +62,7 @@ program: $(PRG).hex
 #	avrdude -p $(PROGRAMMER_TARGET) -c usbasp -e -U flash:w:$(PRG).hex 
 #	avrdude -p $(PROGRAMMER_TARGET) -c usbasp -e -U flash:w:$(PRG).hex \
                                                      -U eeprom:w:$(PRG)_eeprom.hex
-	avrdude -p $(PROGRAMMER_TARGET) -c osuisp3 -e -U flash:w:$(PRG).hex 
+	avrdude -p $(PROGRAMMER_TARGET) -c osuisp2 -e -U flash:w:$(PRG).hex 
 	make clean 
 lst:  $(PRG).lst
 
