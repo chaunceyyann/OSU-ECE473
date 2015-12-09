@@ -32,15 +32,15 @@ extern uint16_t eeprom_am_freq;
 extern uint16_t eeprom_sw_freq;
 extern uint8_t  eeprom_volume;
 
- uint16_t current_fm_freq = 10750;
- uint16_t current_am_freq;
- uint16_t current_sw_freq;
- uint8_t  current_volume;
+uint16_t current_fm_freq = 8910;
+uint16_t current_am_freq;
+uint16_t current_sw_freq;
+uint8_t  current_volume;
 
 
 ISR(INT7_vect){
-   STC_interrupt = TRUE;
-   EIFR |= 0x80;
+	STC_interrupt = TRUE;
+	EIFR |= 0x80;
 }
 
 //********************************************************************************
@@ -52,13 +52,13 @@ ISR(INT7_vect){
 // 
 uint8_t get_int_status(){
 
-    si4734_wr_buf[0] = GET_INT_STATUS;              
-    twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 1); //send get_int_status command
-    while( twi_busy() ){}; //spin while previous TWI transaction finshes
-    _delay_us(300);        //si4734 process delay
-    twi_start_rd(SI4734_ADDRESS, si4734_rd_buf, 1); //get the interrupt status 
-    while( twi_busy() ){}; //spin while previous TWI transaction finshes
-    return(si4734_rd_buf[0]);
+	si4734_wr_buf[0] = GET_INT_STATUS;              
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 1); //send get_int_status command
+	while( twi_busy() ){}; //spin while previous TWI transaction finshes
+	_delay_us(300);        //si4734 process delay
+	twi_start_rd(SI4734_ADDRESS, si4734_rd_buf, 1); //get the interrupt status 
+	while( twi_busy() ){}; //spin while previous TWI transaction finshes
+	return(si4734_rd_buf[0]);
 }
 //********************************************************************************
 
@@ -69,15 +69,15 @@ uint8_t get_int_status(){
 //
 
 void fm_tune_freq(){
-  si4734_wr_buf[0] = 0x20;  //fm tune command
-  si4734_wr_buf[1] = 0x00;  //no FREEZE and no FAST tune
-  si4734_wr_buf[2] = (uint8_t)(current_fm_freq >> 8); //freq high byte
-  si4734_wr_buf[3] = (uint8_t)(current_fm_freq);      //freq low byte
-  si4734_wr_buf[4] = 0x00;  //antenna tuning capactior
-  //send fm tune command
-  STC_interrupt = FALSE;
-  twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 5);
-//  while( ! STC_interrupt ){}; //spin until the tune command finishes 
+	si4734_wr_buf[0] = 0x20;  //fm tune command
+	si4734_wr_buf[1] = 0x00;  //no FREEZE and no FAST tune
+	si4734_wr_buf[2] = (uint8_t)(current_fm_freq >> 8); //freq high byte
+	si4734_wr_buf[3] = (uint8_t)(current_fm_freq);      //freq low byte
+	si4734_wr_buf[4] = 0x00;  //antenna tuning capactior
+	//send fm tune command
+	STC_interrupt = FALSE;
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 5);
+	//  while( ! STC_interrupt ){}; //spin until the tune command finishes 
 }
 //********************************************************************************
 
@@ -88,16 +88,16 @@ void fm_tune_freq(){
 //
 
 void am_tune_freq(){
-  si4734_wr_buf[0] = AM_TUNE_FREQ; //am tune command
-  si4734_wr_buf[1] = 0x00;         //no FAST tune
-  si4734_wr_buf[2] = (uint8_t)(current_am_freq >> 8); //freq high byte
-  si4734_wr_buf[3] = (uint8_t)(current_am_freq);      //freq low byte
-  si4734_wr_buf[4] = 0x00;  //antenna tuning capactior high byte
-  si4734_wr_buf[5] = 0x00;  //antenna tuning capactior low byte
-  //send am tune command
-  STC_interrupt = FALSE;
-  twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 6);
-  while( ! STC_interrupt ){}; //spin until the tune command finishes 
+	si4734_wr_buf[0] = AM_TUNE_FREQ; //am tune command
+	si4734_wr_buf[1] = 0x00;         //no FAST tune
+	si4734_wr_buf[2] = (uint8_t)(current_am_freq >> 8); //freq high byte
+	si4734_wr_buf[3] = (uint8_t)(current_am_freq);      //freq low byte
+	si4734_wr_buf[4] = 0x00;  //antenna tuning capactior high byte
+	si4734_wr_buf[5] = 0x00;  //antenna tuning capactior low byte
+	//send am tune command
+	STC_interrupt = FALSE;
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 6);
+	while( ! STC_interrupt ){}; //spin until the tune command finishes 
 }
 //********************************************************************************
 
@@ -108,35 +108,35 @@ void am_tune_freq(){
 //antcap low byte is 0x01 as per datasheet
 
 void sw_tune_freq(){
-  si4734_wr_buf[0] = 0x40;  //am tune command
-  si4734_wr_buf[1] = 0x00;  //no FAST tune
-  si4734_wr_buf[2] = (uint8_t)(current_sw_freq >> 8); //freq high byte
-  si4734_wr_buf[3] = (uint8_t)(current_sw_freq);      //freq low byte
-  si4734_wr_buf[4] = 0x00;  //antenna tuning capactior high byte
-  si4734_wr_buf[5] = 0x01;  //antenna tuning capactior low byte 
-  //send am tune command
-  twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 6);
-   _delay_ms(80); //TODO: FIX
+	si4734_wr_buf[0] = 0x40;  //am tune command
+	si4734_wr_buf[1] = 0x00;  //no FAST tune
+	si4734_wr_buf[2] = (uint8_t)(current_sw_freq >> 8); //freq high byte
+	si4734_wr_buf[3] = (uint8_t)(current_sw_freq);      //freq low byte
+	si4734_wr_buf[4] = 0x00;  //antenna tuning capactior high byte
+	si4734_wr_buf[5] = 0x01;  //antenna tuning capactior low byte 
+	//send am tune command
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 6);
+	_delay_ms(80); //TODO: FIX
 }
 
 //********************************************************************************
 //                            fm_pwr_up()
 //
 void fm_pwr_up(){
-//restore the previous fm frequency  
-/*
- current_fm_freq = eeprom_read_word(&eeprom_fm_freq); //TODO: only this one does not work 
- current_volume  = eeprom_read_byte(&eeprom_volume); //TODO: only this one does not work 
-*/
-//send fm power up command
-  si4734_wr_buf[0] = FM_PWR_UP; //powerup command byte
-  si4734_wr_buf[1] = 0x50;      //GPO2O enabled, STCINT enabled, use ext. 32khz osc.
-  si4734_wr_buf[2] = 0x05;      //OPMODE = 0x05; analog audio output
-  twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 3);
-  _delay_ms(120);               //startup delay as specified 
-  //The seek/tune interrupt is enabled here. If the STCINT bit is set, a 1.5us
-  //low pulse will be output from GPIO2/INT when tune or seek is completed.
-  set_property(GPO_IEN, GPO_IEN_STCIEN); //seek_tune complete interrupt
+	//restore the previous fm frequency  
+	/*
+	   current_fm_freq = eeprom_read_word(&eeprom_fm_freq); //TODO: only this one does not work 
+	   current_volume  = eeprom_read_byte(&eeprom_volume); //TODO: only this one does not work 
+	 */
+	//send fm power up command
+	si4734_wr_buf[0] = FM_PWR_UP; //powerup command byte
+	si4734_wr_buf[1] = 0x50;      //GPO2O enabled, STCINT enabled, use ext. 32khz osc.
+	si4734_wr_buf[2] = 0x05;      //OPMODE = 0x05; analog audio output
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 3);
+	_delay_ms(120);               //startup delay as specified 
+	//The seek/tune interrupt is enabled here. If the STCINT bit is set, a 1.5us
+	//low pulse will be output from GPIO2/INT when tune or seek is completed.
+	set_property(GPO_IEN, GPO_IEN_STCIEN); //seek_tune complete interrupt
 }
 //********************************************************************************
 
@@ -144,17 +144,17 @@ void fm_pwr_up(){
 //                            am_pwr_up()
 //
 void am_pwr_up(){
-//restore the previous am frequency  
-  current_am_freq = eeprom_read_word(&eeprom_am_freq);
-  current_volume  = eeprom_read_byte(&eeprom_volume); //TODO: only this one does not work 
+	//restore the previous am frequency  
+	current_am_freq = eeprom_read_word(&eeprom_am_freq);
+	current_volume  = eeprom_read_byte(&eeprom_volume); //TODO: only this one does not work 
 
-//send am power up command
-  si4734_wr_buf[0] = AM_PWR_UP;
-  si4734_wr_buf[1] = 0x51;//GPO2OEN and XOSCEN selected
-  si4734_wr_buf[2] = 0x05;
-  twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 3);
-  _delay_ms(120);   
-  set_property(GPO_IEN, GPO_IEN_STCIEN);    //Seek/Tune Complete interrupt
+	//send am power up command
+	si4734_wr_buf[0] = AM_PWR_UP;
+	si4734_wr_buf[1] = 0x51;//GPO2OEN and XOSCEN selected
+	si4734_wr_buf[2] = 0x05;
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 3);
+	_delay_ms(120);   
+	set_property(GPO_IEN, GPO_IEN_STCIEN);    //Seek/Tune Complete interrupt
 }
 //********************************************************************************
 
@@ -163,22 +163,22 @@ void am_pwr_up(){
 //
 
 void sw_pwr_up(){
-//restore the previous sw frequency  
-  current_sw_freq = eeprom_read_word(&eeprom_sw_freq);
-  current_volume  = eeprom_read_byte(&eeprom_volume); //TODO: only this one does not work 
+	//restore the previous sw frequency  
+	current_sw_freq = eeprom_read_word(&eeprom_sw_freq);
+	current_volume  = eeprom_read_byte(&eeprom_volume); //TODO: only this one does not work 
 
-//send sw power up command (same as am, only tuning rate is different)
-    si4734_wr_buf[0] = AM_PWR_UP; //same cmd as for AM
-    si4734_wr_buf[1] = 0x51;
-    si4734_wr_buf[2] = 0x05;
-    twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 3);
-    _delay_ms(120);   //start up delay
+	//send sw power up command (same as am, only tuning rate is different)
+	si4734_wr_buf[0] = AM_PWR_UP; //same cmd as for AM
+	si4734_wr_buf[1] = 0x51;
+	si4734_wr_buf[2] = 0x05;
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 3);
+	_delay_ms(120);   //start up delay
 
-  //set property to disable soft muting for shortwave broadcasts
-  set_property(AM_SOFT_MUTE_MAX_ATTENUATION, 0x0000); //cut off soft mute  
-  //select 4khz filter BW and engage power line filter
-  set_property(AM_CHANNEL_FILTER, (AM_CHFILT_4KHZ | AM_PWR_LINE_NOISE_REJT_FILTER)); 
-  set_property(GPO_IEN, GPO_IEN_STCIEN); //Seek/Tune Complete interrupt
+	//set property to disable soft muting for shortwave broadcasts
+	set_property(AM_SOFT_MUTE_MAX_ATTENUATION, 0x0000); //cut off soft mute  
+	//select 4khz filter BW and engage power line filter
+	set_property(AM_CHANNEL_FILTER, (AM_CHFILT_4KHZ | AM_PWR_LINE_NOISE_REJT_FILTER)); 
+	set_property(GPO_IEN, GPO_IEN_STCIEN); //Seek/Tune Complete interrupt
 }
 //********************************************************************************
 
@@ -188,20 +188,20 @@ void sw_pwr_up(){
 
 void radio_pwr_dwn(){
 
-//save current frequency to EEPROM
-switch(current_radio_band){
-  case(FM) : eeprom_write_word(&eeprom_fm_freq, current_fm_freq); break;
-  case(AM) : eeprom_write_word(&eeprom_am_freq, current_am_freq); break;
-  case(SW) : eeprom_write_word(&eeprom_sw_freq, current_sw_freq); break;
-  default  : break;
-}//switch      
+	//save current frequency to EEPROM
+	switch(current_radio_band){
+		case(FM) : eeprom_write_word(&eeprom_fm_freq, current_fm_freq); break;
+		case(AM) : eeprom_write_word(&eeprom_am_freq, current_am_freq); break;
+		case(SW) : eeprom_write_word(&eeprom_sw_freq, current_sw_freq); break;
+		default  : break;
+	}//switch      
 
-  eeprom_write_byte(&eeprom_volume, current_volume); //save current volume level
+	eeprom_write_byte(&eeprom_volume, current_volume); //save current volume level
 
-//send fm power down command
-    si4734_wr_buf[0] = 0x11;
-    twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 1);
-   _delay_us(310); //power down delay
+	//send fm power down command
+	si4734_wr_buf[0] = 0x11;
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 1);
+	_delay_us(310); //power down delay
 }
 //********************************************************************************
 
@@ -216,16 +216,16 @@ switch(current_radio_band){
 //
 void fm_rsq_status(){
 
-    si4734_wr_buf[0] = FM_RSQ_STATUS;            //fm_rsq_status command
-    si4734_wr_buf[1] = FM_RSQ_STATUS_IN_INTACK;  //clear STCINT bit if set
-    twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 2);
-    while(twi_busy()){}; //spin while previous TWI transaction finshes
-    _delay_us(300);      //delay for si4734 to process
-    //This is a blind wait. Waiting for CTS interrupt here would tell you 
-    //when the command is received and has been processed.
-    //get the fm tune status 
-    twi_start_rd(SI4734_ADDRESS, si4734_tune_status_buf, 8);
-    while(twi_busy()){}; //spin while previous TWI transaction finshes
+	si4734_wr_buf[0] = FM_RSQ_STATUS;            //fm_rsq_status command
+	si4734_wr_buf[1] = FM_RSQ_STATUS_IN_INTACK;  //clear STCINT bit if set
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 2);
+	while(twi_busy()){}; //spin while previous TWI transaction finshes
+	_delay_us(300);      //delay for si4734 to process
+	//This is a blind wait. Waiting for CTS interrupt here would tell you 
+	//when the command is received and has been processed.
+	//get the fm tune status 
+	twi_start_rd(SI4734_ADDRESS, si4734_tune_status_buf, 8);
+	while(twi_busy()){}; //spin while previous TWI transaction finshes
 }
 
 
@@ -239,14 +239,14 @@ void fm_rsq_status(){
 //
 void fm_tune_status(){
 
-    si4734_wr_buf[0] = FM_TUNE_STATUS;            //fm_tune_status command
-    si4734_wr_buf[1] = FM_TUNE_STATUS_IN_INTACK;  //clear STCINT bit if set
-    twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 2);
-    while(twi_busy()){}; //spin while previous TWI transaction finshes
-    _delay_us(300);        //delay for si4734 to process
-    //get the fm tune status 
-    twi_start_rd(SI4734_ADDRESS, si4734_tune_status_buf, 8);
-    while( twi_busy() ){}; //spin till TWI read transaction finshes
+	si4734_wr_buf[0] = FM_TUNE_STATUS;            //fm_tune_status command
+	si4734_wr_buf[1] = FM_TUNE_STATUS_IN_INTACK;  //clear STCINT bit if set
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 2);
+	while(twi_busy()){}; //spin while previous TWI transaction finshes
+	_delay_us(300);        //delay for si4734 to process
+	//get the fm tune status 
+	twi_start_rd(SI4734_ADDRESS, si4734_tune_status_buf, 8);
+	while( twi_busy() ){}; //spin till TWI read transaction finshes
 }
 
 //********************************************************************************
@@ -257,13 +257,13 @@ void fm_tune_status(){
 
 void am_tune_status(){
 
-    si4734_wr_buf[0] = AM_TUNE_STATUS;            //fm_tune_status command
-    si4734_wr_buf[1] = AM_TUNE_STATUS_IN_INTACK;  //clear STCINT bit if set
-    twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 2);
-    while(twi_busy()){}; //spin while previous TWI transaction finshes
-    _delay_us(300);        //delay for si4734 to process command
-    //get the am tune status 
-    twi_start_rd(SI4734_ADDRESS, si4734_tune_status_buf, 8);
+	si4734_wr_buf[0] = AM_TUNE_STATUS;            //fm_tune_status command
+	si4734_wr_buf[1] = AM_TUNE_STATUS_IN_INTACK;  //clear STCINT bit if set
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 2);
+	while(twi_busy()){}; //spin while previous TWI transaction finshes
+	_delay_us(300);        //delay for si4734 to process command
+	//get the am tune status 
+	twi_start_rd(SI4734_ADDRESS, si4734_tune_status_buf, 8);
 
 }
 //********************************************************************************
@@ -273,13 +273,13 @@ void am_tune_status(){
 
 void am_rsq_status(){
 
-    si4734_wr_buf[0] = AM_RSQ_STATUS;            //am_rsq_status command
-    si4734_wr_buf[1] = AM_RSQ_STATUS_IN_INTACK;  //clear STCINT bit if set
-    twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 2);
-    while(twi_busy()){}; //spin while previous TWI transaction finshes
-    _delay_us(300);        //delay for si4734 to process command
-    //get the fm tune status 
-    twi_start_rd(SI4734_ADDRESS, si4734_tune_status_buf, 8);
+	si4734_wr_buf[0] = AM_RSQ_STATUS;            //am_rsq_status command
+	si4734_wr_buf[1] = AM_RSQ_STATUS_IN_INTACK;  //clear STCINT bit if set
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 2);
+	while(twi_busy()){}; //spin while previous TWI transaction finshes
+	_delay_us(300);        //delay for si4734 to process command
+	//get the fm tune status 
+	twi_start_rd(SI4734_ADDRESS, si4734_tune_status_buf, 8);
 }
 
 //********************************************************************************
@@ -290,32 +290,32 @@ void am_rsq_status(){
 //
 void set_property(uint16_t property, uint16_t property_value){
 
-    si4734_wr_buf[0] = SET_PROPERTY;                   //set property command
-    si4734_wr_buf[1] = 0x00;                           //all zeros
-    si4734_wr_buf[2] = (uint8_t)(property >> 8);       //property high byte
-    si4734_wr_buf[3] = (uint8_t)(property);            //property low byte
-    si4734_wr_buf[4] = (uint8_t)(property_value >> 8); //property value high byte
-    si4734_wr_buf[5] = (uint8_t)(property_value);      //property value low byte
-    twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 6);
-    _delay_ms(10);  //SET_PROPERTY command takes 10ms to complete
+	si4734_wr_buf[0] = SET_PROPERTY;                   //set property command
+	si4734_wr_buf[1] = 0x00;                           //all zeros
+	si4734_wr_buf[2] = (uint8_t)(property >> 8);       //property high byte
+	si4734_wr_buf[3] = (uint8_t)(property);            //property low byte
+	si4734_wr_buf[4] = (uint8_t)(property_value >> 8); //property value high byte
+	si4734_wr_buf[5] = (uint8_t)(property_value);      //property value low byte
+	twi_start_wr(SI4734_ADDRESS, si4734_wr_buf, 6);
+	_delay_ms(10);  //SET_PROPERTY command takes 10ms to complete
 }//set_property()
 
 
 void reset_radio(){
-   //hardware reset of Si4734
-   PORTE &= ~(1<<PE7); //int2 initially low to sense TWI mode
-   DDRE  |= 0x80;      //turn on Port E bit 7 to drive it low
-   PORTE |=  (1<<PE2); //hardware reset Si4734
-   _delay_us(200);     //hold for 200us, 100us by spec
-   PORTE &= ~(1<<PE2); //release reset
-   _delay_us(30);      //5us required because of my slow I2C translators I suspect
-   //Si code in "low" has 30us delay...no explaination in documentation
-   DDRE  &= ~(0x80);   //now Port E bit 7 becomes input from the radio interrupt
+	//hardware reset of Si4734
+	PORTE &= ~(1<<PE7); //int2 initially low to sense TWI mode
+	DDRE  |= 0x80;      //turn on Port E bit 7 to drive it low
+	PORTE |=  (1<<PE2); //hardware reset Si4734
+	_delay_us(200);     //hold for 200us, 100us by spec
+	PORTE &= ~(1<<PE2); //release reset
+	_delay_us(30);      //5us required because of my slow I2C translators I suspect
+	//Si code in "low" has 30us delay...no explaination in documentation
+	DDRE  &= ~(0x80);   //now Port E bit 7 becomes input from the radio interrupt
 }
 
 void radio_int_init(){
-   EIMSK |= 0x80;
-   EICRB |= (1<<ISC71 | 1<<ISC70);
+	EIMSK |= 0x80;
+	EICRB |= (1<<ISC71 | 1<<ISC70);
 }
 
 

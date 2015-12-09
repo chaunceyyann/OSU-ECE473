@@ -13,7 +13,7 @@
 // --- --- --- --- --- --- --- ---
 // |7| |6| |5| |4| |3| |2| |1| |0|
 // --- --- --- --- --- --- --- ---
-// |0| -> change volume
+// |0| -> Radio mode
 // |1| -> toggle increments between 1 and 60 mins
 // |2| -> set current time 
 // |3| -> set alarm time 
@@ -101,8 +101,12 @@ signed int gc = 0;              // globle counter
 signed int lec = 0;             // left encoder counter
 signed int old_lec = 0;         // old left encoder counter
 signed int rec = 0;             // right encoder counter
+signed int old_rec = 0;         // old right encoder counter
 signed int vc = 20;             // volume counter
 signed int old_vc = 1;          // volume counter old value
+//uint16_t current_fm_freq = 8910;
+//uint16_t old_fm_freq = 8910;    // old fm freq value
+unsigned int vol = 0;           // volume mode
 unsigned int rts = 0;           // global time counter seconds
 unsigned int rtc = 1440;        // global time counter mins 
 signed int rtc_t = 0;           // temporary rtc for set time mins
@@ -119,7 +123,8 @@ uint8_t sn = 0;                 // 0 - Beavs fight sone 1 - Tetris
 // 2 - Mario 3 - Unknown
 uint8_t mode_t = 0;             // toggle mode switch
 uint8_t mode = 0;               // mode flags
-uint8_t inc = 1;                // increament to seperate min and hour 
+uint8_t tinc = 1;               // increament to seperate min and hour , and channel
+uint8_t vinc = 2;               // increament to seperate volume
 uint8_t barcode = 0;            // data print on the bar 
 uint8_t debounced_state = 0;    // Debounced state of the switches
 uint8_t state[MAX_CHECKS];      // Array that maintains bounce status
@@ -344,27 +349,27 @@ void read_encoder(uint8_t miso){
     static uint8_t old_miso;
 
     // Pulse the HC165 with SH/LD 0 for load the data from knod then keep it high for serial sent back
-    PORTE ^= (1<<7);                          // SH/LD = 0 CLK_INH = 0 
-    PORTE = 0b10000000;                       // SH/LD = 1 CLK_INH = 0
+    PORTE ^= (1<<6);                          // SH/LD = 0 CLK_INH = 0 
+    PORTE = 0b01000000;                       // SH/LD = 1 CLK_INH = 0
 
     if (old_miso != miso){
         if ((old_miso & 0x03) == 0x03){
             switch(miso&0x03){
                 case 0x02:
-                    lec+=inc;
+                    lec+=vinc;
                     break;
                 case 0x01:
-                    lec-=inc;
+                    lec-=vinc;
                     break;
             }
         }
         if ((old_miso & 0x0C) == 0x0C){
             switch((miso&0x0C)>>2){
                 case 0x02:
-                    rec+=inc;
+                    rec+=tinc;
                     break;
                 case 0x01:
-                    rec-=inc;
+                    rec-=tinc;
                     break;
             }
         }
@@ -459,27 +464,20 @@ void radio_init(){
     PORTE |= 0x04; //radio reset is on at powerup (active high)
     PORTE |= 0x40; //pulse low to load switch values, else its in shift mode
 
-
-    //hardware reset of Si4734
-    PORTE &= ~(1<<PE7); //int2 initially low to sense TWI mode
-    DDRE  |= 0x80;      //turn on Port E bit 7 to drive it low
-    PORTE |=  (1<<PE2); //hardware reset Si4734
-    _delay_us(200);     //hold for 200us, 100us by spec
-    PORTE &= ~(1<<PE2); //release reset
-    _delay_us(30);      //5us required because of my slow I2C translators I suspect
-    //Si code in "low" has 30us delay...no explaination in documentation
-    DDRE  &= ~(0x80);   //now Port E bit 7 becomes input from the radio interrupt
+    reset_radio();
 
 
 
     while(twi_busy()){} //spin while TWI is busy
     fm_pwr_up();        //power up radio
     while(twi_busy()){} //spin while TWI is busy
+	_delay_ms(1000);
+    fm_tune_freq();     //tune to frequency
     fm_tune_freq();     //tune to frequency
 
     //retrive the receive strength and display on the bargraph display
-    while(twi_busy()){}                //spin while TWI is busy
-    fm_rsq_status();                   //get status of radio tuning operation
+    //while(twi_busy()){}                //spin while TWI is busy
+    //fm_rsq_status();                   //get status of radio tuning operation
 }
 
 //***********************************************************************************
@@ -520,6 +518,7 @@ ISR(TIMER0_OVF_vect){
     // 1/125k * 256 * 488 = 1s
 
     static uint16_t count_2ms = 0;
+    static uint16_t curr = 0;
     count_2ms++;                                // increment count every 2.048ms
 
     // reduce the bar graph brightness
@@ -603,9 +602,9 @@ ISR(TIMER0_OVF_vect){
 
     // adding pm dot indicator 
     // (out of real time since it should show up on all settings)
-    if ((hours_24 >= 12) && !(mode & (1<<5))){     // pm and not 24 hour mode
+    if ((hours_24 >= 12) && !(mode & (1<<5))){    	// pm and not 24 hour mode
         segment_data[2] &= dec_to_7seg[16];
-    } else {                                       // explicitly turn off indicator 
+    } else {                                       	// explicitly turn off indicator 
         segment_data[2] &= ~(1<<1) | ~(1<<0);
     }
 
@@ -614,8 +613,22 @@ ISR(TIMER0_OVF_vect){
         beat++;
     }
 
-    if (count_2ms % 2 == 0){                        // volume control
-        if (mode & (1<<0)) {                        // mode 0
+    if (count_2ms % 2 == 0){                        
+		// radio mode
+	    if (mode&(1<<0)){
+	   // 	if ((old_fm_freq + rec) < 8710) 
+	   // 		lec = 8710-old_fm_freq;             // set range 8710 - 10790
+       //     else if ((old_vc + rec) > 50) 
+       //         lec = 10790-old_fm_freq; 
+       //     current_fm_freq = old_fm_freq + lec;
+	    	segsum(8910/10);
+	    	segment_data[1] &= ~(1<<7);                // decimal point
+	   // 	old_lec = lec;
+	    }
+
+		// volume control
+		if (lec != old_lec){
+			vol = 1;
             if ((old_vc + lec) < 0) 
                 lec = 0-old_vc;                     // set range 0 - 100
             else if ((old_vc + lec) > 50) 
@@ -629,9 +642,21 @@ ISR(TIMER0_OVF_vect){
                     LCD_PutStr("Volume: ");
                     LCD_PutStr(itoa(vc,buf,10));    // lcd display volume
                 }
-                old_lec = lec;
             }
+			old_lec = lec;
+			curr = count_2ms;
         }
+		else {        
+            old_vc = vc;                // save old vc value for next adding
+            lec = 0;                    // reset light encoder reading
+			if ((vol==1)&&(count_2ms-curr<=976)){
+				segsum(vc);
+			}
+			else {
+				vol = 0;
+			}
+		}
+
     }
 
     // lcd update rate 1s for temp
@@ -655,25 +680,34 @@ ISR(TIMER0_OVF_vect){
 //***********************************************************************************
 void set_mode(){
     switch (mode_t){
-        case 1:                         // toggle volume change mode 
-            mode ^= (1<<0);
-            old_vc = vc;                // save old vc value for next adding
-            lec = 0;                    // reset light encoder reading
-            break;
+        case 1:                         // toggle radio mode 
+            mode &= 0b00110011;         // clear all mode but alarm set, 12/24, 1/60
+            mode ^= (1<<0);             // toggle
+			if (mode & (1<<0))
+				radio_init();
+			 
+
+            //old_fm_freq = current_fm_freq;
+			//rec = 0;
+			break;
         case 2:                         // 1 min or 60 mins ?
             mode ^= (1<<1);             // toggle inc between 1 and 60 mins
-            if (mode & (1<<1))
-                inc = 60;
-            else
-                inc = 1;
+            if (mode & (1<<1)){
+                tinc = 60;
+			    vinc = 10;
+			}
+            else{
+                tinc = 1;
+			    vinc = 2;
+			}
             break;
         case 4:                         // set time
-            mode &= 0b00110111;         // clear set alarm
+            mode &= 0b00110110;         // clear set alarm
             mode ^= (1<<2);             // toggle, for cancelling
             rec = 0;                    // reset right encoder reading
             break;
         case 8:                         // set alarm
-            mode &= 0b00111011;         // clear set time
+            mode &= 0b00111010;         // clear set time
             mode ^= (1<<3);             // toggle, for cancelling
             if (!(mode & (1<<3)))       // unset alarm if double cancel setting
                 mode &= ~(1<<4);        // unset alarm flag
@@ -746,7 +780,7 @@ int main(){
     sei();
 
     // turn on radio
-    //radio_init();
+	radio_int_init();
     //music_on();
     // main while loop
     while(1){
@@ -772,11 +806,11 @@ int main(){
         localTemp();
 
         // remote tempurature uart rx and tx
-        //uart_putc('s');
-        //for ( counter = 0; counter < 2; counter++){
-        //    remote_temp_buf[counter] = uart_getc();
-        //    uart_putc('Y');
-        //}
+        uart_putc('s');
+        for ( counter = 0; counter < 2; counter++){
+            remote_temp_buf[counter] = uart_getc();
+            uart_putc('Y');
+        }
 
 
         // select the digit to display and select the input from decoder
