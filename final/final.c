@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------
 //| 8 | 8 | . | 7 |   |   | * | * | * | * | * | * | * | * |   |   |
 //|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
-//| A | L | A | R | M |   | M | U | S | I | C |   |   |   |   |   |
+//| L | : | 2 | 4 | . | 2 | 5 | C |   | R | : | 2 | 5 | C |   |   |
 //-----------------------------------------------------------------
 
 // Push button assignment
@@ -68,9 +68,14 @@
 // Alarm tone out        PORTD bit 7 (yellow)
 // Volume control        PORTE bit 3 (green)
 //
-//       ADC               Mega128 board
+//     ADC                 Mega128 board
 // --------------        ------------------
 // analog data in        PORTF bit 0
+// 
+//   Local temp            Mega128 board
+// --------------        -----------------
+//     Sclk              PORTD bit 0
+//     Sdata             PORTD bit 1
 //
 //   FM radio              Mega128 board
 // --------------        ------------------
@@ -94,15 +99,15 @@
 
 #define MAX_CHECKS 12           // # of checks before a switch is debounced
 #define BASE 10                 // the base of the clock should be working
-#define ALARM_LEN 32            // seconds of alarm going to be play
-#define SNOOZE_LEN 10           // seconds of snooze going to be wait
+#define ALARM_LEN 1             // min of alarm going to be play
+//#define SNOOZE_LEN 10         // seconds of snooze going to be wait
 
 signed int gc = 0;              // globle counter
 signed int lec = 0;             // left encoder counter
 signed int old_lec = 0;         // old left encoder counter
 signed int rec = 0;             // right encoder counter
 signed int old_rec = 0;         // old right encoder counter
-unsigned int radio_on = 0;           // volume mode
+unsigned int radio_on = 0;      // volume mode
 signed int vc = 20;             // volume counter
 signed int old_vc = 1;          // volume counter old value
 unsigned int vol = 0;           // volume mode
@@ -116,8 +121,13 @@ unsigned int hours_24 = 0;      // display 24 Hours
 unsigned int ahours = 0;        // alarm Hours 24 hours
 unsigned int mins = 0;          // display mins
 unsigned int amins = 59;        // alarm mins
+uint8_t alarm_wentoff = 0;
 uint8_t alarm_start = 60;       // alarm start time
+uint8_t snooze_wentoff = 0;
 uint8_t snooze_start = 0;       // alarm snooze start time
+uint8_t snooze_min = 0;         // alarm snooze start time
+uint8_t snooze_second = 0;      // alarm snooze start time
+uint8_t snooze_len = 1;
 uint8_t sn = 0;                 // 0 - Beavs fight sone 1 - Tetris 
 // 2 - Mario 3 - Unknown
 uint8_t mode_t = 0;             // toggle mode switch
@@ -152,8 +162,9 @@ uint16_t old_fm_freq=8870;
 uint16_t current_am_freq;
 uint16_t current_wm_freq;
 uint8_t current_volume;
+uint8_t si4734_tune_status_buf[8];
 uint8_t rssi;
-uint16_t stations[5]={8870,9910,9990,10750};
+uint16_t stations[5]={8870,9570,9910,9990,10630};
 //decimal to 7-segment LED display encodings, logic "0" turns on segment
 int dec_to_7seg[18] = {0b11000000, 0b11111001, 0b10100100, 0b10110000, // 0 1 2 3
     0b10011001, 0b10010010, 0b10000010, 0b11111000, // 4 5 6 7
@@ -253,12 +264,12 @@ void clock_dis(){
 
 
 void alarm_check(){                                     // run once pre second
-    uint8_t i;
-    if ((alarm_start == 60) && (mode & (1<<4))){        // initial value, use this to exe music once
+    if (mode & (1<<4)){        // initial value, use this to exe music once
         hmclock(rtc);                                   // update real time clock value hours and mins
-        if ((ahours == hours_24) && (amins == mins)){   // use hours_24 for am pm
+        if (((ahours==hours_24)&&(amins==mins))||(snooze_wentoff==1)){   // use hours_24 for am pm
+            alarm_wentoff=1;
             music_on();                                 // alarm tone on
-            LCD_Clr();
+            LCD_MovCursorLn1();
             if ( song == 0)
                 LCD_PutStr(alarm_buf);                  // print Fight sone
             else if (song == 1)
@@ -267,47 +278,43 @@ void alarm_check(){                                     // run once pre second
                 LCD_PutStr("Mario Theme");              // print Mario
             else if (song == 3)
                 LCD_PutStr("Unknow");                   // print Unknow
-            alarm_start = rts;                          // set start second for alarm tone
+            alarm_start = rtc;                          // set start second for alarm tone
         }
     }
-    if ((rts - alarm_start) == ALARM_LEN) {             // 1-58s for the alarm tone
+    if ((rtc - alarm_start) == ALARM_LEN) {             // 1-58s for the alarm tone
+        alarm_wentoff=0;
+        snooze_wentoff = 0;
         music_off();                                    // alarm tone off
         song++;
         if (song == 4) song = 0;                        // roll back for the fisrt song
-        LCD_Clr();
-        LCD_PutStr("Alarm off!");
-        alarm_start = 61;                               // avoiding rerun this music_off and music_on
-    } 
-    if (((rts-alarm_start)<ALARM_LEN)&&(song==0)) {     // roll over buffer chars
         LCD_MovCursorLn1();
-        for (i=0;i<16;i++){                             // give 16 chars to buf
-            buf[i] = alarm_buf[i+(rts-alarm_start)];
-        }
-        LCD_PutStr(buf);
-    }
-    if (rts == 59){                                     // last second in this min
-        alarm_start = 60;                               // reset alarm
-    }
+        LCD_PutStr("Alarm off!");
+        alarm_start = 0;                               // avoiding rerun this music_off and music_on
+    } 
+ 
 }
 
 void snooze_func(){
-    if ((alarm_start != 61) && (alarm_start !=60)) {    // alarm is on
-        if ((mode & (1<<6)) && (snooze_start == 0)) {   // first time snooze is trigered
-            music_off();                                // turn off the music
-            LCD_Clr();
-            LCD_PutStr("Snooze mode 10s");              // print snooze
-            snooze_start = rts;                         // start count 10 second
-            alarm_start = 61;                           // stop alarm tone end check
+    if ((alarm_wentoff == 1) && (snooze_min == 0)) {   // first time snooze is trigered
+        snooze_wentoff = 1;
+        music_off();                                // turn off the music
+        LCD_MovCursorLn1();
+        LCD_PutStr("Snooze mode: 1min");              // print snooze
+        snooze_second = rts;                         // start count 10 second
+        snooze_min = rtc;                         // start count 10 second
+        //snprintf(buf,16,"%d.%-2dC ",(snooze_len-rtc+snooze_min),snooze_second);
+    }
+
+    if ((rts - snooze_second) == 0) {           // out of snooze mode
+        if (( rtc - snooze_min) == snooze_len){
+            song++;
+            if (song == 4) song = 0;                        // roll back for the fisrt song
+            snooze_min = 0;                               // reset snooze function
         }
     }
-    if ((rts - snooze_start) == SNOOZE_LEN) {           // out of snooze mode
-        alarm_start = 60;                               // resume music. 
-        // Not working for long snoozing 
-        song++;
-        if (song == 4) song = 0;                        // roll back for the fisrt song
-        snooze_start = 0;                               // reset snooze function
-    }
 }
+
+
 
 /***********************************************************************/
 //                            lcd functions
@@ -470,13 +477,10 @@ void radio_init(){
     PORTE |= 0x40; //pulse low to load switch values, else its in shift mode
 
     reset_radio();
-
+    current_fm_freq = 8870;
 
 
    
-    //retrive the receive strength and display on the bargraph display
-    //while(twi_busy()){}                //spin while TWI is busy
-    //fm_rsq_status();                   //get status of radio tuning operation
 }
 
 //***********************************************************************************
@@ -564,13 +568,14 @@ ISR(TIMER0_OVF_vect){
         }
 
 
-        // snooze function
-        snooze_func();
 
         // manualy clear snooze and confirm if necessary
-        if ((mode & (1<<6)) && (snooze_start == 0)) // clear snooze if alarm is off
+        if (mode & (1<<6)) { // clear snooze if alarm is off
+            // snooze function
+            snooze_func();
             mode &= 0b00110011;                     // clear set time set alarm as well
-        if (mode & (1<<7)){                          // clear confirm
+        }
+        if (mode & (1<<7)) {                          // clear confirm
             mode &= 0b00110011;                     // clear set time set alarm as well
         }
     }
@@ -582,9 +587,9 @@ ISR(TIMER0_OVF_vect){
         if (rts == 60){
             rtc++;                                  // mins ++
             rts = 0;                                // reset second
+            // check if the real time match with alarm time
+            alarm_check();
         }
-        // check if the real time match with alarm time
-        alarm_check();
 
         // make sure it is not in set time or set alarm mode
         if (!((mode & (1<<3)) || (mode & (1<<2)))){
@@ -602,7 +607,7 @@ ISR(TIMER0_OVF_vect){
 
     // adding pm dot indicator 
     // (out of real time since it should show up on all settings)
-    if ((hours_24 >= 12) && !(mode & (1<<5))){    	// pm and not 24 hour mode
+    if ((hours_24 >= 12) && !(mode & (1<<5) && !(vol||radio_on))){    	// pm and not 24 hour mode
         segment_data[2] &= dec_to_7seg[16];
     } else {                                       	// explicitly turn off indicator 
         segment_data[2] &= ~(1<<1) | ~(1<<0);
@@ -612,194 +617,232 @@ ISR(TIMER0_OVF_vect){
     if (count_2ms % 32 == 0){
         beat++;
     }
+    static unsigned int i;
 
     if (count_2ms % 2 == 0){                        
 		// radio mode
 	    if (mode&(1<<0)){
             if (old_rec != rec){
                 radio_on = 1;
-                if ((old_fm_freq + rec) < 8790) 
-                    rec = 8790-old_fm_freq;             // set range 8710 - 10790
-                else if ((old_fm_freq + rec) > 10790) 
-                    rec = 10790-old_fm_freq; 
-                current_fm_freq = old_fm_freq + rec;
+                
+
+                if (mode & (1<<1)){
+                    i += abs(rec)/60%5;
+                    if (i==5)
+                        i = 0;
+                    current_fm_freq = stations[i];
+
+                } else 
+                    current_fm_freq = ((unsigned long)old_fm_freq + rec - 8790)%2000+8790;
+
                 segsum(current_fm_freq/10);
                 segment_data[1] &= ~(1<<7);                // decimal point
                 old_rec = rec;
-                //if (count_2ms - curr >= 488)
+
                 while(twi_busy()){} //spin while TWI is busy
                 fm_tune_freq();     //tune to frequency
-
                 curr = count_2ms;    
             } else {
                 old_fm_freq = current_fm_freq;
                 rec = 0;
+
                 if ((radio_on==1)&&(count_2ms-curr<=976)){
                     segsum(current_fm_freq/10);
                     segment_data[1] &= ~(1<<7);                // decimal point
-                } else if ((radio_on==1)&&(count_2ms-curr>=488)&&(count_2ms-curr<976)){
-                    LCD_MovCursorLn1();
-                    LCD_PutStr("Volume: ");
-                    LCD_PutStr(itoa(vc,buf,10));    // lcd display volume
+                    //if (count_2ms-curr == 0){ // 0.125s
+                    //    while(twi_busy()){} //spin while TWI is busy
+                    //    fm_tune_freq();     //tune to frequency
+                    //}
+                    if (count_2ms-curr == 488){
+                        LCD_MovCursorLn1();
+                        snprintf(buf,16,"%3d.%-1d",current_fm_freq/100,current_fm_freq/10%10);
+                        LCD_PutStr(buf);                                                  
+                        //LCD_PutStr("         ");                                                  
+                        
+                    }
                 } else {
                     radio_on = 0;
                 }
             }
         }
 
-            // volume control
-            if (lec != old_lec){
-                vol = 1;
-                if ((old_vc + lec) < 0) 
-                    lec = 0-old_vc;                     // set range 0 - 100
-                else if ((old_vc + lec) > 50) 
-                    lec = 50-old_vc; 
-                vc = old_vc + lec;                      // update volume counter
-                segsum(vc);                             // display vc
-                OCR3A = 100 - vc;                       // create PWM with TCNT3
-                old_lec = lec;
-                curr = count_2ms;
-            }
-            else {        
-                old_vc = vc;                // save old vc value for next adding
-                lec = 0;                    // reset light encoder reading
-                if ((vol==1)&&(count_2ms-curr<=976)){
-                    segsum(vc);
-                }
-                else {
-                    vol = 0;
-                }
-            }
-
+        // volume control
+        if (lec != old_lec){
+            vol = 1;
+            if ((old_vc + lec) < 0) 
+                lec = 0-old_vc;                     // set range 0 - 100
+            else if ((old_vc + lec) > 100) 
+                lec = 100-old_vc; 
+            vc = old_vc + lec;                      // update volume counter
+            segsum(vc);                             // display vc
+            OCR3A = 100 - vc;                       // create PWM with TCNT3
+            old_lec = lec;
+            curr = count_2ms;
         }
+        else {        
+            old_vc = vc;                // save old vc value for next adding
+            lec = 0;                    // reset light encoder reading
+            if ((vol==1)&&(count_2ms-curr<=976)){
+                segsum(vc);
+            }
+            else {
+                vol = 0; 
+            }
 
-        // lcd update rate 1s for temp
-        if (count_2ms % 488 == 0){
-            LCD_MovCursorLn2();
-            LCD_PutStr("L:");
-            LCD_PutStr(loc_temp_buf);
-            LCD_PutStr("R:");
-            LCD_PutChar(remote_temp_buf[0]);
-            LCD_PutChar(remote_temp_buf[1]);
-            LCD_PutChar('C');
         }
 
     }
 
-    //ISR timer 1 is in kellen_music.c
+    // lcd update rate 1s for temp
+    if (count_2ms % 488 == 0){
+        LCD_MovCursorLn2();
+        LCD_PutStr("L:");
+        LCD_PutStr(loc_temp_buf);
+        LCD_PutStr("R:");
+        LCD_PutChar(remote_temp_buf[0]);
+        LCD_PutChar(remote_temp_buf[1]);
+        LCD_PutChar('C');
+        
+        //retrive the receive strength and display on the bargraph display
+        //while(twi_busy()){}                //spin while TWI is busy
+        //fm_rsq_status();                   //get status of radio tuning operation
+        //rssi = si4734_tune_status_buf[4];
+        ////redefine rssi to be a thermometer code
+        //if(rssi<= 8) {rssi = 0x00;} else
+        //    if(rssi<=16) {rssi = 0x01;} else
+        //        if(rssi<=24) {rssi = 0x03;} else
+        //            if(rssi<=32) {rssi = 0x07;} else
+        //                if(rssi<=40) {rssi = 0x0F;} else
+        //                    if(rssi<=48) {rssi = 0x1F;} else
+        //                        if(rssi<=56) {rssi = 0x3F;} else
+        //                            if(rssi<=64) {rssi = 0x7F;} else
+        //                                if(rssi>=64) {rssi = 0xFF;}
+        //LCD_MovCursorLn1();
+        //LCD_PutStr(itoa(rssi,buf,5));  
+    }
 
-    //***********************************************************************************
-    //                                    Toggle interpurator
-    //                                     mode_t -> mode flags
-    //***********************************************************************************
-    void set_mode(){
-        switch (mode_t){
-            case 1:                         // toggle radio mode 
-                mode &= 0b00110011;         // clear all mode but alarm set, 12/24, 1/60
-                mode ^= (1<<0);             // toggle
+}
 
+//ISR timer 1 is in kellen_music.c
+
+//***********************************************************************************
+//                                    Toggle interpurator
+//                                     mode_t -> mode flags
+//***********************************************************************************
+void set_mode(){
+    switch (mode_t){
+        case 1:                         // toggle radio mode 
+            mode &= 0b00110011;         // clear all mode but alarm set, 12/24, 1/60
+            mode ^= (1<<0);             // toggle
+
+            if (mode & (1<<0)){
+                if (mode&(1<<1))
+                    tinc = 60;
+                else
+                    tinc = 20;
+            } else
+                tinc = 1; 
+
+            if (mode & (1<<0)) {
+                while(twi_busy()){} //spin while TWI is busy
+                fm_pwr_up();        //power up radio
+                while(twi_busy()){} //spin while TWI is busy
+                fm_tune_freq();     //tune to frequency
+            } else { 
+                while(twi_busy()){} //spin while TWI is busy
+                radio_pwr_dwn();        //power down radio
+            }
+
+            old_fm_freq = current_fm_freq;
+            rec = 0;
+            old_rec = 1;
+
+            break;
+        case 2:                         // 1 min or 60 mins ?
+            mode ^= (1<<1);             // toggle inc between 1 and 60 mins
+            if (mode & (1<<1)){
+                tinc = 60;
+                vinc = 10;
+            }
+            else{         
                 if (mode & (1<<0))
                     tinc = 20;
                 else
-                    tinc = 60; 
-
-                if (mode & (1<<0)) {
-                    while(twi_busy()){} //spin while TWI is busy
-                    fm_pwr_up();        //power up radio
-                    while(twi_busy()){} //spin while TWI is busy
-                    fm_tune_freq();     //tune to frequency
-                } else { 
-                    while(twi_busy()){} //spin while TWI is busy
-                    radio_pwr_dwn();        //power down radio
-                }
-
-                old_fm_freq = current_fm_freq;
-                rec = 0;
-
-                break;
-            case 2:                         // 1 min or 60 mins ?
-                mode ^= (1<<1);             // toggle inc between 1 and 60 mins
-                if (mode & (1<<1)){
-                    tinc = 60;
-                    vinc = 10;
-                }
-                else{         
-                    if (mode & (1<<0))
-                        tinc = 20;
-                    else
-                        tinc =1;
-                    vinc = 2;
-                }
-                break;
-            case 4:                         // set time
-                mode &= 0b00110110;         // clear set alarm
-                mode ^= (1<<2);             // toggle, for cancelling
-                rec = 0;                    // reset right encoder reading
-                break;
-            case 8:                         // set alarm
-                mode &= 0b00111010;         // clear set time
-                mode ^= (1<<3);             // toggle, for cancelling
-                if (!(mode & (1<<3)))       // unset alarm if double cancel setting
-                    mode &= ~(1<<4);        // unset alarm flag
-                lcd_alarm();                // update lcd 
-                rec = 0;                    // reset right encoder reading
-                break;
-            case 16:                        // alarm indicator, toggle set or unset
-                mode ^= (1<<4);             // toggle
-                lcd_alarm();
-                music_off();
-                break;						
-            case 32:                        // 24 - 12 indicator
-                mode ^= (1<<5);             // toggle
-                break;
-            case 64:                        // snooze function indicator
-                mode |= (1<<6);             // clear manually in timer 0
-                break;
-            case 128:                       // confirm & dismiss alarm
-                mode |= (1<<7);             // clear manually in timer 0
-                break;
-            default:                        // multiple buttons input detected
-                mode &= 0b00110010;         // clear all mode but alarm set, 12/24, 1/60
-                break;
-        }
+                    tinc = 1;
+                vinc = 2;
+            }
+            break;
+        case 4:                         // set time
+            mode &= 0b00110110;         // clear set alarm
+            mode ^= (1<<2);             // toggle, for cancelling
+            rec = 0;                    // reset right encoder reading
+            break;
+        case 8:                         // set alarm
+            mode &= 0b00111010;         // clear set time
+            mode ^= (1<<3);             // toggle, for cancelling
+            if (!(mode & (1<<3)))       // unset alarm if double cancel setting
+                mode &= ~(1<<4);        // unset alarm flag
+            lcd_alarm();                // update lcd 
+            rec = 0;                    // reset right encoder reading
+            break;
+        case 16:                        // alarm indicator, toggle set or unset
+            mode ^= (1<<4);             // toggle
+            lcd_alarm();
+            alarm_wentoff=0;
+            snooze_wentoff = 0;
+            music_off();
+            break;						
+        case 32:                        // 24 - 12 indicator
+            mode ^= (1<<5);             // toggle
+            break;
+        case 64:                        // snooze function indicator
+            mode |= (1<<6);             // clear manually in timer 0
+            break;
+        case 128:                       // confirm & dismiss alarm
+            mode |= (1<<7);             // clear manually in timer 0
+            break;
+        default:                        // multiple buttons input detected
+            mode &= 0b00110010;         // clear all mode but alarm set, 12/24, 1/60
+            break;
     }
-    //***********************************************************************************
-    //                                    Main
-    // 
-    //***********************************************************************************
-    int main(){
-        // run time initial 
-        uint8_t counter = 0; 
+}
+//***********************************************************************************
+//                                    Main
+// 
+//***********************************************************************************
+int main(){
+    // run time initial 
+    uint8_t counter = 0; 
 
-        //set port bits 4-7 B as outputs
-        DDRB = 0xf0; // output
-        DDRD = 0xff; // output
+    //set port bits 4-7 B as outputs
+    DDRB = 0xf0; // output
+    DDRD = 0xff; // output
 
-        // ADC init
-        ADC_init();
+    // ADC init
+    ADC_init();
 
-        // time counter init
-        tcnt0_init();
-        music_init(0);
-        tcnt2_init();
-        tcnt3_init();
+    // time counter init
+    tcnt0_init();
+    music_init(0);
+    tcnt2_init();
+    tcnt3_init();
 
-        // initial Volume 20
-        OCR3A = 100 - vc;
+    // initial Volume 20
+    OCR3A = 100 - vc;
 
-        // SPI interupt initial
-        spi_init();
+    // SPI interupt initial
+    spi_init();
 
-        // initialize TWI
-        init_twi();
-        // load lm73_wr_buf[0] with temperature pointer address
-        lm73_wr_buf[0] = LM73_PTR_TEMP;   
-        // start the TWI write process (twi_master.h)
-        twi_start_wr(LM73_ADDRESS,lm73_wr_buf,2);   
-        _delay_ms(2);
+    // initialize TWI
+    init_twi();
+    // load lm73_wr_buf[0] with temperature pointer address
+    lm73_wr_buf[0] = LM73_PTR_TEMP;   
+    // start the TWI write process (twi_master.h)
+    twi_start_wr(LM73_ADDRESS,lm73_wr_buf,2);   
+    _delay_ms(2);
 
-        // initialize LCD
-        LCD_Init();
+    // initialize LCD
+    LCD_Init();
     LCD_Clr();
     LCD_CursorBlinkOff();
     LCD_PutStr("Teklarm 2.0!!!");
@@ -811,8 +854,8 @@ ISR(TIMER0_OVF_vect){
     sei();
 
     // turn on radio
-	radio_int_init();
-	radio_init();
+    radio_int_init();
+    radio_init();
     //music_on();
     // main while loop
     while(1){
