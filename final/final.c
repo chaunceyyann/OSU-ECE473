@@ -102,10 +102,9 @@ signed int lec = 0;             // left encoder counter
 signed int old_lec = 0;         // old left encoder counter
 signed int rec = 0;             // right encoder counter
 signed int old_rec = 0;         // old right encoder counter
+unsigned int radio_on = 0;           // volume mode
 signed int vc = 20;             // volume counter
 signed int old_vc = 1;          // volume counter old value
-//uint16_t current_fm_freq = 8910;
-//uint16_t old_fm_freq = 8910;    // old fm freq value
 unsigned int vol = 0;           // volume mode
 unsigned int rts = 0;           // global time counter seconds
 unsigned int rtc = 1440;        // global time counter mins 
@@ -148,7 +147,13 @@ uint16_t eeprom_fm_freq;
 uint16_t eeprom_am_freq;
 uint16_t eeprom_sw_freq;
 uint8_t  eeprom_volume;
-
+uint16_t current_fm_freq;
+uint16_t old_fm_freq=8870;
+uint16_t current_am_freq;
+uint16_t current_wm_freq;
+uint8_t current_volume;
+uint8_t rssi;
+uint16_t stations[5]={8870,9910,9990,10750};
 //decimal to 7-segment LED display encodings, logic "0" turns on segment
 int dec_to_7seg[18] = {0b11000000, 0b11111001, 0b10100100, 0b10110000, // 0 1 2 3
     0b10011001, 0b10010010, 0b10000010, 0b11111000, // 4 5 6 7
@@ -468,13 +473,7 @@ void radio_init(){
 
 
 
-    while(twi_busy()){} //spin while TWI is busy
-    fm_pwr_up();        //power up radio
-    while(twi_busy()){} //spin while TWI is busy
-	_delay_ms(1000);
-    fm_tune_freq();     //tune to frequency
-    fm_tune_freq();     //tune to frequency
-
+   
     //retrive the receive strength and display on the bargraph display
     //while(twi_busy()){}                //spin while TWI is busy
     //fm_rsq_status();                   //get status of radio tuning operation
@@ -571,8 +570,9 @@ ISR(TIMER0_OVF_vect){
         // manualy clear snooze and confirm if necessary
         if ((mode & (1<<6)) && (snooze_start == 0)) // clear snooze if alarm is off
             mode &= 0b00110011;                     // clear set time set alarm as well
-        if (mode & (1<<7))                          // clear confirm
+        if (mode & (1<<7)){                          // clear confirm
             mode &= 0b00110011;                     // clear set time set alarm as well
+        }
     }
 
 
@@ -616,159 +616,190 @@ ISR(TIMER0_OVF_vect){
     if (count_2ms % 2 == 0){                        
 		// radio mode
 	    if (mode&(1<<0)){
-	   // 	if ((old_fm_freq + rec) < 8710) 
-	   // 		lec = 8710-old_fm_freq;             // set range 8710 - 10790
-       //     else if ((old_vc + rec) > 50) 
-       //         lec = 10790-old_fm_freq; 
-       //     current_fm_freq = old_fm_freq + lec;
-	    	segsum(8910/10);
-	    	segment_data[1] &= ~(1<<7);                // decimal point
-	   // 	old_lec = lec;
-	    }
+            if (old_rec != rec){
+                radio_on = 1;
+                if ((old_fm_freq + rec) < 8790) 
+                    rec = 8790-old_fm_freq;             // set range 8710 - 10790
+                else if ((old_fm_freq + rec) > 10790) 
+                    rec = 10790-old_fm_freq; 
+                current_fm_freq = old_fm_freq + rec;
+                segsum(current_fm_freq/10);
+                segment_data[1] &= ~(1<<7);                // decimal point
+                old_rec = rec;
+                //if (count_2ms - curr >= 488)
+                while(twi_busy()){} //spin while TWI is busy
+                fm_tune_freq();     //tune to frequency
 
-		// volume control
-		if (lec != old_lec){
-			vol = 1;
-            if ((old_vc + lec) < 0) 
-                lec = 0-old_vc;                     // set range 0 - 100
-            else if ((old_vc + lec) > 50) 
-                lec = 50-old_vc; 
-            vc = old_vc + lec;                      // update volume counter
-            segsum(vc);                             // display vc
-            OCR3A = 100 - vc;                       // create PWM with TCNT3
-            if (count_2ms % 488 == 0){              // strobe lcd each second
-                if (old_lec != lec){
+                curr = count_2ms;    
+            } else {
+                old_fm_freq = current_fm_freq;
+                rec = 0;
+                if ((radio_on==1)&&(count_2ms-curr<=976)){
+                    segsum(current_fm_freq/10);
+                    segment_data[1] &= ~(1<<7);                // decimal point
+                } else if ((radio_on==1)&&(count_2ms-curr>=488)&&(count_2ms-curr<976)){
                     LCD_MovCursorLn1();
                     LCD_PutStr("Volume: ");
                     LCD_PutStr(itoa(vc,buf,10));    // lcd display volume
+                } else {
+                    radio_on = 0;
                 }
             }
-			old_lec = lec;
-			curr = count_2ms;
         }
-		else {        
-            old_vc = vc;                // save old vc value for next adding
-            lec = 0;                    // reset light encoder reading
-			if ((vol==1)&&(count_2ms-curr<=976)){
-				segsum(vc);
-			}
-			else {
-				vol = 0;
-			}
-		}
+
+            // volume control
+            if (lec != old_lec){
+                vol = 1;
+                if ((old_vc + lec) < 0) 
+                    lec = 0-old_vc;                     // set range 0 - 100
+                else if ((old_vc + lec) > 50) 
+                    lec = 50-old_vc; 
+                vc = old_vc + lec;                      // update volume counter
+                segsum(vc);                             // display vc
+                OCR3A = 100 - vc;                       // create PWM with TCNT3
+                old_lec = lec;
+                curr = count_2ms;
+            }
+            else {        
+                old_vc = vc;                // save old vc value for next adding
+                lec = 0;                    // reset light encoder reading
+                if ((vol==1)&&(count_2ms-curr<=976)){
+                    segsum(vc);
+                }
+                else {
+                    vol = 0;
+                }
+            }
+
+        }
+
+        // lcd update rate 1s for temp
+        if (count_2ms % 488 == 0){
+            LCD_MovCursorLn2();
+            LCD_PutStr("L:");
+            LCD_PutStr(loc_temp_buf);
+            LCD_PutStr("R:");
+            LCD_PutChar(remote_temp_buf[0]);
+            LCD_PutChar(remote_temp_buf[1]);
+            LCD_PutChar('C');
+        }
 
     }
 
-    // lcd update rate 1s for temp
-    if (count_2ms % 488 == 0){
-        LCD_MovCursorLn2();
-        LCD_PutStr("L:");
-        LCD_PutStr(loc_temp_buf);
-        LCD_PutStr("R:");
-        LCD_PutChar(remote_temp_buf[0]);
-        LCD_PutChar(remote_temp_buf[1]);
-        LCD_PutChar('C');
+    //ISR timer 1 is in kellen_music.c
+
+    //***********************************************************************************
+    //                                    Toggle interpurator
+    //                                     mode_t -> mode flags
+    //***********************************************************************************
+    void set_mode(){
+        switch (mode_t){
+            case 1:                         // toggle radio mode 
+                mode &= 0b00110011;         // clear all mode but alarm set, 12/24, 1/60
+                mode ^= (1<<0);             // toggle
+
+                if (mode & (1<<0))
+                    tinc = 20;
+                else
+                    tinc = 60; 
+
+                if (mode & (1<<0)) {
+                    while(twi_busy()){} //spin while TWI is busy
+                    fm_pwr_up();        //power up radio
+                    while(twi_busy()){} //spin while TWI is busy
+                    fm_tune_freq();     //tune to frequency
+                } else { 
+                    while(twi_busy()){} //spin while TWI is busy
+                    radio_pwr_dwn();        //power down radio
+                }
+
+                old_fm_freq = current_fm_freq;
+                rec = 0;
+
+                break;
+            case 2:                         // 1 min or 60 mins ?
+                mode ^= (1<<1);             // toggle inc between 1 and 60 mins
+                if (mode & (1<<1)){
+                    tinc = 60;
+                    vinc = 10;
+                }
+                else{         
+                    if (mode & (1<<0))
+                        tinc = 20;
+                    else
+                        tinc =1;
+                    vinc = 2;
+                }
+                break;
+            case 4:                         // set time
+                mode &= 0b00110110;         // clear set alarm
+                mode ^= (1<<2);             // toggle, for cancelling
+                rec = 0;                    // reset right encoder reading
+                break;
+            case 8:                         // set alarm
+                mode &= 0b00111010;         // clear set time
+                mode ^= (1<<3);             // toggle, for cancelling
+                if (!(mode & (1<<3)))       // unset alarm if double cancel setting
+                    mode &= ~(1<<4);        // unset alarm flag
+                lcd_alarm();                // update lcd 
+                rec = 0;                    // reset right encoder reading
+                break;
+            case 16:                        // alarm indicator, toggle set or unset
+                mode ^= (1<<4);             // toggle
+                lcd_alarm();
+                music_off();
+                break;						
+            case 32:                        // 24 - 12 indicator
+                mode ^= (1<<5);             // toggle
+                break;
+            case 64:                        // snooze function indicator
+                mode |= (1<<6);             // clear manually in timer 0
+                break;
+            case 128:                       // confirm & dismiss alarm
+                mode |= (1<<7);             // clear manually in timer 0
+                break;
+            default:                        // multiple buttons input detected
+                mode &= 0b00110010;         // clear all mode but alarm set, 12/24, 1/60
+                break;
+        }
     }
+    //***********************************************************************************
+    //                                    Main
+    // 
+    //***********************************************************************************
+    int main(){
+        // run time initial 
+        uint8_t counter = 0; 
 
-}
+        //set port bits 4-7 B as outputs
+        DDRB = 0xf0; // output
+        DDRD = 0xff; // output
 
-//ISR timer 1 is in kellen_music.c
+        // ADC init
+        ADC_init();
 
-//***********************************************************************************
-//                                    Toggle interpurator
-//                                     mode_t -> mode flags
-//***********************************************************************************
-void set_mode(){
-    switch (mode_t){
-        case 1:                         // toggle radio mode 
-            mode &= 0b00110011;         // clear all mode but alarm set, 12/24, 1/60
-            mode ^= (1<<0);             // toggle
-			if (mode & (1<<0))
-				radio_init();
-			 
+        // time counter init
+        tcnt0_init();
+        music_init(0);
+        tcnt2_init();
+        tcnt3_init();
 
-            //old_fm_freq = current_fm_freq;
-			//rec = 0;
-			break;
-        case 2:                         // 1 min or 60 mins ?
-            mode ^= (1<<1);             // toggle inc between 1 and 60 mins
-            if (mode & (1<<1)){
-                tinc = 60;
-			    vinc = 10;
-			}
-            else{
-                tinc = 1;
-			    vinc = 2;
-			}
-            break;
-        case 4:                         // set time
-            mode &= 0b00110110;         // clear set alarm
-            mode ^= (1<<2);             // toggle, for cancelling
-            rec = 0;                    // reset right encoder reading
-            break;
-        case 8:                         // set alarm
-            mode &= 0b00111010;         // clear set time
-            mode ^= (1<<3);             // toggle, for cancelling
-            if (!(mode & (1<<3)))       // unset alarm if double cancel setting
-                mode &= ~(1<<4);        // unset alarm flag
-            lcd_alarm();                // update lcd 
-            rec = 0;                    // reset right encoder reading
-            break;
-        case 16:                        // alarm indicator, toggle set or unset
-            mode ^= (1<<4);             // toggle
-            lcd_alarm();
-            break;						
-        case 32:                        // 24 - 12 indicator
-            mode ^= (1<<5);             // toggle
-            break;
-        case 64:                        // snooze function indicator
-            mode |= (1<<6);             // clear manually in timer 0
-            break;
-        case 128:                       // confirm & dismiss alarm
-            mode |= (1<<7);             // clear manually in timer 0
-            break;
-        default:                        // multiple buttons input detected
-            mode &= 0b00110010;         // clear all mode but alarm set, 12/24, 1/60
-            break;
-    }
-}
-//***********************************************************************************
-//                                    Main
-// 
-//***********************************************************************************
-int main(){
-    // run time initial 
-    uint8_t counter = 0; 
+        // initial Volume 20
+        OCR3A = 100 - vc;
 
-    //set port bits 4-7 B as outputs
-    DDRB = 0xf0; // output
-    DDRD = 0xff; // output
+        // SPI interupt initial
+        spi_init();
 
-    // ADC init
-    ADC_init();
+        // initialize TWI
+        init_twi();
+        // load lm73_wr_buf[0] with temperature pointer address
+        lm73_wr_buf[0] = LM73_PTR_TEMP;   
+        // start the TWI write process (twi_master.h)
+        twi_start_wr(LM73_ADDRESS,lm73_wr_buf,2);   
+        _delay_ms(2);
 
-    // time counter init
-    tcnt0_init();
-    music_init(0);
-    tcnt2_init();
-    tcnt3_init();
-
-    // initial Volume 20
-    OCR3A = 100 - vc;
-
-    // SPI interupt initial
-    spi_init();
-
-    // initialize TWI
-    init_twi();
-    // load lm73_wr_buf[0] with temperature pointer address
-    lm73_wr_buf[0] = LM73_PTR_TEMP;   
-    // start the TWI write process (twi_master.h)
-    twi_start_wr(LM73_ADDRESS,lm73_wr_buf,2);   
-    _delay_ms(2);
-
-    // initialize LCD
-    LCD_Init();
+        // initialize LCD
+        LCD_Init();
     LCD_Clr();
     LCD_CursorBlinkOff();
     LCD_PutStr("Teklarm 2.0!!!");
@@ -781,6 +812,7 @@ int main(){
 
     // turn on radio
 	radio_int_init();
+	radio_init();
     //music_on();
     // main while loop
     while(1){
